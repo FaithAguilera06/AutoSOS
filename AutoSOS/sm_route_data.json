@@ -1,0 +1,330 @@
+{
+  "bbox": [
+    120.983078,
+    14.535406,
+    121.031747,
+    14.656617
+  ],
+  "routes": [
+    {
+      "summary": {
+        "distance": 19504.4,
+        "duration": 1945.0
+      },
+      "segments": [
+        {
+          "distance": 19504.4,
+          "duration": 1945.0,
+          "steps": [
+            {
+              "distance": 115.0,
+              "duration": 35.0,
+              "type": 11,
+              "instruction": "Head east on South Road",
+              "name": "South Road",
+              "way_points": [
+                0,
+                3
+              ]
+            },
+            {
+              "distance": 58.0,
+              "duration": 24.8,
+              "type": 1,
+              "instruction": "Turn right onto West Road",
+              "name": "West Road",
+              "way_points": [
+                3,
+                7
+              ]
+            },
+            {
+              "distance": 341.9,
+              "duration": 72.1,
+              "type": 1,
+              "instruction": "Turn right onto North Avenue, 173",
+              "name": "North Avenue, 173",
+              "way_points": [
+                7,
+                24
+              ]
+            },
+            {
+              "distance": 692.7,
+              "duration": 56.5,
+              "type": 12,
+              "instruction": "Keep left",
+              "name": "-",
+              "way_points": [
+                24,
+                37
+              ]
+            },
+            {
+              "distance": 3523.4,
+              "duration": 353.4,
+              "type": 13,
+              "instruction": "Keep right onto West Avenue, 171",
+              "name": "West Avenue, 171",
+              "way_points": [
+                37,
+                116
+              ]
+            },
+            {
+              "distance": 273.5,
+              "duration": 37.7,
+              "type": 13,
+              "instruction": "Keep right onto Quezon Avenue",
+              "name": "Quezon Avenue",
+              "way_points": [
+                116,
+                120
+              ]
+            },
+            {
+              "distance": 137.0,
+              "duration": 16.2,
+              "type": 0,
+              "instruction": "Turn left onto Gregorio Araneta Avenue, 130",
+              "name": "Gregorio Araneta Avenue, 130",
+              "way_points": [
+                120,
+                123
+              ]
+            },
+            {
+              "distance": 7167.1,
+              "duration": 420.5,
+              "type": 12,
+              "instruction": "Keep left",
+              "name": "-",
+              "way_points": [
+                123,
+                230
+              ]
+            },
+            {
+              "distance": 64.1,
+              "duration": 7.7,
+              "type": 13,
+              "instruction": "Keep right",
+              "name": "-",
+              "way_points": [
+                230,
+                231
+              ]
+            },
+            {
+              "distance": 3019.8,
+              "duration": 425.1,
+              "type": 12,
+              "instruction": "Keep left",
+              "name": "-",
+              "way_points": [
+                231,
+                299
+              ]
+            },
+            {
+              "distance": 2100.2,
+              "duration": 194.8,
+              "type": 0,
+              "instruction": "Turn left onto Roxas Boulevard, 120",
+              "name": "Roxas Boulevard, 120",
+              "way_points": [
+                299,
+                316
+              ]
+            },
+            {
+              "distance": 28.8,
+              "duration": 6.9,
+              "type": 1,
+              "instruction": "Turn right",
+              "name": "-",
+              "way_points": [
+                316,
+                317
+              ]
+            },
+            {
+              "distance": 434.3,
+              "duration": 85.4,
+              "type": 0,
+              "instruction": "Turn left",
+              "name": "-",
+              "way_points": [
+                317,
+                326
+              ]
+            },
+            {
+              "distance": 202.6,
+              "duration": 24.1,
+              "type": 0,
+              "instruction": "Turn left onto President Diosdado Macapagal Boulevard",
+              "name": "President Diosdado Macapagal Boulevard",
+              "way_points": [
+                326,
+                330
+              ]
+            },
+            {
+              "distance": 526.8,
+              "duration": 60.7,
+              "type": 1,
+              "instruction": "Turn right onto Seaside Boulevard",
+              "name": "Seaside Boulevard",
+              "way_points": [
+                330,
+                335
+              ]
+            },
+            {
+              "distance": 366.3,
+              "duration": 40.7,
+              "type": 0,
+              "instruction": "Turn left onto Jose Wright Diokno Boulevard",
+              "name": "Jose Wright Diokno Boulevard",
+              "way_points": [
+                335,
+                340
+              ]
+            },
+            {
+              "distance": 80.9,
+              "duration": 11.7,
+              "type": 1,
+              "instruction": "Turn right onto Palm Coast Avenue",
+              "name": "Palm Coast Avenue",
+              "way_points": [
+                340,
+                342
+              ]
+            },
+            {
+              "distance": 358.5,
+              "duration": 68.6,
+              "type": 0,
+              "instruction": "Turn left onto Pacific Drive",
+              "name": "Pacific Drive",
+              "way_points": [
+                342,
+                355
+              ]
+            },
+            {
+              "distance": 13.3,
+              "duration": 3.2,
+              "type": 1,
+              "instruction": "Turn right",
+              "name": "-",
+              "way_points": [
+                355,
+                357
+              ]
+            },
+            {
+              "distance": 0.0,
+              "duration": 0.0,
+              "type": 10,
+              "instruction": "Arrive at your destination, on the right",
+              "name": "-",
+              "way_points": [
+                357,
+                357
+              ]
+            }
+          ]
+        }
+      ],
+      "bbox": [
+        120.983078,
+        14.535406,
+        121.031747,
+        14.656617
+      ],
+      "geometry": "womxA{xuaVFg@BQ`@wCJB|@LH@PBa@zCAFOr@c@t@I\\AT?TLf@ADIl@EVCRAJCJALAHQnA?N?HoBhNDFZDFAFIHi@D]h@}DpAuJBQDWNYXY`@S`@KHA\\@lBXbIfAVDrIlAdKxAVDnBV~@JxHhA~B\\PAz@LXBd@Hl@HfBVx@Jb@FNBvDh@NBF@F@\\F\\DH@\\F`@FxEp@dBTtARbC^xARfAPvAPLHJBVBD@f@@f@Ld@Tr@f@B@hEpIP\\bArB@BLTjCfF\\n@R^R\\DJdAjBv@vABFh@bAp@nAvAnCFJh@`A~AzCn@jAfAjBb@j@Z`@xAhB@BXZTV\\^f@j@FNf@j@bGzGXZ^a@xAwAt@w@|AoBjB}Ar@[t@WpAWfBEfG`@|B`@xFZ`C@lG^`BFz@EtAGp@K^Ip@W|HsElAi@x@Wz@UjBShg@aAx@Cz@I|@QrAe@t@a@p@g@p@u@tGwGnA{@TIVEZAt@B`Gz@T?ZC\\Kd@U\\Yb@i@fLuSHKNMZQxLoGdIuCvAc@p@Kv@InAB\\D|Ab@x@\\nAr@`@`@t@dApAzB`@j@bEpEl@t@|B|Db@~@d@pA\\jAjAjE\\rBZ|BR|BJ~DA~@Ab@OdAWfAM`@U`@m@x@oAjAc@f@MXQj@EZEx@@`@Jj@fA~CRr@Nx@Dx@GjAGx@SbAw@~DIh@Cd@@f@Jj@P\\V\\xFjF\\^x@dAtApBh@r@rNpMlAvArAdBd@b@BBBBb@\\n@`@j@f@`ChC`@b@tDhDNPT^Rt@DTLVRTLF`@JbBHP@PBb@Vf@^zCpBhCpBfAv@vB~An@d@vCxBb@\\`@ZhCnB~BfBbAx@vB|Ah@b@`@X\\N|@n@FFt@l@~@r@x@n@`At@v@j@RNVRd@\\|@n@NLxFdEjDjCbAt@nHvFfBnAVVXZZn@LXVj@Rj@n@bBb@tAN`@^jADJPj@HVNGl@SpFiBhBm@bEuAjDkA~CgAVGnEsA^MREdPsDlGwAzMsChFy@rMaBnJ{ALr@N?dBSFAD@LLBHxBhPHb@F^LCpDi@lAMtAIhCjQRxAT~A^jCFd@TEvEs@dCa@dDg@fBOBfA@lAf@A`@?vBCd@Al@Al@?RAH?bAAJ?|@ApCE@?HJF@",
+      "way_points": [
+        0,
+        357
+      ],
+      "warnings": [
+        {
+          "code": 1,
+          "message": "There may be restrictions on some roads"
+        }
+      ],
+      "extras": {
+        "roadaccessrestrictions": {
+          "values": [
+            [
+              0,
+              5,
+              0
+            ],
+            [
+              5,
+              7,
+              32
+            ],
+            [
+              7,
+              316,
+              0
+            ],
+            [
+              316,
+              317,
+              32
+            ],
+            [
+              317,
+              357,
+              0
+            ]
+          ],
+          "summary": [
+            {
+              "value": 0.0,
+              "distance": 19460.1,
+              "amount": 99.77
+            },
+            {
+              "value": 32.0,
+              "distance": 44.3,
+              "amount": 0.23
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "attribution": "openrouteservice.org | OpenStreetMap contributors",
+    "service": "routing",
+    "timestamp": 1760499227654,
+    "query": {
+      "coordinates": [
+        [
+          121.0307,
+          14.6561
+        ],
+        [
+          120.9821,
+          14.5355
+        ]
+      ],
+      "profile": "driving-car",
+      "profileName": "driving-car",
+      "format": "json"
+    },
+    "engine": {
+      "version": "9.3.0",
+      "build_date": "2025-06-06T15:39:25Z",
+      "graph_date": "2025-10-12T11:31:24Z",
+      "osm_date": "2025-10-06T00:00:00Z"
+    }
+  }
+}

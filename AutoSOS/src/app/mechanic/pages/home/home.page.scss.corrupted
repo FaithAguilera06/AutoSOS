@@ -1,0 +1,1992 @@
+ion-header, ion-toolbar {
+  min-height: 80px !important;
+  height: 80px !important;
+  --min-height: 80px !important;
+  --height: 80px !important;
+  display: flex;
+  align-items: center;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  max-height: 78px;
+  display: block;
+  margin: 0 auto;
+}
+
+.mechanic-home {
+  height: calc(100vh - 80px);
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+.map-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 50vh;
+  max-height: 60vh;
+  background: #e0e0e0;
+}
+
+.map-area app-real-time-map {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.map-area app-real-time-map .map-container {
+  height: 100% !important;
+  min-height: 45vh;
+  max-height: 50vh;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-pin-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.pin-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.pin-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.location-coords {
+  font-size: 0.7rem;
+  color: #666;
+  text-align: center;
+  font-family: monospace;
+}
+
+.location-refresh-btn {
+  pointer-events: auto;
+  
+  .refresh-location-btn {
+    --background: rgba(255, 255, 255, 0.9);
+    --border-radius: 50%;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 40px;
+    height: 40px;
+    
+    ion-icon {
+      font-size: 18px;
+    }
+    
+    &:hover {
+      --background: white;
+      transform: scale(1.05);
+    }
+  }
+}
+
+.map-area app-real-time-map .map-container {
+  height: 100% !important;
+  min-height: 45vh;
+  max-height: 50vh;
+}
+
+// Map overlay for "You are here"
+.map-area {
+  .map-overlay {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 5;
+
+    .user-pin-placeholder {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 8px 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+
+      .pin-icon ion-icon {
+        font-size: 18px;
+      }
+
+      .pin-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+}
+
+// Responsive design for smaller screens
+@media (max-height: 600px) {
+  .map-area {
+    min-height: 35vh;
+    max-height: 40vh;
+  }
+  
+  .map-area app-real-time-map .map-container {
+    min-height: 35vh;
+    max-height: 40vh;
+  }
+}
+
+@media (max-height: 500px) {
+  .map-area {
+    min-height: 30vh;
+    max-height: 35vh;
+  }
+  
+  .map-area app-real-time-map .map-container {
+    min-height: 30vh;
+    max-height: 35vh;
+  }
+}
+
+.map-text {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.dark-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22vh;
+  min-height: 140px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.handle {
+  width: 40px;
+  height: 4px;
+  background: #666666;
+  border-radius: 2px;
+  margin: 0 auto 15px auto;
+}
+
+// Mechanic Profile Section
+.mechanic-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.mechanic-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #4a90e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #4a90e2;
+}
+
+.avatar-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.mechanic-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mechanic-name {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status-indicator {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+  width: fit-content;
+  
+  &.online {
+    color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+  }
+  
+  &.offline {
+    color: #f44336;
+    background: rgba(244, 67, 54, 0.1);
+  }
+}
+
+.status-description {
+  color: #cccccc;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+// Stop Button Section
+.stop-button-section {
+  width: 100%;
+}
+
+.stop-btn {
+  width: 100%;
+  height: 50px;
+  --background: #e74c3c;
+  --color: white;
+  --border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid #e74c3c;
+  position: relative;
+  z-index: 10;
+  
+  ion-icon {
+    font-size: 20px;
+    color: white;
+    margin-right: 8px;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    --background: #c0392b;
+    border-color: #c0392b;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  // Online state styling
+  &.online-btn {
+    --background: #27ae60;
+    border-color: #27ae60;
+    
+    &:hover {
+      --background: #229954;
+      border-color: #229954;
+      box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+    }
+  }
+}
+
+// Service Request Modal
+.service-request-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+
+    .back-button {
+      --color: white;
+      width: 40px;
+      height: 40px;
+      margin: 0;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+      text-align: center;
+    }
+
+    .header-spacer {
+      width: 40px;
+    }
+  }
+
+  .modal-body {
+    padding: 24px;
+    max-height: calc(90vh - 100px);
+    overflow-y: auto;
+  }
+
+  .info-card {
+    background: #f8f9fa;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+
+      .card-icon {
+        font-size: 1.5rem;
+        color: #667eea;
+        margin-right: 12px;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+      }
+    }
+
+    .card-content {
+      padding: 20px;
+
+      .info-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .info-item {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          &.full-width {
+            flex: 1 1 100%;
+          }
+
+          .info-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .info-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+            word-break: break-word;
+
+            &.price {
+              color: #28a745;
+              font-weight: 600;
+            }
+
+            &.status-badge {
+              display: inline-block;
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+
+              &.status-matched {
+                background: #fff3cd;
+                color: #856404;
+              }
+
+              &.status-in_progress {
+                background: #d1ecf1;
+                color: #0c5460;
+              }
+
+              &.status-completed {
+                background: #d4edda;
+                color: #155724;
+              }
+
+              &.status-cancelled {
+                background: #f8d7da;
+                color: #721c24;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .action-section {
+    margin-top: 24px;
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+
+      .action-btn {
+        flex: 1;
+        height: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+
+        &.decline-btn {
+          --border-color: #dc3545;
+          --color: #dc3545;
+        }
+
+        &.accept-btn {
+          --background: #28a745;
+          --color: white;
+        }
+
+        &.complete-btn {
+          --background: #17a2b8;
+          --color: white;
+        }
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+
+    .price-setting {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #e9ecef;
+
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin: 0 0 16px 0;
+        text-align: center;
+      }
+
+      .price-input-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        .price-input {
+          flex: 1;
+          --background: white;
+          --color: #333;
+          --placeholder-color: #999;
+          --border-radius: 12px;
+          --padding-start: 16px;
+          --padding-end: 16px;
+          --padding-top: 16px;
+          --padding-bottom: 16px;
+          font-size: 1.1rem;
+          font-weight: 500;
+          border: 2px solid #e9ecef;
+          transition: border-color 0.3s ease;
+
+          &:focus {
+            --border-color: #667eea;
+            --color: #333;
+          }
+        }
+
+        ion-button {
+          --border-radius: 12px;
+          --padding-start: 20px;
+          --padding-end: 20px;
+          height: 50px;
+          font-weight: 600;
+          min-width: 120px;
+
+          &[disabled] {
+            opacity: 0.6;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive design for service request modal
+@media (max-width: 768px) {
+  .service-request-modal {
+    padding: 10px;
+
+    .modal-content {
+      max-height: 95vh;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+
+      .modal-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .info-card .card-content {
+      padding: 16px;
+
+      .info-row {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 12px;
+
+        .info-item {
+          .info-value {
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+
+    .action-section {
+      .action-buttons {
+        flex-direction: column;
+
+        .action-btn {
+          width: 100%;
+        }
+      }
+
+      .price-setting .price-input-group {
+        flex-direction: column;
+
+        ion-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Client Found Modal
+.client-found-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0a0a0a;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  .modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #0a0a0a;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    z-index: 10;
+    margin-bottom: 0 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+    .back-button {
+      --color: white;
+      margin-right: 15px;
+    }
+
+    .header-center {
+      flex: 1;
+      text-align: center;
+      
+      .modal-title {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+      }
+      
+      .header-subtitle {
+        color: #b0b0b0;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+    }
+
+    .job-management-button {
+      --color: #4CAF50;
+      --background: rgba(76, 175, 80, 0.1);
+      --border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      margin-right: 10;
+      ion-icon {
+        font-size: 1.5rem;
+      }
+      
+      &:hover {
+        --background: rgba(76, 175, 80, 0.2);
+      }
+    }
+
+    .menu-button {
+      --color: white;
+      margin-left: 15px;
+    }
+  }
+
+  .navigation-map-section {
+    flex: 1;
+    position: relative;
+    min-height: 50vh;
+    max-height: 60vh;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    z-index: 1;
+
+    .map-container-modal {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      min-height: 50vh;
+      max-height: 60vh;
+      z-index: 1;
+      border-radius: 0;
+
+      app-real-time-map {
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 1;
+
+        .map-container {
+          height: 100% !important;
+          min-height: 50vh;
+          max-height: 60vh;
+          z-index: 1;
+        }
+      }
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .navigation-info {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .distance-info, .eta-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: white;
+          font-size: 0.9rem;
+
+          .nav-icon, .time-icon {
+            color: #4CAF50;
+            font-size: 1.1rem;
+          }
+        }
+      }
+
+      .quick-actions {
+        display: flex;
+        gap: 8px;
+
+        .action-btn {
+          --background: rgba(0, 0, 0, 0.8);
+          --color: white;
+          --border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          backdrop-filter: blur(10px);
+
+          &.call-btn {
+            --background: #4CAF50;
+          }
+
+          &.navigate-btn {
+            --background: #2196F3;
+          }
+        }
+      }
+
+      .job-management-overlay {
+        position: absolute;
+        bottom: 80px;
+        left: 20px;
+        right: 20px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .job-action-overlay {
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+
+          .job-overlay-btn {
+            flex: 1;
+            --border-radius: 12px;
+            font-weight: 600;
+            height: 48px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            }
+          }
+
+          .price-overlay-container {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            align-items: center;
+
+            .price-overlay-input {
+              flex: 1;
+              --background: rgba(255, 255, 255, 0.95);
+              --color: #333;
+              --placeholder-color: #666;
+              --border-radius: 12px;
+              --padding-start: 16px;
+              --padding-end: 16px;
+              height: 48px;
+              font-size: 1rem;
+              font-weight: 500;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+
+            .price-overlay-btn {
+              --border-radius: 12px;
+              font-weight: 600;
+              height: 48px;
+              min-width: 120px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+              transition: all 0.3s ease;
+
+              &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .client-preview-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 20px 20px 0 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+    max-height: 40vh;
+    overflow: visible;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+
+    &.expanded {
+      max-height: 100vh;
+      overflow-y: auto;
+      padding-bottom: 20px;
+    }
+
+    .drag-handle {
+      display: flex;
+      justify-content: center;
+      padding: 12px 0 8px 0;
+      cursor: pointer;
+
+      .handle-bar {
+        width: 40px;
+        height: 4px;
+        background: #666;
+        border-radius: 2px;
+      }
+    }
+
+    .collapsed-content {
+      padding: 0 20px 20px 20px;
+
+      .client-profile-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
+        backdrop-filter: blur(10px);
+
+        .profile-section {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+
+          .profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+
+            .avatar-img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .profile-icon {
+              color: #666;
+              font-size: 1.5rem;
+            }
+          }
+
+          .client-info {
+            flex: 1;
+
+            .client-name {
+              color: white;
+              font-size: 1.1rem;
+              font-weight: 600;
+              margin: 0 0 4px 0;
+            }
+
+            .client-phone, .service-type {
+              color: #b0b0b0;
+              font-size: 0.85rem;
+              margin: 2px 0;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+
+              ion-icon {
+                font-size: 0.9rem;
+              }
+            }
+          }
+        }
+
+        .quick-status {
+          display: flex;
+          gap: 8px;
+
+          .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+
+            &.urgent {
+              background: rgba(255, 87, 34, 0.2);
+              color: #FF5722;
+            }
+
+            &.normal {
+              background: rgba(76, 175, 80, 0.2);
+              color: #4CAF50;
+            }
+          }
+        }
+      }
+
+      .motorcycle-preview, .location-preview {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .motorcycle-icon, .location-icon {
+          color: #666;
+          font-size: 1.2rem;
+        }
+
+        .motorcycle-details, .location-details {
+          flex: 1;
+
+          .motorcycle-model, .location-address {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0 0 2px 0;
+          }
+
+          .motorcycle-issue, .location-distance {
+            color: #b0b0b0;
+            font-size: 0.8rem;
+            margin: 0;
+          }
+        }
+      }
+
+    }
+
+    .expanded-content {
+      padding: 0 20px 20px 20px;
+
+      .expanded-header {
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        .back-button {
+          --color: white;
+          margin-right: 12px;
+        }
+
+        .expanded-title {
+          color: white;
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin: 0;
+        }
+      }
+
+      .detail-section {
+        margin: 20px 0;
+
+        .detail-title {
+          color: #4CAF50;
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin: 0 0 12px 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          ion-icon {
+            font-size: 1rem;
+          }
+        }
+
+        .detail-content {
+          .contact-card, .motorcycle-card, .location-card, .booking-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+
+            .contact-item, .motorcycle-item, .location-item, .booking-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 8px 0;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              .contact-icon, .motorcycle-icon, .location-icon, .booking-icon {
+                color: #666;
+                font-size: 1.1rem;
+                min-width: 20px;
+              }
+
+              .contact-details, .motorcycle-details, .location-details, .booking-details {
+                flex: 1;
+
+                .contact-label, .motorcycle-label, .location-label, .booking-label {
+                  color: #b0b0b0;
+                  font-size: 0.8rem;
+                  margin: 0 0 2px 0;
+                  text-transform: uppercase;
+                  letter-spacing: 0.3px;
+                }
+
+                .contact-value, .motorcycle-value, .location-value, .booking-value {
+                  color: white;
+                  font-size: 0.95rem;
+                  margin: 0;
+                  font-weight: 500;
+
+                  &.status-matched {
+                    color: #4CAF50;
+                  }
+                }
+              }
+
+              .call-action, .navigate-action {
+                --color: #4CAF50;
+                margin-left: auto;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive design for modal maps
+  @media (max-height: 600px) {
+    .navigation-map-section {
+      min-height: 30vh;
+      max-height: 35vh;
+      
+      .map-container-modal {
+        min-height: 30vh;
+        max-height: 35vh;
+        
+        app-real-time-map .map-container {
+          min-height: 30vh;
+          max-height: 35vh;
+        }
+      }
+    }
+  }
+
+  @media (max-height: 500px) {
+    .navigation-map-section {
+      min-height: 25vh;
+      max-height: 30vh;
+    }
+    
+    .map-container-modal {
+      min-height: 25vh;
+      max-height: 30vh;
+    }
+    
+    .map-container-modal app-real-time-map .map-container {
+      min-height: 25vh;
+      max-height: 30vh;
+    }
+  }
+
+  .google-map-modal {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+  }
+
+  .bottom-sheet {
+    background: #1a1a1a;
+    border-radius: 20px 20px 0 0 !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    padding: 15px 25px 50px 25px;
+    position: relative;
+    transition: all 0.3s ease;
+    max-height: 60vh;
+    height: 280px;
+    overflow-y: auto;
+    overflow-x: visible;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    z-index: 10;
+
+    &.expanded {
+      max-height: 90vh;
+      height: auto;
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+  }
+
+  .drag-handle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    .handle-bar {
+      width: 40px;
+      height: 4px;
+      background: #666666;
+      border-radius: 2px;
+    }
+  }
+
+  .collapsed-content {
+    .status-message {
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 0;
+
+      .status-text {
+        color: #667eea;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+
+    .service-location {
+      text-align: center;
+      margin-bottom: 12px;
+
+      .location-text {
+        color: white;
+        font-size: 0.9rem;
+        margin: 2px 0;
+      }
+    }
+
+    .client-info-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      .client-profile {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin-right: 20px;
+
+        .profile-picture {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: #667eea;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 15px;
+
+          .profile-icon {
+            font-size: 24px;
+            color: white;
+          }
+        }
+
+        .client-details {
+          flex: 1;
+          min-width: 0;
+
+          .client-name {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+          }
+
+          .client-phone {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin: 0 0 3px 0;
+            white-space: nowrap;
+          }
+
+          .client-issue {
+            color: #f44336;
+            font-size: 0.8rem;
+            margin: 0;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+        flex-shrink: 0;
+
+        .call-button {
+          --color: white;
+          --border-color: white;
+          --border-radius: 50%;
+          font-size: 0.8rem;
+          font-weight: 500;
+          width: 40px;
+          height: 40px;
+          --padding-start: 0;
+          --padding-end: 0;
+
+          ion-icon {
+            font-size: 18px;
+          }
+        }
+
+        .menu-button {
+          --color: #999;
+          --background: transparent;
+          font-size: 0.8rem;
+          font-weight: 500;
+          height: 35px;
+          border-radius: 8px;
+          text-transform: none;
+        }
+      }
+    }
+  }
+
+  .expanded-content {
+    max-height: calc(90vh - 200px);
+    overflow-y: auto;
+    padding-bottom: 20px;
+
+    .expanded-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+      position: sticky;
+      top: 0;
+      background: #1a1a1a;
+      z-index: 5;
+      padding: 10px 0;
+
+      .back-button {
+        --color: #667eea;
+        margin-right: 15px;
+      }
+
+      .expanded-title {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+        flex: 1;
+      }
+    }
+
+    .detail-section {
+      margin-bottom: 30px;
+
+      &:last-child {
+        margin-bottom: 20px;
+      }
+    }
+
+    .detail-title {
+      color: #667eea;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 15px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-content {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-text {
+      color: white;
+      font-size: 0.95rem;
+      margin: 8px 0;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .location-item {
+      display: flex;
+      align-items: flex-start;
+      margin: 12px 0;
+      padding: 8px 0;
+
+      .location-icon {
+        color: #667eea;
+        font-size: 18px;
+        margin-right: 12px;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .detail-text {
+        margin: 0;
+        flex: 1;
+      }
+    }
+
+    .arrival-time {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 8px 0;
+
+      .time-icon {
+        color: #667eea;
+        font-size: 16px;
+        margin-right: 8px;
+      }
+
+      .arrival-text {
+        color: white;
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+
+    .location-point {
+      display: flex;
+      align-items: flex-start;
+      margin: 15px 0;
+
+      .point-icon {
+        margin-right: 15px;
+        margin-top: 2px;
+        flex-shrink: 0;
+
+        .icon-circle {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #333;
+        }
+
+        .icon-square {
+          width: 12px;
+          height: 12px;
+          background: #28a745;
+        }
+      }
+
+      .location-info {
+        flex: 1;
+
+        .location-label {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.8rem;
+          margin: 0 0 4px 0;
+          font-weight: 500;
+        }
+
+        .location-address {
+          color: white;
+          font-size: 0.95rem;
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+    }
+
+    .connecting-line {
+      width: 2px;
+      height: 30px;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.3) 0px,
+        rgba(255, 255, 255, 0.3) 4px,
+        transparent 4px,
+        transparent 8px
+      );
+      margin-left: 5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .action-section {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 20px 0 60px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: #1a1a1a;
+      position: relative;
+      z-index: 10;
+
+      .arrived-btn {
+        --background: #4caf50;
+        --color: white;
+        font-weight: 600;
+        height: 50px;
+        font-size: 16px;
+      }
+
+      .contact-client-btn {
+        --border-color: #4a90e2;
+        --color: #4a90e2;
+        font-weight: 600;
+        height: 50px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// Price Setting Modal
+.price-setting-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  .modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 20px;
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    .close-button {
+      --color: #666;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .price-input-section {
+    padding: 0 20px 20px 20px;
+
+    .price-input-container {
+      margin-bottom: 20px;
+
+      .price-label {
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .price-input {
+        --background: #f8f9fa;
+        --color: #333;
+        --placeholder-color: #999;
+        --border-radius: 12px;
+        --padding-start: 16px;
+        --padding-end: 16px;
+        --padding-top: 16px;
+        --padding-bottom: 16px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+        border: 2px solid #e9ecef;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          --border-color: #007bff;
+          --background: white;
+          --color: #333;
+        }
+      }
+    }
+
+    .quick-price-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      ion-button {
+        --border-radius: 8px;
+        --padding-start: 12px;
+        --padding-end: 12px;
+        font-weight: 500;
+        min-width: 80px;
+      }
+    }
+  }
+
+  .service-details {
+    padding: 0 20px 20px 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin: 0 20px 20px 20px;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 8px 0;
+      line-height: 1.4;
+
+      strong {
+        color: #333;
+      }
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px 20px;
+
+    .cancel-btn {
+      flex: 1;
+      --border-radius: 12px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .confirm-btn {
+      flex: 1;
+      --background: #28a745;
+      --color: white;
+      --border-radius: 12px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-weight: 600;
+
+      &[disabled] {
+        --background: #6c757d;
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  ion-header, ion-toolbar {
+    min-height: 70px !important;
+    height: 70px !important;
+    --min-height: 70px !important;
+    --height: 70px !important;
+  }
+  
+  .header-title {
+    height: 70px;
+  }
+  
+  .header-logo {
+    height: 60px;
+    max-height: 68px;
+  }
+  
+  .mechanic-home {
+    height: calc(100vh - 70px);
+  }
+  
+  .dark-panel {
+    height: 20vh;
+    padding: 12px;
+  }
+  
+  .mechanic-avatar {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .avatar-icon {
+    font-size: 20px;
+  }
+  
+  .mechanic-name {
+    font-size: 14px;
+  }
+  
+  .status-indicator {
+    font-size: 11px;
+  }
+  
+  .status-description {
+    font-size: 10px;
+  }
+  
+  .stop-btn {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  ion-header, ion-toolbar {
+    min-height: 60px !important;
+    height: 60px !important;
+    --min-height: 60px !important;
+    --height: 60px !important;
+  }
+  
+  .header-title {
+    height: 60px;
+  }
+  
+  .header-logo {
+    height: 50px;
+    max-height: 58px;
+  }
+  
+  .mechanic-home {
+    height: calc(100vh - 60px);
+  }
+  
+  .dark-panel {
+    height: 22vh;
+    padding: 10px;
+  }
+  
+  .mechanic-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .avatar-icon {
+    font-size: 18px;
+  }
+  
+  .mechanic-name {
+    font-size: 13px;
+  }
+  
+  .status-indicator {
+    font-size: 10px;
+  }
+  
+  .status-description {
+    font-size: 9px;
+  }
+  
+  .stop-btn {
+    height: 35px;
+    font-size: 12px;
+  }
+}
+
+// Map card styles for service request modal
+.map-card {
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    .map-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .refresh-map-btn {
+        --color: var(--primary-color);
+        --background: rgba(var(--primary-color-rgb), 0.1);
+        --border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        margin: 0;
+
+        ion-icon {
+          font-size: 1rem;
+        }
+      }
+
+  /* Embedded Simulation Map Styles */
+  .embedded-simulation-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    margin: 16px 0;
+
+    .simulation-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  }
+
+.simulation-map-btn {
+  --color: var(--primary-color);
+  --background: rgba(var(--primary-color-rgb), 0.1);
+  --border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    --background: rgba(var(--primary-color-rgb), 0.2);
+  }
+}
+
+.map-container {
+    height: 200px;
+    position: relative;
+    background: var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+
+    &.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100vh;
+      width: 100vw;
+      z-index: 3000;
+      border-radius: 0;
+      margin: 0;
+      background: #000;
+      box-shadow: none;
+
+      app-real-time-map {
+        width: 100% !important;
+        height: 100% !important;
+        
+        .map-container {
+          height: 100% !important;
+          width: 100% !important;
+        }
+      }
+    }
+
+    app-real-time-map {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  .location-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(var(--primary-color-rgb), 0.05);
+    border-radius: var(--radius-lg);
+    margin-top: 0.5rem;
+
+    .distance-info,
+    .eta-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .location-icon,
+      .time-icon {
+        font-size: 1rem;
+        color: var(--primary-color);
+      }
+
+      .distance-text,
+      .eta-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+    }
+  }
+}
+
+// Map Preview Styles
+.map-preview-container {
+  height: 200px;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .map-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .map-placeholder {
+      text-align: center;
+      color: white;
+      z-index: 2;
+
+      .map-icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.8;
+      }
+
+      .map-text {
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 0;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .map-overlay {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    z-index: 3;
+
+    .expand-icon {
+      color: white;
+      font-size: 1.25rem;
+    }
+  }
+}

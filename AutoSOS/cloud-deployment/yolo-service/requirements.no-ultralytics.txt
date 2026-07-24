@@ -1,0 +1,12 @@
+# Minimal requirements for YOLOv8 service without ultralytics
+fastapi
+uvicorn
+numpy
+Pillow
+supabase
+redis
+python-multipart
+python-dotenv
+structlog
+httpx
+prometheus-client

@@ -1,0 +1,1210 @@
+
+
+<ion-content [fullscreen]="true" class="mechanic-finder-content">
+  <div class="mechanic-finder-container">
+         <!-- Header with Back Button -->
+     <div class="page-header" *ngIf="!showMechanicFoundModal">
+       <ion-button fill="clear" (click)="goBack()" class="back-button">
+         <ion-icon name="arrow-back"></ion-icon>
+       </ion-button>
+     </div>
+
+    <!-- Header Section -->
+    <div class="finder-header" *ngIf="!showMechanicFoundModal">
+      <h2 class="finder-title">Mechanic Finder</h2>
+      <p class="finder-subtitle">Find nearby qualified mechanics for immediate assistance</p>
+    </div>
+
+    <!-- Location Status -->
+    <div class="location-status">
+      <!-- Loading State -->
+      <div class="status-card loading" *ngIf="locationStatus === 'loading'">
+        <ion-icon name="location-outline" class="status-icon"></ion-icon>
+        <div class="status-content">
+          <h3 class="status-title">{{ locationStatusTitle }}</h3>
+          <p class="status-description">{{ locationStatusDescription }}</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div class="status-card error" *ngIf="locationStatus === 'error'">
+        <ion-icon name="location-outline" class="status-icon"></ion-icon>
+        <div class="status-content">
+          <h3 class="status-title">{{ locationStatusTitle }}</h3>
+          <p class="status-description">{{ locationStatusDescription }}</p>
+          <ion-button fill="outline" size="small" (click)="getCurrentLocation()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Try Again
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Success State - Interactive Location -->
+      <div class="status-card success interactive" *ngIf="locationStatus === 'success'">
+        <ion-icon name="location" class="status-icon"></ion-icon>
+        <div class="status-content">
+          <h3 class="status-title">Location Found</h3>
+          <p class="status-description">{{ currentAddress || 'Current location detected' }}</p>
+          
+          <!-- Location Actions -->
+          <div class="location-actions">
+            <ion-button 
+              fill="solid" 
+              size="small" 
+              (click)="useCurrentLocation()"
+              color="success">
+              <ion-icon name="checkmark" slot="start"></ion-icon>
+              Use This Location
+            </ion-button>
+            <ion-button 
+              fill="outline" 
+              size="small" 
+              (click)="toggleLocationSearch()"
+              color="primary">
+              <ion-icon name="search" slot="start"></ion-icon>
+              Search Location
+            </ion-button>
+          </div>
+
+          <!-- Location Search (Inline) -->
+          <div class="inline-location-search" *ngIf="showLocationSearch">
+            <div class="search-input-container">
+              <ion-searchbar
+                [(ngModel)]="searchQuery"
+                (ionInput)="onSearchInput($event)"
+                (ionClear)="onSearchClear()"
+                placeholder="Search for a specific location..."
+                show-clear-button="focus"
+                debounce="300">
+              </ion-searchbar>
+            </div>
+
+            <!-- Search Results -->
+            <div class="search-results" *ngIf="searchSuggestions.length > 0">
+              <ion-list>
+                <ion-item 
+                  *ngFor="let suggestion of searchSuggestions; trackBy: trackBySuggestionId"
+                  (click)="selectSuggestion(suggestion)"
+                  button>
+                  <ion-icon 
+                    [name]="getSuggestionIcon(suggestion.type)" 
+                    [color]="getSuggestionColor(suggestion.type)"
+                    slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h3>{{ suggestion.name }}</h3>
+                    <p>{{ suggestion.address }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" *ngIf="searchSuggestions.length === 0 && searchQuery.length > 2">
+              <p>No locations found. Try different keywords.</p>
+            </div>
+
+            <!-- Nearby Places -->
+            <div class="nearby-places" *ngIf="searchSuggestions.length === 0 && nearbyPlaces.length > 0 && searchQuery.length === 0">
+              <h4>Nearby Places</h4>
+              <ion-list>
+                <ion-item 
+                  *ngFor="let place of nearbyPlaces; trackBy: trackBySuggestionId"
+                  (click)="selectSuggestion(place)"
+                  button>
+                  <ion-icon name="location" color="secondary" slot="start"></ion-icon>
+                  <ion-label>
+                    <h3>{{ place.name }}</h3>
+                    <p>{{ place.address }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Map Section -->
+    <div class="map-section" *ngIf="locationStatus === 'success'">
+      <div class="map-header">
+        <h3 class="map-title">
+          <ion-icon name="map-outline"></ion-icon>
+          Nearby Mechanics
+        </h3>
+        <div class="map-controls">
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            (click)="refreshMechanics()"
+            [disabled]="isLoadingMechanics">
+            <ion-icon name="refresh" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            (click)="openFullscreenMap()">
+            <ion-icon name="expand" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      
+      <!-- User Location Indicator -->
+      <div class="user-location-indicator" *ngIf="currentAddress">
+        <div class="location-pin">
+          <ion-icon name="location" color="primary"></ion-icon>
+          <div class="location-info">
+            <h4>Your Location</h4>
+            <p>{{ currentAddress }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Container -->
+      <div class="map-container" style="height: 200px;">
+        <app-real-time-map 
+          #realTimeMap
+          [mechanicId]="null"
+          [clientLocation]="currentLocation"
+          [showRoute]="false"
+          [isVisible]="true"
+          (locationUpdated)="onLocationUpdated($event)"
+          (mechanicLocationUpdated)="onMechanicLocationUpdated($event)">
+        </app-real-time-map>
+        
+        <!-- Map Overlay with User Pin -->
+        <div class="map-overlay" *ngIf="currentLatitude && currentLongitude">
+          <div class="user-pin-placeholder">
+            <div class="pin-icon">
+              <ion-icon name="person" color="primary"></ion-icon>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available Mechanics Section -->
+    <div class="available-mechanics-section" *ngIf="isUserAuthenticated && locationStatus === 'success'">
+      <div class="mechanics-header">
+        <h3 class="mechanics-title">
+          <ion-icon name="people" class="mechanics-icon"></ion-icon>
+          Available Mechanics ({{ nearbyMechanics.length }})
+        </h3>
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          (click)="refreshMechanics()"
+          class="refresh-btn">
+          <ion-icon name="refresh"></ion-icon>
+        </ion-button>
+      </div>
+
+      <!-- Mechanics List -->
+      <div class="mechanics-list" *ngIf="nearbyMechanics.length > 0">
+        <div 
+          class="mechanic-card" 
+          *ngFor="let mechanic of nearbyMechanics; let i = index"
+          (click)="selectMechanic(mechanic)">
+          <div class="mechanic-avatar">
+            <img *ngIf="mechanic.avatar_url" [src]="mechanic.avatar_url" alt="Mechanic Avatar" class="avatar-img" />
+            <ion-icon *ngIf="!mechanic.avatar_url" name="person" class="avatar-icon"></ion-icon>
+          </div>
+          
+          <div class="mechanic-info">
+            <h4 class="mechanic-name">{{ mechanic.name || 'Mechanic Name' }}</h4>
+            <p class="mechanic-specialty">{{ mechanic.specialty || 'General Repair' }}</p>
+            <div class="mechanic-rating">
+              <ion-icon name="star" class="star-icon"></ion-icon>
+              <span class="rating-text">{{ mechanic.rating || '4.5' }}</span>
+              <span class="review-count">({{ mechanic.review_count || '12' }} reviews)</span>
+            </div>
+          </div>
+          
+          <div class="mechanic-distance">
+            <div class="distance-info">
+              <ion-icon name="location-outline" class="distance-icon"></ion-icon>
+              <span class="distance-text">{{ mechanic.distance }} km</span>
+            </div>
+            <div class="eta-info">
+              <ion-icon name="time-outline" class="eta-icon"></ion-icon>
+              <span class="eta-text">{{ mechanic.eta || '5' }} min</span>
+            </div>
+          </div>
+          
+          <div class="mechanic-status">
+            <div class="status-indicator online">
+              <ion-icon name="radio-button-on"></ion-icon>
+              <span>Available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Mechanics Found -->
+      <div class="no-mechanics" *ngIf="nearbyMechanics.length === 0 && !isLoadingMechanics">
+        <ion-icon name="people-outline" size="large"></ion-icon>
+        <h4>No Available Mechanics</h4>
+        <p>No mechanics are currently available in your area. Please try again later or expand your search radius.</p>
+        <ion-button fill="outline" (click)="resetFilters()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Reset Filters
+        </ion-button>
+      </div>
+
+      <!-- Loading Mechanics -->
+      <div class="loading-mechanics" *ngIf="isLoadingMechanics">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>{{ loadingText || 'Finding available mechanics...' }}</p>
+      </div>
+    </div>
+    </div>
+
+    <!-- Login Prompt (shown when not authenticated) -->
+    <div class="login-prompt" *ngIf="!isUserAuthenticated">
+      <div class="login-card">
+        <ion-icon name="lock-closed-outline" size="large"></ion-icon>
+        <h3>Login Required</h3>
+        <p>Please log in to create service requests and find nearby mechanics.</p>
+        <ion-button (click)="goToLogin()" expand="block" fill="solid">
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Go to Login
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Service Request Form -->
+    <div class="service-request-section" *ngIf="isUserAuthenticated">
+      <div class="request-form">
+        <!-- Contact Information -->
+
+        <!-- Motorcycle Model -->
+        <div class="form-item">
+          <label class="form-label">Motorcycle Model</label>
+          <ion-input 
+            [(ngModel)]="motorcycleModel"
+            placeholder="Enter your motorcycle model"
+            class="model-input">
+          </ion-input>
+        </div>
+
+        <!-- Motorcycle Issue -->
+        <div class="form-item">
+          <label class="form-label">Motorcycle Issue</label>
+          <div class="simple-dropdown">
+            <select 
+              [(ngModel)]="selectedIssue" 
+              (change)="onIssueChange($event)"
+              class="dropdown-select">
+              <option value="" disabled selected>Select motorcycle issue</option>
+              <option value="tire-assistance">Tire assistance</option>
+              <option value="emergency-fuel">Emergency fuel</option>
+              <option value="oil-leak">Oil leak</option>
+              <option value="overheating">Overheating</option>
+              <option value="snon-functional-break-lights">Non-functional brake lights</option>
+              <option value="short-circuit">Short Circuit</option>
+              <option value="dead-battery">Dead Battery</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <!-- Custom Issue Input -->
+          <ion-textarea 
+            *ngIf="selectedIssue === 'other'"
+            [(ngModel)]="customIssue"
+            placeholder="Describe your motorcycle issue..."
+            rows="3"
+            class="custom-issue-input">
+          </ion-textarea>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-item">
+          <label class="form-label">Payment Method</label>
+          <div class="simple-dropdown">
+            <select 
+              [(ngModel)]="selectedPaymentMethod" 
+              class="dropdown-select">
+              <option value="" disabled selected>Select payment method</option>
+              <option value="cash">Cash</option>
+              <option value="facial_recognition">Facial Recognition</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+          <!-- Active Booking Warning -->
+          <div *ngIf="hasActiveBooking()" class="active-booking-warning">
+            <ion-icon name="warning" color="warning"></ion-icon>
+            <div class="warning-content">
+              <p>You already have an active booking. Complete or cancel your current booking to create a new one.</p>
+              <ion-button 
+                fill="outline" 
+                size="small" 
+                color="danger"
+                (click)="cancelBooking()"
+                class="cancel-booking-btn">
+                <ion-icon name="close" slot="start"></ion-icon>
+                Cancel Current Booking
+              </ion-button>
+            </div>
+          </div>
+          
+          <!-- Submit Button (disabled if active booking) -->
+          <ion-button 
+            expand="block" 
+            class="submit-button"
+            (click)="submitServiceRequest()"
+            [disabled]="!canSubmitRequest()">
+            <ion-icon name="send" slot="start"></ion-icon>
+            <span *ngIf="!hasActiveBooking()">Submit Request</span>
+            <span *ngIf="hasActiveBooking()">Cannot Submit - Active Booking Exists</span>
+          </ion-button>
+          
+          <!-- View Existing Booking Button -->
+          <ion-button 
+            *ngIf="currentBooking"
+            expand="block" 
+            class="view-booking-button"
+            fill="outline"
+            color="secondary"
+            (click)="showExistingBookingModal()">
+            <ion-icon name="eye" slot="start"></ion-icon>
+            View Current Booking
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+                   <!-- Loading Indicator -->
+      <div class="loading-overlay" *ngIf="isLoadingMechanics">
+        <div class="loading-content">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p class="loading-text">{{ loadingText }}</p>
+        </div>
+      </div>
+
+    <!-- Loading State Modal -->
+
+         <!-- Enhanced Mechanic Preview Panel -->
+         <div class="mechanic-preview-panel" [class.expanded]="isBottomSheetExpanded">
+            <!-- Drag Handle -->
+            <div class="drag-handle" (click)="toggleBottomSheet()">
+              <div class="handle-bar"></div>
+            </div>
+
+            <!-- Collapsed Content (Initial State) -->
+            <div class="collapsed-content" *ngIf="!isBottomSheetExpanded">
+
+
+            </div>
+
+            <!-- Expanded Content -->
+            <div class="expanded-content" *ngIf="isBottomSheetExpanded">
+              <!-- Header with back button -->
+              <div class="expanded-header">
+                <ion-button fill="clear" class="back-button" (click)="collapseBottomSheet()">
+                  <ion-icon name="arrow-down"></ion-icon>
+                </ion-button>
+                <h3 class="expanded-title">Complete Mechanic Details</h3>
+              </div>
+
+              <!-- Mechanic Contact Information -->
+              <div class="detail-section">
+                <h4 class="detail-title">
+                  <ion-icon name="person-circle-outline"></ion-icon>
+                  MECHANIC CONTACT
+                </h4>
+                <div class="detail-content">
+                  <div class="contact-card">
+                    <div class="contact-info">
+                      <div class="contact-item">
+                        <ion-icon name="person-outline" class="contact-icon"></ion-icon>
+                        <div class="contact-details">
+                          <p class="contact-label">Full Name</p>
+                          <p class="contact-value">{{ nearbyMechanics[0].name || 'Mechanic Name' }}</p>
+                        </div>
+                      </div>
+                      <div class="contact-item">
+                        <ion-icon name="call-outline" class="contact-icon"></ion-icon>
+                        <div class="contact-details">
+                          <p class="contact-label">Phone Number</p>
+                          <p class="contact-value">{{ nearbyMechanics[0].phone || 'No phone available' }}</p>
+                        </div>
+                        <ion-button fill="clear" class="call-action" (click)="callMechanic()">
+                          <ion-icon name="call"></ion-icon>
+                        </ion-button>
+                      </div>
+                      <div class="contact-item">
+                        <ion-icon name="mail-outline" class="contact-icon"></ion-icon>
+                        <div class="contact-details">
+                          <p class="contact-label">Email</p>
+                          <p class="contact-value">{{ nearbyMechanics[0].email || 'No email available' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mechanic Professional Information -->
+              <div class="detail-section">
+                <h4 class="detail-title">
+                  <ion-icon name="construct-outline"></ion-icon>
+                  PROFESSIONAL INFO
+                </h4>
+                <div class="detail-content">
+                  <div class="professional-card">
+                    <div class="professional-item">
+                      <ion-icon name="construct-outline" class="professional-icon"></ion-icon>
+                      <div class="professional-details">
+                        <p class="professional-label">Specialty</p>
+                        <p class="professional-value">{{ nearbyMechanics[0].specialty || 'General Service' }}</p>
+                      </div>
+                    </div>
+                    <div class="professional-item">
+                      <ion-icon name="star-outline" class="professional-icon"></ion-icon>
+                      <div class="professional-details">
+                        <p class="professional-label">Rating</p>
+                        <p class="professional-value">{{ nearbyMechanics[0].rating || '4.5' }} ⭐</p>
+                      </div>
+                    </div>
+                    <div class="professional-item">
+                      <ion-icon name="briefcase-outline" class="professional-icon"></ion-icon>
+                      <div class="professional-details">
+                        <p class="professional-label">Experience</p>
+                        <p class="professional-value">{{ nearbyMechanics[0].experience || '5' }} years</p>
+                      </div>
+                    </div>
+                    <div class="professional-item">
+                      <ion-icon name="language-outline" class="professional-icon"></ion-icon>
+                      <div class="professional-details">
+                        <p class="professional-label">Languages</p>
+                        <p class="professional-value">{{ nearbyMechanics[0].languages.join(', ') || 'English, Filipino' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Request Information -->
+              <div class="detail-section">
+                <h4 class="detail-title">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                  SERVICE REQUEST
+                </h4>
+                <div class="detail-content">
+                  <div class="service-card">
+                    <div class="service-item">
+                      <ion-icon name="construct-outline" class="service-icon"></ion-icon>
+                      <div class="service-details">
+                        <p class="service-label">Service Type</p>
+                        <p class="service-value">{{ selectedIssue || 'Service Request' }}</p>
+                      </div>
+                    </div>
+                    <div class="service-item">
+                      <ion-icon name="bicycle-outline" class="service-icon"></ion-icon>
+                      <div class="service-details">
+                        <p class="service-label">Motorcycle Model</p>
+                        <p class="service-value">{{ motorcycleModel || 'Motorcycle Model' }}</p>
+                      </div>
+                    </div>
+                    <div class="service-item">
+                      <ion-icon name="document-text-outline" class="service-icon"></ion-icon>
+                      <div class="service-details">
+                        <p class="service-label">Additional Notes</p>
+                        <p class="service-value">{{ customIssue || 'No additional notes' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location and Timing Information -->
+              <div class="detail-section">
+                <h4 class="detail-title">
+                  <ion-icon name="location-outline"></ion-icon>
+                  LOCATION & TIMING
+                </h4>
+                <div class="detail-content">
+                  <div class="location-card">
+                    <div class="location-item">
+                      <ion-icon name="location-outline" class="location-icon"></ion-icon>
+                      <div class="location-details">
+                        <p class="location-label">Your Location</p>
+                        <p class="location-value">Current location</p>
+                      </div>
+                    </div>
+                    <div class="location-item">
+                      <ion-icon name="navigate-outline" class="location-icon"></ion-icon>
+                      <div class="location-details">
+                        <p class="location-label">Distance</p>
+                        <p class="location-value">{{ getEstimatedDistance() || 'Calculating...' }}</p>
+                      </div>
+                    </div>
+                    <div class="location-item">
+                      <ion-icon name="time-outline" class="location-icon"></ion-icon>
+                      <div class="location-details">
+                        <p class="location-label">Estimated Arrival</p>
+                        <p class="location-value">{{ getEstimatedTime() || 'Calculating...' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Booking Information -->
+              <div class="detail-section">
+                <h4 class="detail-title">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  BOOKING INFORMATION
+                </h4>
+                <div class="detail-content">
+                  <div class="booking-card">
+                    <div class="booking-item">
+                      <ion-icon name="calendar-outline" class="booking-icon"></ion-icon>
+                      <div class="booking-details">
+                        <p class="booking-label">Request Time</p>
+                        <p class="booking-value">{{ getCurrentTime() }}</p>
+                      </div>
+                    </div>
+                    <div class="booking-item">
+                      <ion-icon name="receipt-outline" class="booking-icon"></ion-icon>
+                      <div class="booking-details">
+                      </div>
+                      <div class="booking-details">
+                        <p class="booking-label">Status</p>
+                        <p class="booking-value" [ngClass]="'status-' + (currentBooking?.status || 'matched')">{{ (currentBooking?.status | titlecase) || 'Matched' }}</p>
+                      </div>
+                    </div>
+                    <div class="booking-item" *ngIf="currentBooking?.service_price">
+                      <ion-icon name="cash-outline" class="booking-icon"></ion-icon>
+                      <div class="booking-details">
+                        <p class="booking-label">Service Price</p>
+                        <p class="booking-value">₱{{ currentBooking.service_price }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+         </div>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal" *ngIf="showPaymentModal">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2 class="modal-title">Complete Payment</h2>
+          <ion-button fill="clear" (click)="closePaymentModal()" class="close-button">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Service Summary -->
+        <div class="service-summary">
+          <h3>Service Summary</h3>
+          <div class="summary-item">
+            <span class="label">Service:</span>
+            <span class="value">{{ currentBooking?.required_specialization }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Mechanic:</span>
+            <span class="value">{{ selectedMechanic?.name }}</span>
+          </div>
+          <div class="summary-item total">
+            <span class="label">Total Amount:</span>
+            <span class="value">₱{{ currentBooking?.service_price }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+          <h3>Choose Payment Method</h3>
+          
+          <div class="payment-option" (click)="selectPaymentMethod('cash')" [class.selected]="selectedPaymentMethod === 'cash'">
+            <ion-icon name="cash" class="payment-icon"></ion-icon>
+            <div class="payment-info">
+              <h4>Cash Payment</h4>
+              <p>Pay directly to the mechanic</p>
+            </div>
+            <ion-radio value="cash"></ion-radio>
+          </div>
+
+          <div class="payment-option" (click)="selectPaymentMethod('card')" [class.selected]="selectedPaymentMethod === 'card'">
+            <ion-icon name="card" class="payment-icon"></ion-icon>
+            <div class="payment-info">
+              <h4>Credit/Debit Card</h4>
+              <p>Secure online payment</p>
+            </div>
+            <ion-radio value="card"></ion-radio>
+          </div>
+
+          <div class="payment-option" (click)="selectPaymentMethod('facial_recognition')" [class.selected]="selectedPaymentMethod === 'facial_recognition'">
+            <ion-icon name="scan" class="payment-icon"></ion-icon>
+            <div class="payment-info">
+              <h4>Facial Recognition</h4>
+              <p>Secure biometric payment</p>
+            </div>
+            <ion-radio value="facial_recognition"></ion-radio>
+          </div>
+        </div>
+
+        <!-- Facial Recognition Section -->
+        <div class="facial-recognition-section" *ngIf="selectedPaymentMethod === 'facial_recognition'">
+          <h3>Facial Recognition Payment</h3>
+          <div class="info-banner">
+            <ion-icon name="information-circle" color="primary"></ion-icon>
+            <p>Payment will be processed automatically after facial verification. The job will also be marked as completed once payment is confirmed.</p>
+          </div>
+          <div class="camera-container" *ngIf="!facialRecognitionCompleted">
+            <div class="camera-placeholder">
+              <ion-icon name="camera" size="large"></ion-icon>
+              <p>Position your face in the camera</p>
+            </div>
+            <div class="auto-verification-notice">
+              <ion-icon name="information-circle" color="primary"></ion-icon>
+              <p>Facial verification will start automatically</p>
+            </div>
+          </div>
+          
+          <div class="verification-result" *ngIf="facialRecognitionCompleted">
+            <ion-icon name="checkmark-circle" color="success" size="large"></ion-icon>
+            <p>Identity verified successfully!</p>
+            <p class="auto-complete-notice">Payment processed and job completed automatically!</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="modal-actions">
+          <ion-button fill="outline" (click)="closePaymentModal()" class="cancel-btn">
+            Cancel
+          </ion-button>
+          <ion-button 
+            fill="solid" 
+            (click)="processPayment()" 
+            class="pay-btn" 
+            [disabled]="!selectedPaymentMethod || (selectedPaymentMethod === 'facial_recognition' && !facialRecognitionCompleted)">
+            <ion-icon name="card" slot="start"></ion-icon>
+            Pay ₱{{ currentBooking?.service_price }}
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comprehensive Mechanic Found Modal -->
+    <div class="mechanic-found-modal" *ngIf="showMechanicFoundModal && currentBooking">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <ion-button fill="clear" (click)="closeMechanicFoundModal()" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+          <div class="header-center">
+            <h2 class="modal-title">Mechanic Found</h2>
+            <p class="header-subtitle" *ngIf="currentBooking?.status === 'matched'">Waiting for mechanic to accept...</p>
+            <p class="header-subtitle" *ngIf="currentBooking?.status === 'in_progress'">Your mechanic is on the way</p>
+          </div>
+          <ion-button fill="clear" class="menu-button" (click)="toggleBottomSheet()">
+            <ion-icon name="menu"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Content based on booking status -->
+        <div class="modal-body">
+          <!-- Loading State for Matched Bookings -->
+          <div class="loading-state" *ngIf="currentBooking?.status === 'matched'">
+            <div class="loading-animation">
+              <div class="spinner-container">
+                <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+              </div>
+              <h3>Waiting for Mechanic</h3>
+              <p>Your mechanic is reviewing the request and will accept shortly...</p>
+            </div>
+            
+            <!-- Status Steps -->
+            <div class="status-steps">
+              <div class="status-step completed">
+                <ion-icon name="checkmark-circle" class="step-icon completed"></ion-icon>
+                <div class="step-content">
+                  <div class="step-title">Request Submitted</div>
+                  <div class="step-description">Your service request has been sent</div>
+                </div>
+              </div>
+              
+              <div class="status-step active">
+                <ion-icon name="time" class="step-icon active"></ion-icon>
+                <div class="step-content">
+                  <div class="step-title">Waiting for Acceptance</div>
+                  <div class="step-description">Mechanic is reviewing your request</div>
+                </div>
+              </div>
+              
+              <div class="status-step pending">
+                <ion-icon name="navigate" class="step-icon pending"></ion-icon>
+                <div class="step-content">
+                  <div class="step-title">Mechanic En Route</div>
+                  <div class="step-description">Mechanic will start navigation once accepted</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- In Progress State with Map and Navigation -->
+          <div class="in-progress-state" *ngIf="currentBooking?.status === 'in_progress'">
+            <!-- Navigation Section (replacing map) -->
+            <div class="navigation-section">
+              <div class="navigation-card">
+                <div class="navigation-content">
+                  <div class="navigation-icon">
+                    <ion-icon name="navigate" color="success"></ion-icon>
+                  </div>
+                  <div class="navigation-text">
+                    <div class="navigation-title">Mechanic En Route</div>
+                    <div class="navigation-info">
+                      <div class="mechanic-info">
+                        <span class="mechanic-label">Mechanic:</span>
+                        <span class="mechanic-name">{{ getMechanicName() }}</span>
+                      </div>
+                      <div class="distance-info">
+                        <ion-icon name="location-outline" color="medium"></ion-icon>
+                        <span>{{ getEstimatedDistance() || 'Calculating...' }} away</span>
+                      </div>
+                      <div class="eta-info">
+                        <ion-icon name="time-outline" color="medium"></ion-icon>
+                        <span>ETA: {{ getEstimatedTime() || 'Calculating...' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="navigation-actions">
+                    <ion-button 
+                      fill="solid" 
+                      color="success" 
+                      size="small"
+                      (click)="startNavigation()">
+                      <ion-icon name="play" slot="start"></ion-icon>
+                      Start Navigation
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Quick Action Buttons -->
+              <div class="quick-actions">
+                <ion-button fill="solid" class="action-btn call-btn" (click)="callMechanic()">
+                  <ion-icon name="call"></ion-icon>
+                  <span>Call Mechanic</span>
+                </ion-button>
+                <ion-button fill="outline" class="action-btn cancel-btn" (click)="cancelBooking()">
+                  <ion-icon name="close"></ion-icon>
+                  <span>Cancel</span>
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Mechanic Information Card -->
+            <div class="mechanic-info-card">
+              <div class="mechanic-avatar">
+                <img *ngIf="getMechanicAvatar()" [src]="getMechanicAvatar()" alt="Mechanic Avatar" class="avatar-img" />
+                <ion-icon *ngIf="!getMechanicAvatar()" name="person" class="avatar-icon"></ion-icon>
+              </div>
+              <div class="mechanic-details">
+                <h3 class="mechanic-name">{{ getMechanicName() }}</h3>
+                <p class="mechanic-specialization">{{ currentBooking?.required_specialization || 'General Repair' }}</p>
+                <div class="mechanic-rating">
+                  <ion-icon name="star" class="star-icon"></ion-icon>
+                  <span class="rating-text">4.5</span>
+                  <span class="review-count">(12 reviews)</span>
+                </div>
+              </div>
+              <div class="mechanic-status">
+                <div class="status-indicator online">
+                  <ion-icon name="radio-button-on"></ion-icon>
+                  <span>En Route</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Service Details Card -->
+            <div class="service-details-card">
+              <h4 class="card-title">Service Details</h4>
+              <div class="service-info">
+                <div class="info-row">
+                  <ion-icon name="construct" class="info-icon"></ion-icon>
+                  <span class="info-label">Service Type:</span>
+                  <span class="info-value">{{ currentBooking?.required_specialization || 'General Repair' }}</span>
+                </div>
+                <div class="info-row" *ngIf="currentBooking?.notes">
+                  <ion-icon name="document-text" class="info-icon"></ion-icon>
+                  <span class="info-label">Description:</span>
+                  <span class="info-value">{{ currentBooking.notes }}</span>
+                </div>
+                <div class="info-row">
+                  <ion-icon name="time" class="info-icon"></ion-icon>
+                  <span class="info-label">Requested:</span>
+                  <span class="info-value">{{ formatDate(currentBooking?.created_at) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Information Card -->
+            <div class="payment-info-card" *ngIf="currentBooking?.service_price">
+              <h4 class="card-title">Payment Information</h4>
+              <div class="payment-details">
+                <div class="price-row">
+                  <span class="price-label">Service Fee:</span>
+                  <span class="price-value">₱{{ currentBooking.service_price }}</span>
+                </div>
+                <div class="payment-method-row">
+                  <ion-icon name="card" class="payment-icon"></ion-icon>
+                  <span class="payment-method">{{ getPaymentMethodText(currentBooking.payment_method) }}</span>
+                </div>
+              </div>
+              
+              <!-- Payment Processing -->
+              <div class="payment-section">
+                <!-- Cash Payment -->
+                <div *ngIf="currentBooking?.payment_method === 'cash'">
+                  <ion-button 
+                    expand="block" 
+                    fill="solid" 
+                    color="success"
+                    class="payment-btn"
+                    (click)="processPayment()">
+                    <ion-icon name="cash" slot="start"></ion-icon>
+                    Pay ₱{{ currentBooking?.service_price }} (Cash)
+                  </ion-button>
+                </div>
+
+                <!-- Facial Recognition Payment -->
+                <div *ngIf="currentBooking?.payment_method === 'facial_recognition'">
+                  <div class="facial-recognition-section">
+                    <!-- Simple Payment Interface -->
+                    <div class="payment-interface" *ngIf="!facialRecognitionCompleted && !isProcessingPayment && !facialRecognitionError">
+                      <div class="payment-info">
+                        <ion-icon name="scan" size="large" color="primary"></ion-icon>
+                        <h3>Facial Recognition Payment</h3>
+                        <p>Click below to start facial recognition and complete your payment</p>
+                      </div>
+                      
+                      <ion-button 
+                        expand="block" 
+                        fill="solid" 
+                        color="success"
+                        class="payment-btn"
+                        (click)="processFacialRecognitionPayment()"
+                        [disabled]="isProcessingPayment">
+                        <ion-spinner *ngIf="isProcessingPayment" name="crescent" size="small"></ion-spinner>
+                        <ion-icon *ngIf="!isProcessingPayment" name="scan" slot="start"></ion-icon>
+                        Pay ₱{{ currentBooking?.service_price }} (Face Recognition)
+                      </ion-button>
+                    </div>
+                    
+                    <!-- Processing Status -->
+                    <div class="processing-status" *ngIf="isProcessingPayment">
+                      <ion-spinner name="crescent"></ion-spinner>
+                      <p>Processing facial recognition...</p>
+                    </div>
+                    
+                    <!-- Success Status -->
+                    <div class="success-status" *ngIf="facialRecognitionCompleted">
+                      <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                      <p>Face recognized! Payment processed.</p>
+                    </div>
+                    
+                    <!-- Error Status with Retry -->
+                    <div class="error-status" *ngIf="facialRecognitionError">
+                      <ion-icon name="close-circle" color="danger"></ion-icon>
+                      <p>Face recognition failed. Please try again.</p>
+                      <ion-button 
+                        fill="outline" 
+                        color="primary"
+                        size="small"
+                        (click)="retryFacialRecognition()">
+                        <ion-icon name="refresh" slot="start"></ion-icon>
+                        Try Again
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Finding Mechanic Loading Modal -->
+    <div class="finding-mechanic-modal" *ngIf="isLoadingMechanics">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2 class="modal-title">Finding Mechanic</h2>
+        </div>
+
+        <!-- Content -->
+        <div class="modal-body">
+          <!-- Loading Animation -->
+          <div class="loading-animation">
+            <div class="spinner-container">
+              <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+            </div>
+            <h3>{{ loadingText || 'Finding Available Mechanics' }}</h3>
+            <p>We're searching for the best mechanic in your area...</p>
+          </div>
+          
+          <!-- Status Steps -->
+          <div class="status-steps">
+            <div class="status-step" [class.active]="loadingText === 'Creating service request...'">
+              <div class="step-icon">
+                <ion-icon name="document-text" *ngIf="loadingText === 'Creating service request...'"></ion-icon>
+                <ion-icon name="checkmark-circle" *ngIf="loadingText !== 'Creating service request...'"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4 class="step-title">Creating Request</h4>
+                <p class="step-description">Setting up your service request</p>
+              </div>
+            </div>
+            
+            <div class="status-step" [class.active]="loadingText === 'Finding nearby mechanics...'">
+              <div class="step-icon">
+                <ion-icon name="search" *ngIf="loadingText === 'Finding nearby mechanics...'"></ion-icon>
+                <ion-icon name="checkmark-circle" *ngIf="loadingText !== 'Finding nearby mechanics...' && loadingText !== 'Creating service request...'"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4 class="step-title">Searching Mechanics</h4>
+                <p class="step-description">Finding qualified mechanics nearby</p>
+              </div>
+            </div>
+            
+            <div class="status-step" [class.active]="loadingText === 'Matching with mechanic...'">
+              <div class="step-icon">
+                <ion-icon name="people" *ngIf="loadingText === 'Matching with mechanic...'"></ion-icon>
+                <ion-icon name="checkmark-circle" *ngIf="loadingText !== 'Matching with mechanic...' && loadingText !== 'Finding nearby mechanics...' && loadingText !== 'Creating service request...'"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4 class="step-title">Matching</h4>
+                <p class="step-description">Connecting you with a mechanic</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State Modal -->
+    <div class="loading-state-modal" *ngIf="showLoadingState && currentBooking">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2 class="modal-title">Submitting Request</h2>
+          <ion-button fill="clear" (click)="closeLoadingState()" class="close-button">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Content -->
+        <div class="modal-body">
+          <!-- Loading Animation -->
+          <div class="loading-animation">
+            <div class="spinner-container">
+              <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+            </div>
+            <h3>Finding Available Mechanics</h3>
+            <p>We're searching for the best mechanic in your area...</p>
+          </div>
+
+          <!-- Status Steps -->
+          <div class="status-steps">
+            <div class="step completed">
+              <div class="step-icon">
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4>Request Submitted</h4>
+                <p>Your service request has been sent</p>
+              </div>
+            </div>
+            
+            <div class="step active">
+              <div class="step-icon">
+                <ion-icon name="search" color="primary"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4>Finding Mechanic</h4>
+                <p>Searching for available mechanics nearby</p>
+              </div>
+            </div>
+            
+            <div class="step pending">
+              <div class="step-icon">
+                <ion-icon name="time" color="medium"></ion-icon>
+              </div>
+              <div class="step-content">
+                <h4>Waiting for Acceptance</h4>
+                <p>Mechanic will accept your request shortly</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Request Details -->
+          <div class="request-details">
+            <h4>Request Details</h4>
+            <div class="detail-item">
+              <span class="label">Issue Type:</span>
+              <span class="value">{{ currentBooking?.required_specialization || 'General Service' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="currentBooking?.notes">
+              <span class="label">Description:</span>
+              <span class="value">{{ currentBooking.notes }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Payment Method:</span>
+              <span class="value">{{ currentBooking?.payment_method || 'Cash' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service In Progress Modal -->
+    <div class="service-in-progress-modal" *ngIf="showServiceInProgressModal && currentBooking">
+      <div class="modal-overlay" (click)="closeServiceInProgressModal()"></div>
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <ion-button fill="clear" (click)="closeServiceInProgressModal()" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+          <h2 class="modal-title">Service In Progress</h2>
+          <div class="header-spacer"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="modal-body">
+          <!-- Status Card -->
+          <div class="status-card">
+            <div class="status-icon">
+              <ion-icon name="construct" class="working-icon"></ion-icon>
+            </div>
+            <div class="status-content">
+              <h3>Mechanic is Working</h3>
+              <p>Your mechanic is currently working on your motorcycle. Please wait for completion.</p>
+            </div>
+          </div>
+
+          <!-- Real-time Map Section -->
+          <div class="map-section" *ngIf="currentBooking?.mechanic_latitude && currentBooking?.mechanic_longitude">
+            <div class="map-header">
+              <ion-icon name="navigate" class="map-icon"></ion-icon>
+              <h3>Mechanic Location</h3>
+              <div class="location-info">
+                <span class="distance">{{ getDistanceToMechanicInProgress() }}</span>
+                <span class="eta">{{ getEstimatedArrivalTimeInProgress() }}</span>
+              </div>
+            </div>
+            <div class="map-container" style="height: 200px;">
+              <app-real-time-map 
+                [mechanicId]="currentBooking?.mechanic_id"
+                [clientLocation]="getClientLocationForMap()"
+                [showRoute]="true"
+                (locationUpdated)="onLocationUpdated($event)"
+                (mechanicLocationUpdated)="onMechanicLocationUpdated($event)">
+              </app-real-time-map>
+            </div>
+          </div>
+
+          <!-- Service Details Card -->
+          <div class="info-card">
+            <div class="card-header">
+              <ion-icon name="information-circle" class="card-icon"></ion-icon>
+              <h3>Service Details</h3>
+            </div>
+            <div class="card-content">
+              <div class="info-row">
+                <div class="info-item">
+                  <span class="info-label">Issue Type</span>
+                  <span class="info-value">{{ currentBooking?.required_specialization || 'General Service' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Service Price</span>
+                  <span class="info-value price">₱{{ currentBooking?.service_price || 'TBD' }}</span>
+                </div>
+              </div>
+              <div class="info-row" *ngIf="currentBooking?.notes">
+                <div class="info-item full-width">
+                  <span class="info-label">Notes</span>
+                  <span class="info-value">{{ currentBooking.notes }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Information Card -->
+          <div class="info-card">
+            <div class="card-header">
+              <ion-icon name="card" class="card-icon"></ion-icon>
+              <h3>Payment Information</h3>
+            </div>
+            <div class="card-content">
+              <div class="info-row">
+                <div class="info-item">
+                  <span class="info-label">Payment Method</span>
+                  <span class="info-value">{{ currentBooking?.payment_method || 'Cash' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Status</span>
+                  <span class="info-value status-badge" [class]="'status-' + (currentBooking?.payment_status || 'pending')">
+                    {{ (currentBooking?.payment_status || 'pending') | titlecase }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Action Section -->
+          <div class="payment-action-section" *ngIf="currentBooking?.service_price">
+            <!-- Cash Payment - Just waiting -->
+            <div class="cash-payment-info" *ngIf="currentBooking?.payment_method === 'cash'">
+              <div class="payment-status">
+                <ion-icon name="time" class="status-icon"></ion-icon>
+                <div class="status-content">
+                  <h4>Cash Payment</h4>
+                  <p>Please prepare ₱{{ currentBooking.service_price }} in cash. Payment will be collected when the service is completed.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Facial Recognition Payment - Button to pay -->
+            <div class="facial-payment-section" *ngIf="currentBooking?.payment_method === 'facial_recognition'">
+              <div class="payment-info">
+                <ion-icon name="scan" class="payment-icon"></ion-icon>
+                <div class="payment-content">
+                  <h4>Facial Recognition Payment</h4>
+                  <p>Complete your payment using facial recognition technology.</p>
+                </div>
+              </div>
+              
+              <ion-button 
+                fill="solid" 
+                color="primary" 
+                class="payment-btn"
+                (click)="processFacialRecognitionPayment()"
+                [disabled]="currentBooking?.payment_status === 'paid'">
+                <ion-icon name="scan" slot="start"></ion-icon>
+                {{ currentBooking?.payment_status === 'paid' ? 'Payment Completed' : 'Pay ₱' + currentBooking?.service_price }}
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Waiting Message -->
+          <div class="waiting-message" *ngIf="!currentBooking?.service_price">
+            <ion-icon name="hourglass" class="waiting-icon"></ion-icon>
+            <h4>Waiting for Price</h4>
+            <p>Your mechanic is assessing the issue and will set the service price shortly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</ion-content>

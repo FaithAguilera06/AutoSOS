@@ -1,0 +1,136 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Track Mechanic</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="toggleFullscreen()">
+        <ion-icon [name]="isFullscreen ? 'contract' : 'expand'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="navigation-content">
+  <div class="navigation-container">
+    <!-- Map Container -->
+    <div class="map-container" [class.fullscreen]="isFullscreen">
+      <div id="navigation-map" class="map"></div>
+      
+      <!-- Map Loading Overlay -->
+      <div class="map-loading-overlay" *ngIf="!mapLoaded">
+        <div class="loading-content">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+          <h3>Loading Navigation</h3>
+          <p>Getting real-time directions...</p>
+        </div>
+      </div>
+      
+      <!-- Navigation Info Overlay -->
+      <div class="navigation-info-overlay" *ngIf="mapLoaded">
+        <div class="route-info">
+          <div class="distance-info">
+            <ion-icon name="navigate" color="primary"></ion-icon>
+            <span>{{ routeDistance || 'Calculating...' }}</span>
+          </div>
+          <div class="eta-info">
+            <ion-icon name="time" color="secondary"></ion-icon>
+            <span>{{ routeDuration || 'Calculating...' }}</span>
+          </div>
+        </div>
+        
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            size="small"
+            (click)="centerOnMechanic()"
+            [disabled]="!mechanicLocation">
+            <ion-icon name="car" slot="start"></ion-icon>
+            Mechanic
+          </ion-button>
+          <ion-button 
+            fill="solid" 
+            color="secondary" 
+            size="small"
+            (click)="centerOnClient()"
+            [disabled]="!clientLocation">
+            <ion-icon name="person" slot="start"></ion-icon>
+            My Location
+          </ion-button>
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            size="small"
+            (click)="refreshRoute()"
+            [disabled]="isLoadingRoute">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Refresh
+          </ion-button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom Panel -->
+    <div class="bottom-panel" [class.hidden]="isFullscreen">
+      <div class="panel-header">
+        <div class="mechanic-info">
+          <ion-icon name="car" color="primary"></ion-icon>
+          <div class="mechanic-details">
+            <h4>{{ mechanicName || 'Mechanic' }}</h4>
+            <p>En Route to Your Location</p>
+          </div>
+        </div>
+        <div class="status-indicator">
+          <ion-icon name="radio" [color]="isTracking ? 'success' : 'medium'"></ion-icon>
+          <span>{{ isTracking ? 'Tracking' : 'Offline' }}</span>
+        </div>
+      </div>
+      
+      <div class="panel-content">
+        <div class="location-details">
+          <div class="detail-item">
+            <ion-icon name="location" color="primary"></ion-icon>
+            <div class="detail-content">
+              <span class="label">Your Location</span>
+              <span class="value">{{ clientLocation ? (clientLocation.latitude.toFixed(4) + ', ' + clientLocation.longitude.toFixed(4)) : 'Not available' }}</span>
+            </div>
+          </div>
+          
+          <div class="detail-item" *ngIf="mechanicLocation">
+            <ion-icon name="car" color="secondary"></ion-icon>
+            <div class="detail-content">
+              <span class="label">Mechanic Location</span>
+              <span class="value">{{ mechanicLocation.latitude.toFixed(4) }}, {{ mechanicLocation.longitude.toFixed(4) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <ion-button 
+            fill="outline" 
+            color="primary"
+            (click)="callMechanic()"
+            [disabled]="!mechanicPhone">
+            <ion-icon name="call" slot="start"></ion-icon>
+            Call Mechanic
+          </ion-button>
+          
+          <ion-button 
+            fill="solid" 
+            color="success"
+            (click)="startNavigation()"
+            [disabled]="!routeLoaded">
+            <ion-icon name="play" slot="start"></ion-icon>
+            Start Navigation
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

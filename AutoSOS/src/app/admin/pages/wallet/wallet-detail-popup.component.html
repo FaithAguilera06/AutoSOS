@@ -1,0 +1,89 @@
+<div class="popup-overlay" *ngIf="isVisible" (click)="closePopup()">
+  <div class="popup-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <div class="close-button" (click)="closePopup()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <ion-avatar>
+        <img src="assets/images/icon.png" alt="Profile Picture">
+      </ion-avatar>
+    </div>
+
+    <!-- Client Information -->
+    <div class="client-info">
+      <div class="info-row">
+        <span class="label">Client Name:</span>
+        <span class="value">{{ request.clientName }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Contact Number:</span>
+        <span class="value">{{ request.clientPhone }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ request.clientEmail }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Amount:</span>
+        <span class="value">₱{{ request.amount.toLocaleString() }}</span>
+      </div>
+    </div>
+
+    <!-- Proof of Payment Section -->
+    <div class="proof-section">
+      <h3>Proof of Payment</h3>
+      
+      <!-- Receipt Images Preview -->
+      <div class="receipt-images" *ngIf="getReceiptImages().length > 0">
+        <h4>Uploaded Receipt Images ({{ getReceiptImages().length }}):</h4>
+        <div class="image-gallery">
+          <div class="image-item" *ngFor="let imageUrl of getReceiptImages(); let i = index">
+            <div class="document-image" (click)="viewImageFullscreen(getDocumentUrl(i), 'Receipt Image ' + (i + 1))">
+              <img [src]="getDocumentUrl(i)" 
+                   [alt]="'Receipt image ' + (i + 1)"
+                   (load)="onImageLoad(i)"
+                   (error)="onImageError($event)"
+                   loading="lazy">
+              <div class="document-status status-approved">
+                RECEIPT
+              </div>
+              <div class="view-overlay">
+                <ion-icon name="eye-outline"></ion-icon>
+                <span>Click to view</span>
+              </div>
+            </div>
+            <div class="image-loading" *ngIf="!imageLoaded[i]">
+              <ion-spinner name="crescent"></ion-spinner>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- No images message -->
+      <div class="no-images" *ngIf="getReceiptImages().length === 0">
+        <ion-icon name="image-outline" class="no-image-icon"></ion-icon>
+        <p>No receipt images uploaded</p>
+        <p class="debug-info" *ngIf="request.receipt_images">
+          Debug: receipt_images = {{ request.receipt_images }}
+        </p>
+      </div>
+      
+    </div>
+
+
+    <!-- Funds Display - Only show for completed status -->
+    <div class="funds-display-section" *ngIf="request.status === 'completed'">
+      <div class="funds-info">
+        <span class="funds-label">Added Funds:</span>
+        <span class="funds-amount">₱{{ request.amount.toLocaleString() }}</span>
+      </div>
+    </div>
+
+  </div>
+</div>

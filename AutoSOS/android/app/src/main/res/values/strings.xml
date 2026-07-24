@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AutoSOS</string>
+    <string name="title_activity_main">AutoSOS</string>
+    <string name="package_name">io.ionic.starter</string>
+    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiYXV0b3NvczEyMyIsImEiOiJjbWdvNHJ0MDkxcjJtMm5va2lhNnB1YjR0In0.8hQ5bC4FlZKZFevZQvBzNg</string>
+</resources>

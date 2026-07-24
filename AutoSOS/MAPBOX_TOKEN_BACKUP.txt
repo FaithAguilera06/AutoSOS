@@ -1,0 +1,18 @@
+AutoSOS Mapbox Token Backup
+============================
+Date: $(Get-Date)
+Purpose: Backup of Mapbox access token for testing without tokens
+
+Current Mapbox Access Token:
+pk.eyJ1IjoiZmFpdGhhZ3VpbGVyYSIsImEiOiJjbWZqbmdrcWUxMHBpMmpwd2Nsb2d1bnFkIn0.mczL0OLNOyx7VlpdqOSbbQ
+
+Files that contained this token:
+- src/environments/mapbox.config.ts
+- src/app/mapbox.service.ts
+
+To restore tokens:
+1. Copy the token above
+2. Replace 'YOUR_MAPBOX_ACCESS_TOKEN' in mapbox.config.ts with the token
+3. Replace 'YOUR_MAPBOX_ACCESS_TOKEN' in mapbox.service.ts with the token
+
+Note: This backup was created before removing tokens for testing purposes.

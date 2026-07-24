@@ -1,0 +1,44 @@
+<ion-content [fullscreen]="true">
+  <div class="registration-container">
+    <div class="registration-form">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <img src="assets/images/autoSOS logo.png" alt="AutoSOS Logo" class="logo">
+      </div>
+      
+      <!-- Role Selection -->
+      <div class="form-section">
+        <h2>Choose Your Role</h2>
+        <p>Select how you want to use AutoSOS</p>
+        
+        <div class="role-cards">
+          <div class="role-card" (click)="selectRole('mechanic')" [class.selected]="selectedRole === 'mechanic'">
+            <div class="role-icon">
+              <ion-icon name="construct-outline"></ion-icon>
+            </div>
+            <div class="role-content">
+              <h3>Mechanic</h3>
+              <p>I provide motorcycle repair and maintenance services</p>
+            </div>
+          </div>
+          
+          <div class="role-card" (click)="selectRole('client')" [class.selected]="selectedRole === 'client'">
+            <div class="role-icon">
+              <ion-icon name="person-outline"></ion-icon>
+            </div>
+            <div class="role-content">
+              <h3>Client</h3>
+              <p>I need motorcycle assistance and roadside help</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      <!-- Back Link -->
+      <div class="back-link">
+        <a routerLink="/login">← Back to Login</a>
+      </div>
+    </div>
+  </div>
+</ion-content> 

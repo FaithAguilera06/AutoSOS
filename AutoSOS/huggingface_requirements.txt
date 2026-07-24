@@ -1,0 +1,32 @@
+# Hugging Face YOLOv8 Integration Requirements
+# Core dependencies
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+
+# Hugging Face ecosystem
+transformers==4.35.2
+huggingface_hub==0.19.4
+torch==2.1.1
+torchvision==0.16.1
+
+# Computer Vision
+opencv-python==4.8.1.78
+Pillow==10.1.0
+numpy==1.24.3
+
+# Ultralytics YOLOv8 (for fallback/comparison)
+ultralytics==8.0.196
+
+# Optional: For better performance
+accelerate==0.24.1
+datasets==2.14.6
+
+# Optional: For model optimization
+optimum==1.14.1
+onnx==1.15.0
+onnxruntime==1.16.3
+
+# Development and testing
+pytest==7.4.3
+requests==2.31.0

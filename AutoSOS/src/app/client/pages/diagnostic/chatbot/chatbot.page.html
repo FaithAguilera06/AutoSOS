@@ -1,0 +1,197 @@
+<ion-content [fullscreen]="true" class="chatbot-content">
+  <div class="chatbot-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <ion-button fill="clear" (click)="goBack()" class="back-button">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <div class="header-content">
+        <h2 class="header-title">AI Diagnostic Assistant</h2>
+        <p class="header-subtitle">Describe your motorcycle problem</p>
+        <!-- GPT-5 Status Indicator -->
+        <div class="gpt5-status" *ngIf="gpt5Error">
+          <ion-icon name="warning-outline" color="warning"></ion-icon>
+          <span class="status-text">{{ gpt5Error }}</span>
+          <ion-button fill="clear" size="small" (click)="retryGPT5Connection()">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="gpt5-status success" *ngIf="isGPT5Available && !gpt5Error">
+          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+          <span class="status-text">AutososBot is active</span>
+        </div>
+        <div class="gpt5-status unavailable" *ngIf="!isGPT5Available && !gpt5Error">
+          <ion-icon name="close-circle-outline" color="danger"></ion-icon>
+          <span class="status-text">AutososBot is not active</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <ion-button fill="clear" (click)="showUserTierSelection()" class="tier-button" *ngIf="isGPT5Available">
+          <ion-icon name="settings-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="showHelp()" class="help-button">
+          <ion-icon name="help-circle-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages" #chatContainer>
+      <!-- Scroll to bottom button -->
+      <div class="scroll-to-bottom" *ngIf="showScrollToBottomButton" (click)="scrollToBottom()">
+        <ion-icon name="arrow-down"></ion-icon>
+      </div>
+      <div class="message-list">
+        <!-- Welcome Message -->
+        <div class="message bot-message">
+          <div class="message-avatar">
+            <ion-icon name="construct-outline"></ion-icon>
+          </div>
+          <div class="message-content">
+            <div class="message-bubble">
+              <p>Hello! I'm your AI motorcycle diagnostic assistant. Please describe the problem you're experiencing with your motorcycle, and I'll help you identify the issue and provide recommendations.</p>
+            </div>
+            <div class="message-time">{{ getCurrentTime() }}</div>
+          </div>
+        </div>
+
+        <!-- Combined Messages (User and Bot) in chronological order -->
+        <div *ngFor="let message of getAllMessages(); trackBy: trackByMessageId">
+          <!-- User Message -->
+          <div class="message user-message" *ngIf="message.type === 'user'">
+            <div class="message-content">
+              <div class="message-bubble">
+                <p>{{ message.text }}</p>
+              </div>
+              <div class="message-time">{{ message.timestamp }}</div>
+            </div>
+          </div>
+
+          <!-- Bot Message -->
+          <div class="message bot-message" *ngIf="message.type === 'bot'">
+            <div class="message-avatar">
+              <ion-icon name="construct-outline"></ion-icon>
+            </div>
+            <div class="message-content">
+              <div class="message-bubble">
+                 <div class="response-text" [innerHTML]="formatResponseText(message.text)"></div>
+                
+                <!-- Enhanced Diagnosis Result for GPT-5 responses -->
+                <div class="diagnosis-result" *ngIf="message.recommendations && message.recommendations.length > 0">
+                  <div class="diagnosis-header">
+                    <ion-icon name="medical-outline"></ion-icon>
+                    <span>Diagnosis Result</span>
+                    <ion-badge color="primary" *ngIf="message.isGPT5Response">{{ message.model }}</ion-badge>
+                    <ion-badge color="success" *ngIf="message.cached">Cached</ion-badge>
+                  </div>
+                  <div class="diagnosis-details">
+                    <div class="diagnosis-item">
+                      <strong>Severity:</strong> 
+                      <span class="severity-badge" [class]="'severity-' + message.severity">
+                        {{ message.severity | titlecase }}
+                      </span>
+                    </div>
+                    
+                    <!-- Recommendations -->
+                    <div class="diagnosis-item" *ngIf="message.recommendations && message.recommendations.length > 0">
+                      <strong>Recommendations:</strong>
+                      <ul class="recommendation-list">
+                        <li *ngFor="let recommendation of message.recommendations">{{ recommendation }}</li>
+                      </ul>
+                    </div>
+                    
+                    <!-- Immediate Actions -->
+                    <div class="diagnosis-item" *ngIf="message.immediate_actions && message.immediate_actions.length > 0">
+                      <strong>Immediate Actions:</strong>
+                      <ul class="action-list">
+                        <li *ngFor="let action of message.immediate_actions">{{ action }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Follow-up Questions -->
+                <div class="follow-up-questions" *ngIf="message.follow_up_questions && message.follow_up_questions.length > 0">
+                  <div class="follow-up-header">
+                    <ion-icon name="help-circle-outline"></ion-icon>
+                    <span>Follow-up Questions</span>
+                  </div>
+                  <div class="follow-up-list">
+                    <ion-button 
+                      fill="outline" 
+                      size="small" 
+                      *ngFor="let question of message.follow_up_questions"
+                      (click)="userInput = question; sendMessage()"
+                      class="follow-up-button">
+                      {{ question }}
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+              <div class="message-time">{{ message.timestamp }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="message bot-message" *ngIf="isTyping">
+          <div class="message-avatar">
+            <ion-icon name="construct-outline"></ion-icon>
+          </div>
+          <div class="message-content">
+            <div class="message-bubble typing-indicator">
+              <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <div class="input-container">
+        <ion-textarea
+          [(ngModel)]="userInput"
+          placeholder="Describe your motorcycle problem..."
+          rows="3"
+          maxlength="500"
+          class="message-input"
+          (keyup.enter)="sendMessage()"
+          [disabled]="isTyping">
+        </ion-textarea>
+        <div class="input-actions">
+          <div class="character-count">
+            {{ userInput.length }}/500
+          </div>
+          <ion-button 
+            fill="solid" 
+            (click)="sendMessage()" 
+            [disabled]="!userInput.trim() || isTyping"
+            class="send-button"
+            title="Send message">
+            <ion-icon name="send"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" *ngIf="showQuickActions">
+      <h4 class="actions-title">Common Issues:</h4>
+      <div class="action-buttons">
+        <ion-button 
+          fill="outline" 
+          size="small" 
+          *ngFor="let action of quickActions"
+          (click)="selectQuickAction(action)"
+          class="action-button">
+          {{ action }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content> 

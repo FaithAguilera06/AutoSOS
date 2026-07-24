@@ -1,0 +1,67 @@
+{
+  "timestamp": 1759464177.799428,
+  "dependencies": {
+    "opencv": true,
+    "ultralytics": true,
+    "numpy": true,
+    "pil": true
+  },
+  "model_info": {
+    "model_path": "models\\motorcycle_diagnostic.pt",
+    "model_type": "<class 'ultralytics.models.yolo.model.YOLO'>",
+    "model_loaded": true,
+    "class_names": {
+      "0": "broken_headlights_tail_lights",
+      "1": "broken_side_mirror",
+      "2": "flat_tire",
+      "3": "oil_leak"
+    },
+    "num_classes": 4,
+    "model_info_available": true
+  },
+  "test_images": [
+    {
+      "image_index": 0,
+      "detection_time": 0.15326166152954102,
+      "raw_results": 1,
+      "detections": [
+        {
+          "bbox": [
+            116.05543518066406,
+            121.80555725097656,
+            516.531494140625,
+            445.5531005859375
+          ],
+          "confidence": 0.1260157972574234,
+          "class": 2,
+          "class_name": "flat_tire"
+        }
+      ]
+    },
+    {
+      "image_index": 1,
+      "detection_time": 0.0539860725402832,
+      "raw_results": 1,
+      "detections": []
+    },
+    {
+      "image_index": 2,
+      "detection_time": 0.049239158630371094,
+      "raw_results": 1,
+      "detections": []
+    },
+    {
+      "image_index": 3,
+      "detection_time": 0.051108598709106445,
+      "raw_results": 1,
+      "detections": []
+    }
+  ],
+  "camera_test": {
+    "duration": 5.287434816360474,
+    "total_frames": 135,
+    "detection_runs": 27,
+    "average_detection_time": 0.04153351430539732,
+    "fps": 25.53222965175488
+  }
+}

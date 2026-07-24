@@ -1,0 +1,97 @@
+<ion-content [fullscreen]="true" class="pending-content">
+  <div class="pending-container">
+    <!-- Header -->
+    <div class="header-section">
+      <img src="assets/images/autoSOS logo.png" alt="AutoSOS Logo" class="logo">
+      <h1 class="title">Registration Pending</h1>
+    </div>
+
+    <!-- Status Card -->
+    <div class="status-card">
+      <div class="status-icon">
+        <ion-icon name="time-outline" class="pending-icon"></ion-icon>
+      </div>
+      
+      <h2 class="status-title">Your Registration is Under Review</h2>
+      
+      <p class="status-description">
+        Thank you for registering as a mechanic! Your account is currently being reviewed by our admin team. 
+        This process typically takes 24-48 hours.
+      </p>
+
+      <div class="user-info" *ngIf="profile">
+        <div class="info-item">
+          <span class="label">Name:</span>
+          <span class="value">{{ profile.full_name || 'Not provided' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Status:</span>
+          <span class="value status-badge pending">Pending Approval</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Submitted:</span>
+          <span class="value">{{ profile.created_at | date:'medium' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's Next Section -->
+    <div class="next-steps">
+      <h3>What happens next?</h3>
+      <div class="steps-list">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Document Review</h4>
+            <p>Our admin team will review your submitted ID and certificate documents.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Verification</h4>
+            <p>We'll verify your credentials and ensure all information is accurate.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Approval</h4>
+            <p>Once approved, you'll receive access to the mechanic dashboard and can start receiving service requests.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        class="check-status-btn"
+        (click)="checkStatus()"
+        [disabled]="isLoading">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Check Status
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="clear" 
+        class="logout-btn"
+        (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Logout
+      </ion-button>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <p class="contact-text">
+        Questions about your registration? 
+        <a href="mailto:support@autosos.com" class="contact-link">Contact Support</a>
+      </p>
+    </div>
+  </div>
+</ion-content>
+

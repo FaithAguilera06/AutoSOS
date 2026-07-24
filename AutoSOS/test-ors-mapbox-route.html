@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenRouteService + Mapbox Demo (SM North EDSA → SM MOA)</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    .panel {
+      position: absolute; z-index: 2; top: 12px; left: 12px; right: 12px; max-width: 560px;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      padding: 12px 14px;
+    }
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .row label { font-size: 12px; color: #555; }
+    .row code { background:#f2f2f2; padding:2px 6px; border-radius:6px; }
+    .stats { margin-top: 8px; font-size: 13px; color: #333; }
+    .btn { cursor: pointer; background:#1f75fe; color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:600; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .bad { color:#b00020; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="panel">
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <div><strong>Route:</strong> SM North EDSA → SM Mall of Asia (Philippines)</div>
+        <div style="margin-top:4px; font-size:12px; color:#666;">OpenRouteService for routing + Mapbox GL JS for map rendering</div>
+      </div>
+      <button id="rerouteBtn" class="btn">Recalculate Route</button>
+    </div>
+    <div class="stats" id="stats">—</div>
+    <div class="row" style="margin-top:6px;">
+      <label>ORS API:</label>
+      <code>https://api.openrouteservice.org/v2/directions/driving-car</code>
+      <span style="flex:1"></span>
+      <span id="err" class="bad"></span>
+    </div>
+  </div>
+
+  <script>
+    // CONFIG — replace if needed
+    const MAPBOX_TOKEN = 'pk.eyJ1IjoiYXV0b3NvczEyMyIsImEiOiJjbWdvNHJ0MDkxcjJtMm5va2lhNnB1YjR0In0.8hQ5bC4FlZKZFevZQvBzNg'; // display only
+    const ORS_API_KEY  = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNmNWM2NzE3M2VhOTRjZGQ4ZWY2MGE4NzcwZGNhMjY1IiwiaCI6Im11cm11cjY0In0='; // demo key used in project
+
+    // Landmarks (lng, lat)
+    const SM_NORTH_EDSA = [121.0309, 14.6563];
+    const SM_MOA        = [120.9822, 14.5353];
+
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [121.0, 14.60], // Manila area
+      zoom: 11,
+      antialias: true
+    });
+
+    // Add controls
+    map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+
+    // Add markers
+    const startMarker = new mapboxgl.Marker({ color: '#0a7cff' }).setLngLat(SM_NORTH_EDSA).setPopup(new mapboxgl.Popup().setText('SM North EDSA'));
+    const endMarker   = new mapboxgl.Marker({ color: '#ff3b30' }).setLngLat(SM_MOA).setPopup(new mapboxgl.Popup().setText('SM Mall of Asia'));
+
+    const addMarkers = () => { startMarker.addTo(map); endMarker.addTo(map); };
+
+    // Fit bounds to the two points
+    function fitBounds() {
+      const b = new mapboxgl.LngLatBounds();
+      b.extend(SM_NORTH_EDSA); b.extend(SM_MOA);
+      map.fitBounds(b, { padding: 60, duration: 800 });
+    }
+
+    // Draw route GeoJSON from ORS
+    function drawRoute(geojson) {
+      // Remove existing
+      if (map.getLayer('route')) map.removeLayer('route');
+      if (map.getSource('route')) map.removeSource('route');
+
+      map.addSource('route', { type: 'geojson', data: geojson });
+      map.addLayer({
+        id: 'route', type: 'line', source: 'route',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: { 'line-color': '#1f75fe', 'line-width': 6, 'line-opacity': 0.9 }
+      });
+    }
+
+    async function fetchORSRoute() {
+      const stats = document.getElementById('stats');
+      const errEl = document.getElementById('err');
+      errEl.textContent = '';
+      stats.textContent = 'Requesting route from OpenRouteService…';
+
+      async function tryPost() {
+        const res = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
+          method: 'POST',
+          headers: {
+            'Authorization': ORS_API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            coordinates: [ SM_NORTH_EDSA, SM_MOA ], // [lng, lat]
+            format: 'geojson',
+            instructions: false
+          })
+        });
+        return res;
+      }
+
+      async function tryGet() {
+        const params = new URLSearchParams({
+          api_key: ORS_API_KEY,
+          start: `${SM_NORTH_EDSA[0]},${SM_NORTH_EDSA[1]}`,
+          end: `${SM_MOA[0]},${SM_MOA[1]}`
+        });
+        const url = `https://api.openrouteservice.org/v2/directions/driving-car?${params}`;
+        const res = await fetch(url, { method: 'GET' });
+        return res;
+      }
+
+      try {
+        // First attempt: POST
+        let res = await tryPost();
+        let data;
+        try {
+          data = await res.json();
+        } catch (e) {
+          throw new Error(`ORS ${res.status}: Non-JSON response`);
+        }
+
+        // If POST fails or has no features, retry with GET (start/end)
+        if (!res.ok || !data?.features || !data.features.length) {
+          console.warn('ORS POST returned no features; retrying with GET...', data);
+          const res2 = await tryGet();
+          let data2;
+          try {
+            data2 = await res2.json();
+          } catch (e) {
+            throw new Error(`ORS GET ${res2.status}: Non-JSON response`);
+          }
+          if (!res2.ok) {
+            const detail = data2?.error?.message || JSON.stringify(data2);
+            throw new Error(`ORS GET ${res2.status}: ${detail}`);
+          }
+          if (!data2?.features || !data2.features.length) {
+            throw new Error(`ORS GET returned no features. Raw: ${JSON.stringify(data2).slice(0,500)}...`);
+          }
+          data = data2; // use GET result
+        }
+
+        // ORS GeoJSON -> first feature
+        const feature = data.features[0];
+        // Stats
+        const summary = feature.properties?.summary || {};
+        const km = summary.distance ? (summary.distance / 1000).toFixed(2) : '—';
+        const min = summary.duration ? (summary.duration / 60).toFixed(1) : '—';
+        stats.textContent = `Distance: ${km} km   •   ETA: ${min} min`;
+
+        drawRoute({ type: 'FeatureCollection', features: [ feature ] });
+        fitBounds();
+      } catch (e) {
+        console.error(e);
+        errEl.textContent = e.message;
+        stats.textContent = 'Failed to load route. Check console for details.';
+      }
+    }
+
+    map.on('load', () => {
+      addMarkers();
+      fetchORSRoute();
+    });
+
+    document.getElementById('rerouteBtn').addEventListener('click', () => fetchORSRoute());
+  </script>
+</body>
+</html>

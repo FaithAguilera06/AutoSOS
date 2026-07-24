@@ -1,0 +1,14 @@
+# Requirements for YOLOv8 service with full OpenCV support
+fastapi
+uvicorn
+ultralytics
+opencv-python
+numpy
+Pillow
+supabase
+redis
+python-multipart
+python-dotenv
+structlog
+httpx
+prometheus-client

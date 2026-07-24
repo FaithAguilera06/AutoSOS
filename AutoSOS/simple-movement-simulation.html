@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SM North to MOA Movement Simulation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: Arial, sans-serif; 
+            background: #f0f0f0;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .map-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #e8f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .route-container {
+            position: relative;
+            width: 80%;
+            height: 60%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .route-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: #007bff;
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+        .start-point {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            background: #00ff00;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .end-point {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .moving-point {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 15px;
+            height: 15px;
+            background: #ff6b35;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            transition: left 0.1s ease-out;
+        }
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #status { 
+            margin-top: 10px; 
+            font-size: 14px; 
+            min-height: 20px;
+        }
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #007bff;
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="map-area">
+        <div class="route-container">
+            <div class="route-line"></div>
+            <div class="start-point"></div>
+            <div class="end-point"></div>
+            <div class="moving-point" id="movingPoint"></div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <h3>🚶 Movement Simulation</h3>
+        <p><strong>From:</strong> SM North EDSA<br>
+        <strong>To:</strong> SM Mall of Asia</p>
+        <button onclick="startSimulation()" id="startBtn">▶️ Start Simulation</button>
+        <button onclick="stopSimulation()" id="stopBtn" disabled>⏹️ Stop</button>
+        <div id="status">Ready to simulate...</div>
+    </div>
+    
+    <div class="info">
+        <h4>Route Information</h4>
+        <p><strong>Distance:</strong> 19.5 km | <strong>Duration:</strong> ~32 minutes</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText">Progress: 0%</p>
+    </div>
+</div>
+
+<script>
+let isAnimating = false;
+let animationInterval;
+let currentProgress = 0;
+
+function startSimulation() {
+    if (isAnimating) return;
+    
+    isAnimating = true;
+    currentProgress = 0;
+    
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('stopBtn').disabled = false;
+    document.getElementById('status').innerHTML = '🚶 Moving...';
+    
+    // Reset position
+    const movingPoint = document.getElementById('movingPoint');
+    movingPoint.style.left = '10%';
+    
+    animationInterval = setInterval(() => {
+        currentProgress += 1;
+        
+        if (currentProgress >= 100) {
+            stopSimulation();
+            document.getElementById('status').innerHTML = '✅ Arrived at SM Mall of Asia!';
+            return;
+        }
+        
+        // Update position (10% to 90% of container width)
+        const position = 10 + (currentProgress / 100) * 80;
+        movingPoint.style.left = position + '%';
+        
+        // Update progress bar
+        document.getElementById('progressFill').style.width = currentProgress + '%';
+        document.getElementById('progressText').innerHTML = `Progress: ${currentProgress}%`;
+        
+        // Update status
+        document.getElementById('status').innerHTML = `🚶 Moving... ${currentProgress}%`;
+        
+    }, 50); // Update every 50ms for smooth animation
+}
+
+function stopSimulation() {
+    if (!isAnimating) return;
+    
+    isAnimating = false;
+    clearInterval(animationInterval);
+    
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('stopBtn').disabled = true;
+    
+    if (currentProgress < 100) {
+        document.getElementById('status').innerHTML = '⏸️ Simulation stopped';
+    }
+}
+
+// Add some visual effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add pulsing effect to start point
+    const startPoint = document.querySelector('.start-point');
+    setInterval(() => {
+        startPoint.style.transform = 'translate(-50%, -50%) scale(1.2)';
+        setTimeout(() => {
+            startPoint.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 500);
+    }, 2000);
+    
+    // Add pulsing effect to end point
+    const endPoint = document.querySelector('.end-point');
+    setInterval(() => {
+        endPoint.style.transform = 'translate(50%, -50%) scale(1.2)';
+        setTimeout(() => {
+            endPoint.style.transform = 'translate(50%, -50%) scale(1)';
+        }, 500);
+    }, 2000);
+});
+</script>
+</body>
+</html>

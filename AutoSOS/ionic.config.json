@@ -1,0 +1,7 @@
+{
+  "name": "AutoSOS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

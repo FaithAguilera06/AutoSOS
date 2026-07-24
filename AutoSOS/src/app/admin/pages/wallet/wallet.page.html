@@ -1,0 +1,92 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <img src="assets/images/autoSOS logo side.png" alt="AutoSOS Logo" class="header-logo" />
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="container">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h2 class="page-title">Wallet Top-up Requests</h2>
+      <p class="page-subtitle">Manage and approve wallet top-up requests from clients</p>
+    </div>
+
+    <!-- Search Bar -->
+    <ion-searchbar
+      placeholder="Search topup requests..."
+      (ionInput)="onSearchChange($event)"
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Topup Requests List -->
+    <ion-list>
+      <ion-item *ngFor="let request of filteredRequests" class="request-item">
+        <ion-avatar slot="start" class="request-avatar">
+          <ion-icon name="person" size="large"></ion-icon>
+        </ion-avatar>
+        
+        <ion-label class="request-label">
+          <h2>Request ID: {{ request.id }}</h2>
+          <p>Amount: ₱{{ request.amount.toFixed(2) }}</p>
+          <p>GCash Ref: {{ request.gcash_reference }}</p>
+          <div class="status-badge">
+            <ion-badge [color]="getStatusColor(request.status)">
+              {{ request.status }}
+            </ion-badge>
+          </div>
+        </ion-label>
+
+        <div class="button-container">
+          <!-- Show approve/reject buttons only for pending requests -->
+          <div *ngIf="request.status === 'pending'" class="action-buttons">
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              color="success" 
+              (click)="approveRequest(request.id)"
+              class="approve-btn">
+              <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              color="danger" 
+              (click)="rejectRequest(request.id, 'Rejected by admin')"
+              class="reject-btn">
+              <ion-icon name="close" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <!-- Always show view button -->
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            color="primary" 
+            (click)="viewRequest(request.id)"
+            class="view-btn">
+            <ion-icon name="eye" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredRequests.length === 0" class="empty-state">
+      <ion-icon name="wallet-outline" size="large"></ion-icon>
+      <h3>No topup requests found</h3>
+      <p>Try adjusting your search criteria</p>
+    </div>
+
+  </div>
+
+  <!-- Custom Popup -->
+  <app-wallet-detail-popup 
+    [request]="selectedRequest" 
+    [isVisible]="showPopup"
+    (closePopupEvent)="showPopup = false">
+  </app-wallet-detail-popup>
+</ion-content> 

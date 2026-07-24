@@ -1,0 +1,984 @@
+.wallet-content {
+  --background: #ffffff;
+}
+
+.wallet-container {
+  padding: 20px;
+  background: #ffffff;
+  min-height: 100vh;
+  overflow-y: auto; // Allow vertical scrolling
+}
+
+.wallet-content-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Center all items horizontally
+  justify-content: flex-start; // Changed from center to flex-start
+  width: 100%;
+  max-width: 400px; // Limit width for better appearance
+  gap: 20px; // Increased gap for better spacing
+  margin-top: 20px; // Add some top margin
+  min-height: calc(100vh - 40px); // Ensure full height
+}
+
+// Balance Section
+.balance-section {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-top: 20px;
+}
+
+.balance-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.wallet-icon {
+  font-size: 24px;
+  color: #666666;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0;
+}
+
+// Top Up Button Section
+.topup-section {
+  margin-bottom: 40px;
+}
+
+.topup-button {
+  --background: #4a4a4a;
+  --color: #ffffff;
+  --border-radius: 8px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
+}
+
+// Transactions Section
+.transactions-section {
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0 0 20px 0;
+  }
+}
+
+.transaction-list {
+  .transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .receipt-button {
+      --color: #007bff;
+      --background: transparent;
+      --border-radius: 8px;
+      margin-left: 8px;
+      
+      &:hover {
+        --background: rgba(0, 123, 255, 0.1);
+      }
+      
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.transaction-icon {
+  width: 40px;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+.transaction-details {
+  flex: 1;
+  
+  .transaction-type {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0 0 4px 0;
+  }
+  
+  .transaction-date {
+    font-size: 12px;
+    color: #999999;
+    margin: 0;
+  }
+}
+
+.transaction-amount {
+  .amount-positive {
+    font-size: 14px;
+    font-weight: 600;
+    color: #28a745;
+  }
+  
+  .amount-negative {
+    font-size: 14px;
+    font-weight: 600;
+    color: #dc3545;
+  }
+}
+
+// Modal Styles
+.modal-content {
+  --background: transparent;
+  padding: 0;
+}
+
+// Make the modal overlay transparent
+ion-modal {
+  --backdrop-opacity: 0;
+}
+
+.modal-form {
+  background: white;
+  border-radius: 20px;
+  margin: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  position: relative;
+  border: 1px solid #f0f0f0;
+}
+
+.close-button-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.close-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --color: #333333;
+  font-size: 20px;
+  --background: rgba(255, 255, 255, 0.9);
+  --border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-field {
+  margin-bottom: 28px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.field-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.field-value {
+  font-size: 16px;
+  color: #666666;
+  padding: 8px 0;
+  font-weight: 500;
+  margin-bottom: 4px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.amount-input {
+  --background: #ffffff;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --placeholder-color: #999999;
+  --placeholder-opacity: 0.7;
+  
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.15);
+  }
+}
+
+.upload-area {
+  border: 2px dashed #007bff;
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover {
+    border-color: #0056b3;
+    background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.15);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.upload-icon {
+  font-size: 52px;
+  color: #007bff;
+  filter: drop-shadow(0 2px 4px rgba(0, 123, 255, 0.2));
+}
+
+.upload-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #333333;
+  letter-spacing: 0.5px;
+}
+
+.upload-hint {
+  font-size: 13px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.selected-files {
+  margin-top: 16px;
+  
+  .file-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .file-preview {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+      
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      
+      .file-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        border-radius: 8px;
+        
+        .expand-icon {
+          color: white;
+          font-size: 24px;
+        }
+      }
+      
+      &:hover .file-overlay {
+        opacity: 1;
+      }
+    }
+    
+    .file-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .file-name {
+        font-size: 14px;
+        color: #333333;
+        font-weight: 500;
+      }
+      
+      .remove-btn {
+        --color: #dc3545;
+        --padding-start: 8px;
+        --padding-end: 8px;
+      }
+    }
+  }
+}
+
+.verification-photo {
+  margin-top: 16px;
+  position: relative;
+  display: inline-block;
+  
+  img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  ion-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    --background: #dc3545;
+    --color: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+    }
+  }
+}
+
+.submit-section {
+  margin-top: 36px;
+}
+
+.submit-button {
+  --background: #cccccc;
+  --color: #666666;
+  --border-radius: 16px;
+  --padding-top: 18px;
+  --padding-bottom: 18px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:not([disabled]) {
+    --background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    --color: white;
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+    
+    &:hover {
+      --background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 123, 255, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    }
+  }
+}
+
+// Wallet specific styles
+.wallet-section {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.wallet-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 30px;
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.balance-amount {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.card-icon {
+  font-size: 3em;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+.card-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  z-index: 1;
+}
+
+.action-section {
+  flex: 0 0 auto;
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.history-section {
+  flex: 1;
+  overflow: visible;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0; // Allow flex item to shrink
+}
+
+.section-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+  width: 100%;
+}
+
+.transaction-list {
+  background: transparent;
+  width: 100%;
+  max-width: 350px;
+  overflow-y: auto; // Allow scrolling within transaction list
+  max-height: 400px; // Limit height to enable scrolling
+}
+
+.transaction-item {
+  --background: transparent;
+  --border-color: #f0f0f0;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  width: 100%;
+}
+
+.transaction-avatar {
+  background: #e3f2fd;
+  color: #1976d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Responsive Design
+@media (max-width: 576px) {
+  .wallet-container {
+    padding: 16px;
+  }
+  
+  .wallet-content-flex {
+    max-width: 100%;
+    gap: 15px;
+  }
+  
+  .wallet-card {
+    max-width: 100%;
+    padding: 25px;
+  }
+  
+  .balance-amount {
+    font-size: 28px;
+  }
+  
+  .topup-button {
+    max-width: 180px;
+  }
+  
+  .modal-form {
+    margin: 12px;
+    padding: 24px;
+  }
+  
+  .upload-area {
+    padding: 28px 16px;
+  }
+  
+  .upload-icon {
+    font-size: 44px;
+  }
+  
+  .upload-text {
+    font-size: 16px;
+  }
+  
+  .verification-photo img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .transaction-list {
+    max-width: 100%;
+  }
+}
+
+// Facial Recognition Section
+.facial-recognition-section {
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.facial-recognition-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.facial-recognition-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.facial-recognition-icon {
+  flex: 0 0 auto;
+  
+  ion-icon {
+    font-size: 32px;
+  }
+}
+
+.facial-recognition-info {
+  flex: 1;
+  
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0 0 4px 0;
+  }
+  
+  p {
+    font-size: 13px;
+    color: #666666;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.facial-recognition-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  ion-button {
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 100px;
+    
+    &[fill="outline"] {
+      --border-width: 1px;
+    }
+    
+    &[color="primary"] {
+      --color: #007bff;
+      --border-color: #007bff;
+      
+      &:hover {
+        --background: #007bff;
+        --color: white;
+      }
+    }
+    
+    &[color="success"] {
+      --color: #28a745;
+      --border-color: #28a745;
+      
+      &:hover {
+        --background: #28a745;
+        --color: white;
+      }
+    }
+    
+    &[color="danger"] {
+      --color: #dc3545;
+      
+      &:hover {
+        --background: #dc3545;
+        --color: white;
+      }
+    }
+  }
+}
+
+// Modal Styling
+.topup-modal {
+  --background: rgba(0, 0, 0, 0.5);
+  
+  .modal-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 20px;
+    max-width: 400px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+  }
+  
+  .back-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --border-radius: 50%;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 20px;
+      color: #666666;
+    }
+  }
+  
+  .close-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --border-radius: 50%;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 20px;
+      color: #666666;
+    }
+  }
+}
+
+.form-field {
+  margin-bottom: 20px;
+  
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .field-value {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 4px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+  }
+}
+
+// Fix input text visibility
+.amount-input {
+  --background: #ffffff !important;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --color: #333333 !important;
+  --placeholder-color: #999999 !important;
+  --placeholder-opacity: 0.7;
+  font-size: 16px !important;
+  font-weight: 500;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white !important;
+  
+  &.ios {
+    --color: #333333 !important;
+  }
+  
+  &.md {
+    --color: #333333 !important;
+  }
+  
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.15);
+  }
+  
+  // Ensure input text is visible
+  input {
+    color: #333333 !important;
+    background: white !important;
+  }
+}
+
+// Submit button styling
+.submit-button {
+  --background: #007bff;
+  --background-hover: #0056b3;
+  --color: white;
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+  width: 100%;
+  
+  &:hover {
+    --background: #0056b3;
+  }
+  
+  &[disabled] {
+    --background: #cccccc;
+    --color: #666666;
+  }
+}
+
+// Responsive adjustments for facial recognition
+@media (max-width: 576px) {
+  .facial-recognition-card {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .facial-recognition-content {
+    gap: 12px;
+  }
+  
+  .facial-recognition-icon ion-icon {
+    font-size: 28px;
+  }
+  
+  .facial-recognition-info h4 {
+    font-size: 15px;
+  }
+  
+  .facial-recognition-info p {
+    font-size: 12px;
+  }
+  
+  .facial-recognition-actions {
+    gap: 6px;
+    
+    ion-button {
+      min-width: 90px;
+      font-size: 11px;
+    }
+  }
+  
+  // Mobile modal adjustments
+  .topup-modal .modal-content {
+    margin: 10px;
+    padding: 20px;
+    max-height: 95vh;
+  }
+  
+  .modal-header .modal-title {
+    font-size: 18px;
+  }
+  
+  .form-field .field-label {
+    font-size: 13px;
+  }
+  
+  .amount-input {
+    font-size: 16px !important;
+  }
+}
+
+// Fullscreen Image Modal
+.image-modal-content {
+  --background: #000000;
+  
+  .image-modal-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    
+    .close-image-btn {
+      --color: white;
+      --background: rgba(255, 255, 255, 0.1);
+      --border-radius: 50%;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .image-title {
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+      flex: 1;
+    }
+  }
+  
+  .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 80px 20px 20px;
+    
+    .fullscreen-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+  }
+}

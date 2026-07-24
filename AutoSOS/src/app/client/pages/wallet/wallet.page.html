@@ -1,0 +1,242 @@
+
+
+<div class="wallet-container">
+  <div class="wallet-content-flex">
+    <!-- Wallet Card Section -->
+    <div class="wallet-section">
+      <div class="wallet-card">
+        <div class="card-content">
+          <div class="balance-display">
+            <h1 class="balance-amount">₱{{ walletBalance.toFixed(2) }}</h1>
+          </div>
+          <div class="card-icon">
+            <ion-icon name="card-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="card-gradient"></div>
+      </div>
+    </div>
+
+    <!-- Top Up Button Section -->
+    <div class="action-section">
+      <ion-button 
+        expand="block" 
+        color="dark" 
+        class="topup-button"
+        (click)="presentTopUpModal()">
+        TOP UP
+      </ion-button>
+    </div>
+
+    <!-- Facial Recognition Section -->
+    <div class="facial-recognition-section">
+      <h3 class="section-title">Facial Recognition</h3>
+      <div class="facial-recognition-card">
+        <div class="facial-recognition-content">
+          <div class="facial-recognition-icon">
+            <ion-icon 
+              [name]="isFaceRegistered ? 'checkmark-circle' : 'person-add'" 
+              [color]="isFaceRegistered ? 'success' : 'primary'">
+            </ion-icon>
+          </div>
+          <div class="facial-recognition-info">
+            <h4>{{ isFaceRegistered ? 'Face Registered' : 'Register Your Face' }}</h4>
+            <p>{{ isFaceRegistered ? 'You can use facial recognition for secure payments' : 'Set up facial recognition for secure payments' }}</p>
+          </div>
+          <div class="facial-recognition-actions">
+            <ion-button 
+              *ngIf="!isFaceRegistered && !faceRegistrationError"
+              fill="outline" 
+              color="primary" 
+              size="small"
+              (click)="handleFacialRecognitionClick()"
+              [disabled]="isRegisteringFace">
+              <ion-spinner *ngIf="isRegisteringFace" name="crescent" size="small"></ion-spinner>
+              <span *ngIf="!isRegisteringFace">Register Face</span>
+            </ion-button>
+            <ion-button 
+              *ngIf="faceRegistrationError"
+              fill="outline" 
+              color="danger" 
+              size="small"
+              (click)="handleFacialRecognitionClick()"
+              [disabled]="isRegisteringFace">
+              <ion-spinner *ngIf="isRegisteringFace" name="crescent" size="small"></ion-spinner>
+              <ion-icon *ngIf="!isRegisteringFace" name="refresh" slot="start"></ion-icon>
+              <span *ngIf="!isRegisteringFace">Try Again</span>
+            </ion-button>
+            <ion-button 
+              *ngIf="isFaceRegistered"
+              fill="outline" 
+              color="success" 
+              size="small"
+              (click)="handleFacialRecognitionClick()">
+              <ion-icon name="checkmark" slot="start"></ion-icon>
+              Registered
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="history-section">
+      <h3 class="section-title">Recent Transactions</h3>
+      <ion-list class="transaction-list">
+        <ion-item lines="none" class="transaction-item" *ngFor="let transaction of transactions">
+          <ion-avatar slot="start" class="transaction-avatar">
+            <ion-icon 
+              [name]="getTransactionIcon(transaction.transaction_type)" 
+              [color]="getTransactionColor(transaction.transaction_type)">
+            </ion-icon>
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ getTransactionTitle(transaction.transaction_type) }}</h3>
+            <p>{{ transaction.description || 'No description' }}</p>
+            <p>{{ formatDate(transaction.created_at) }}</p>
+          </ion-label>
+          <ion-label slot="end" [color]="getTransactionColor(transaction.transaction_type)">
+            {{ getTransactionAmount(transaction.transaction_type, transaction.amount) }}
+          </ion-label>
+          <!-- Receipt View Button -->
+          <ion-button 
+            *ngIf="hasReceipts(transaction)"
+            slot="end" 
+            fill="clear" 
+            size="small"
+            (click)="viewReceipts(transaction)"
+            class="receipt-button">
+            <ion-icon name="receipt-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+        
+        <!-- Empty state -->
+        <ion-item lines="none" class="transaction-item" *ngIf="transactions.length === 0">
+          <ion-label>
+            <h3>No transactions yet</h3>
+            <p>Your transaction history will appear here</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</div>
+
+<!-- Top Up Modal -->
+<ion-modal #topUpModal [isOpen]="isModalOpen" (didDismiss)="dismissModal()">
+  <ng-template>
+    <ion-content class="modal-content">
+      <div class="modal-form">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <ion-button fill="clear" (click)="dismissModal()" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+          <h2 class="modal-title">Top Up Wallet</h2>
+          <ion-button fill="clear" (click)="dismissModal()" class="close-button">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Admin GCash Account -->
+        <div class="form-field" *ngIf="adminGcashSettings">
+          <label class="field-label">ADMIN GCASH ACCOUNT:</label>
+          <div class="field-value">Account Name: {{ adminGcashSettings.account_name }}</div>
+          <div class="field-value">Account Number: {{ adminGcashSettings.account_number }}</div>
+        </div>
+
+        <!-- Amount Input -->
+        <div class="form-field">
+          <label class="field-label">Amount</label>
+          <ion-input 
+            type="number" 
+            placeholder="Enter Amount" 
+            class="amount-input"
+            [(ngModel)]="topUpAmount">
+          </ion-input>
+        </div>
+
+        <!-- GCash Reference Number -->
+        <div class="form-field">
+          <label class="field-label">GCash Reference Number</label>
+          <ion-input 
+            type="text" 
+            placeholder="Enter GCash Reference Number" 
+            class="amount-input"
+            [(ngModel)]="gcashReference">
+          </ion-input>
+        </div>
+
+        <!-- Payment Method Upload -->
+        <div class="form-field">
+          <label class="field-label">Proof of Payment</label>
+          <div class="upload-area" (click)="selectFiles()">
+            <div class="upload-content">
+              <ion-icon name="cloud-upload" class="upload-icon"></ion-icon>
+              <div class="upload-text">Upload File/s</div>
+              <div class="upload-hint">Click to upload photos (maximum of 3 files)</div>
+            </div>
+            <input 
+              type="file" 
+              multiple 
+              accept="image/*" 
+              #fileInput 
+              (change)="onFileSelected($event)"
+              style="display: none;">
+          </div>
+          <div class="selected-files" *ngIf="selectedFiles.length > 0">
+            <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+              <div class="file-preview" *ngIf="isImageFile(file)">
+                <img 
+                  [src]="getFilePreview(file)" 
+                  [alt]="file.name"
+                  class="preview-image"
+                  (click)="viewImageFullscreen(getFilePreview(file), file.name)">
+                <div class="file-overlay">
+                  <ion-icon name="expand" class="expand-icon"></ion-icon>
+                </div>
+              </div>
+              <div class="file-info">
+                <span class="file-name">{{ file.name }}</span>
+                <ion-button fill="clear" size="small" (click)="removeFile(i)" class="remove-btn">
+                  <ion-icon name="close"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+          <ion-button 
+            expand="block" 
+            class="submit-button"
+            (click)="submitTopUp()"
+            [disabled]="!topUpAmount || selectedFiles.length === 0 || !gcashReference || isLoading">
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!isLoading">Submit</span>
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Fullscreen Image Modal -->
+<ion-modal #imageModal [isOpen]="isImageModalOpen" (didDismiss)="closeImageModal()">
+  <ng-template>
+    <ion-content class="image-modal-content">
+      <div class="image-modal-header">
+        <ion-button fill="clear" (click)="closeImageModal()" class="close-image-btn">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+        <h3 class="image-title">{{ selectedImageName }}</h3>
+      </div>
+      <div class="image-container">
+        <img [src]="selectedImageUrl" [alt]="selectedImageName" class="fullscreen-image">
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+

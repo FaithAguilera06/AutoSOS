@@ -1,0 +1,27 @@
+test:
+  class_distribution:
+    broken_headlights_tail_lights: 30
+    broken_side_mirror: 44
+    flat_tire: 31
+    oil_leak: 32
+  images: 148
+  labels: 135
+  total_annotations: 137
+train:
+  class_distribution:
+    broken_headlights_tail_lights: 79
+    broken_side_mirror: 92
+    flat_tire: 66
+    oil_leak: 60
+  images: 401
+  labels: 297
+  total_annotations: 297
+val:
+  class_distribution:
+    broken_headlights_tail_lights: 52
+    broken_side_mirror: 58
+    flat_tire: 64
+    oil_leak: 53
+  images: 244
+  labels: 224
+  total_annotations: 227

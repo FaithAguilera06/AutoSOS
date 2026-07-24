@@ -1,0 +1,41 @@
+{
+  "yolo-motorcycle-diagnostic-training/backend/runs/detect/train3/weights/best.pt": {
+    "path": "yolo-motorcycle-diagnostic-training/backend/runs/detect/train3/weights/best.pt",
+    "classes": {
+      "0": "broken_headlights_tail_lights",
+      "1": "broken_side_mirror",
+      "2": "flat_tire",
+      "3": "oil_leak"
+    },
+    "num_classes": 4,
+    "test_detection_time": 0.10889935493469238,
+    "test_detections": 0,
+    "detection_details": []
+  },
+  "yolo-motorcycle-diagnostic-training/runs/detect/train/weights/best.pt": {
+    "path": "yolo-motorcycle-diagnostic-training/runs/detect/train/weights/best.pt",
+    "classes": {
+      "0": "broken_headlights_tail_lights",
+      "1": "broken_side_mirror",
+      "2": "flat_tire",
+      "3": "oil_leak"
+    },
+    "num_classes": 4,
+    "test_detection_time": 0.06660771369934082,
+    "test_detections": 0,
+    "detection_details": []
+  },
+  "yolo-motorcycle-diagnostic-training/runs/detect/train3/weights/best.pt": {
+    "path": "yolo-motorcycle-diagnostic-training/runs/detect/train3/weights/best.pt",
+    "classes": {
+      "0": "broken_headlights_tail_lights",
+      "1": "broken_side_mirror",
+      "2": "flat_tire",
+      "3": "oil_leak"
+    },
+    "num_classes": 4,
+    "test_detection_time": 0.06260180473327637,
+    "test_detections": 0,
+    "detection_details": []
+  }
+}

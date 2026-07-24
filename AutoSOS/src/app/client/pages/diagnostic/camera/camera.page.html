@@ -1,0 +1,258 @@
+<ion-content [fullscreen]="true" class="camera-content">
+  <div class="camera-container">
+    <!-- Header -->
+    <div class="camera-header">
+      <h2 class="header-title">Camera diagnostic</h2>
+      <ion-button fill="clear" (click)="goBack()" class="close-button">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Description -->
+    <div class="camera-description">
+      <p>Point your camera at the motorcycle for real-time AI detection of issues</p>
+    </div>
+
+    <!-- Camera Preview Area -->
+    <div class="camera-preview-area">
+      <!-- Always present video element (hidden when no stream) -->
+      <div class="camera-feed">
+        <video 
+          #videoElement 
+          autoplay 
+          playsinline 
+          muted
+          class="camera-video"
+          [class.analyzing]="isAnalyzing"
+          [style.display]="cameraStream ? 'block' : 'none'">
+        </video>
+        
+        <!-- YOLOv8 Detection Overlay -->
+        <div class="detection-overlay" *ngIf="cameraStream && yoloDetections.length > 0">
+          <div 
+            *ngFor="let detection of yoloDetections; let i = index"
+            class="detection-box"
+            [style.left.px]="detection.bbox[0]"
+            [style.top.px]="detection.bbox[1]"
+            [style.width.px]="detection.bbox[2] - detection.bbox[0]"
+            [style.height.px]="detection.bbox[3] - detection.bbox[1]"
+            [class]="'detection-' + detection.class_name">
+            
+            <!-- Detection Label -->
+            <div class="detection-label">
+              <span class="detection-name">{{ detection.class_display_name }}</span>
+              <span class="detection-confidence">{{ (detection.confidence * 100).toFixed(1) }}%</span>
+            </div>
+            
+            <!-- Diagnostic Label -->
+            <div class="diagnostic-label">
+              {{ getDiagnosticLabel(detection.class_name) }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Placeholder overlay when no camera stream -->
+        <div class="camera-preview-overlay" *ngIf="!cameraStream">
+          <ion-icon name="camera-outline" class="camera-icon"></ion-icon>
+          <p class="camera-text">Checking YOLOv8 Service...</p>
+          <p class="camera-subtext">Camera will ONLY start if YOLOv8 is working</p>
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            (click)="manualStartCamera()"
+            class="start-camera-button"
+            *ngIf="yoloServiceStatus === 'available'">
+            <ion-icon name="videocam" slot="start"></ion-icon>
+            Start Camera Now
+          </ion-button>
+          
+          <ion-button 
+            fill="outline" 
+            color="warning" 
+            (click)="manualStartCamera()"
+            class="start-camera-button"
+            *ngIf="yoloServiceStatus === 'unavailable'">
+            <ion-icon name="warning" slot="start"></ion-icon>
+            Start Camera Anyway (Simulation)
+          </ion-button>
+          
+          <!-- Test button for debugging -->
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            (click)="manualStartCamera()"
+            class="start-camera-button"
+            style="margin-top: 10px;">
+            <ion-icon name="videocam" slot="start"></ion-icon>
+            Start Camera
+          </ion-button>
+
+
+
+
+          
+        </div>
+        
+        <!-- Real-time Detection Overlay -->
+        <div class="ar-overlay" *ngIf="cameraStream">
+          <!-- Detection boxes - show when we have markers -->
+          <div class="ar-marker" *ngFor="let marker of arMarkers; trackBy: trackByIndex" 
+               [style.left.%]="marker.x" 
+               [style.top.%]="marker.y">
+            <div class="marker-point"></div>
+            <div class="marker-label">{{ marker.label }}</div>
+          </div>
+          
+          <!-- Detection Status -->
+          <div class="detection-status" *ngIf="isRealtimeDetectionActive">
+            <div class="status-indicator">
+              <div class="pulse-dot"></div>
+              <span>Live Detection {{ arMarkers.length > 0 ? '- Detecting!' : '' }}</span>
+            </div>
+            
+            <!-- Detection count -->
+            <div class="detection-count" *ngIf="arMarkers && arMarkers.length > 0">
+              <span>{{ arMarkers.length }} issue(s) detected in real-time</span>
+            </div>
+          </div>
+
+          <!-- Instructions when no detections -->
+          <div class="no-detection-info" *ngIf="isRealtimeDetectionActive && arMarkers.length === 0 && yoloServiceStatus === 'available'">
+            <div class="info-bubble">
+              <span>Point camera at motorcycle parts to detect issues</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera Controls -->
+    <div class="camera-controls">
+      <!-- Real-time Detection Toggle -->
+      <ion-button 
+        expand="block" 
+        [color]="isRealtimeDetectionActive ? 'danger' : 'success'"
+        class="detection-toggle-button"
+        (click)="toggleRealtimeDetection()"
+        [disabled]="!cameraStream">
+        <ion-icon [name]="isRealtimeDetectionActive ? 'stop-circle' : 'play-circle'" slot="start"></ion-icon>
+        {{ isRealtimeDetectionActive ? 'Stop Detection' : 'Start Detection' }}
+      </ion-button>
+      
+      <!-- Manual Analysis Button -->
+      <ion-button 
+        expand="block" 
+        fill="outline"
+        color="primary"
+        class="analyze-button"
+        (click)="analyzeCurrentFrame()"
+        [disabled]="!cameraStream || isAnalyzing">
+        <ion-icon name="scan" slot="start"></ion-icon>
+        Detailed Analysis
+      </ion-button>
+
+
+      
+      <!-- Settings Row -->
+      <div class="settings-row" *ngIf="cameraStream">
+        
+        <div class="setting-item">
+          <label>Speed: {{ detectionFrameRate }} FPS</label>
+          <ion-range 
+            [value]="detectionFrameRate" 
+            min="0.5" 
+            max="15" 
+            step="0.5"
+            (ionChange)="setDetectionFrameRate($event)">
+          </ion-range>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis View -->
+    <div class="analysis-view" *ngIf="isAnalyzing">
+      <div class="analysis-container">
+        <div class="analysis-header">
+          <ion-icon name="scan-circle" class="analysis-icon"></ion-icon>
+          <h3 class="analysis-title">Analyzing Image</h3>
+          <p class="analysis-subtitle">Detecting motorcycle issues...</p>
+        </div>
+        
+        <div class="analysis-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="analysisProgress"></div>
+          </div>
+          <p class="progress-text">{{ analysisProgress }}% Complete</p>
+        </div>
+
+        <div class="analysis-steps">
+          <div class="step" [class.active]="currentStep >= 1">
+            <ion-icon name="checkmark-circle" class="step-icon"></ion-icon>
+            <span>Image Processing</span>
+          </div>
+          <div class="step" [class.active]="currentStep >= 2">
+            <ion-icon name="checkmark-circle" class="step-icon"></ion-icon>
+            <span>Issue Detection</span>
+          </div>
+          <div class="step" [class.active]="currentStep >= 3">
+            <ion-icon name="checkmark-circle" class="step-icon"></ion-icon>
+            <span>AR Analysis</span>
+          </div>
+          <div class="step" [class.active]="currentStep >= 4">
+            <ion-icon name="checkmark-circle" class="step-icon"></ion-icon>
+            <span>Generating Report</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real-time Results View -->
+    <div class="results-view" *ngIf="diagnosisResult && !isAnalyzing">
+      <div class="results-container">
+        <div class="results-header">
+          <ion-icon name="medical-outline" class="results-icon"></ion-icon>
+          <h3 class="results-title">{{ isRealtimeDetectionActive ? 'Live Detection Result' : 'Analysis Complete' }}</h3>
+        </div>
+
+        <div class="diagnosis-card">
+          <div class="diagnosis-header">
+            <h4 class="issue-title">{{ diagnosisResult.issue }}</h4>
+            <span class="severity-badge" [class]="'severity-' + diagnosisResult.severity.toLowerCase()">
+              {{ diagnosisResult.severity }}
+            </span>
+          </div>
+          
+          <div class="diagnosis-details">
+            <div class="detail-item">
+              <strong>Detected Problem:</strong>
+              <p>{{ diagnosisResult.description }}</p>
+            </div>
+            
+            <div class="detail-item">
+              <strong>Recommendation:</strong>
+              <p>{{ diagnosisResult.recommendation }}</p>
+            </div>
+            
+            <div class="detail-item">
+              <strong>Mechanic Needed:</strong>
+              <p class="mechanic-status" [class.required]="diagnosisResult.mechanicNeeded">
+                {{ diagnosisResult.mechanicNeeded ? 'Yes - ' + diagnosisResult.mechanicReason : 'No' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <ion-button 
+            expand="block" 
+            fill="outline"
+            class="action-button"
+            (click)="continueDetection()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            {{ isRealtimeDetectionActive ? 'Continue Detection' : 'New Diagnosis' }}
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content> 

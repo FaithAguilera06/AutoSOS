@@ -1,0 +1,344 @@
+<ion-content [fullscreen]="true" class="jobs-content">
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshBookings($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="jobs-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">My Jobs</h1>
+      <p class="page-subtitle">Manage your service requests and job history</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+      <ion-searchbar
+        [(ngModel)]="searchQuery"
+        (ionInput)="onSearchChange()"
+        placeholder="Search jobs..."
+        show-clear-button="focus">
+      </ion-searchbar>
+    </div>
+
+    <!-- Filter Chips -->
+    <div class="filter-section">
+      <ion-chip 
+        *ngFor="let filter of filterOptions"
+        [color]="selectedFilter === filter.value ? filter.color : 'medium'"
+        [outline]="selectedFilter !== filter.value"
+        (click)="setFilter(filter.value)">
+        <ion-icon [name]="filter.icon"></ion-icon>
+        <ion-label>{{ filter.label }}</ion-label>
+      </ion-chip>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoadingBookings">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading jobs...</p>
+    </div>
+
+    <!-- Job Cards -->
+    <div class="job-cards" *ngIf="!isLoadingBookings">
+      <div 
+        class="job-card job-animation" 
+        *ngFor="let booking of filteredBookings; let i = index; trackBy: trackByBookingId" 
+        [style.animation-delay.s]="(i + 1) * 0.1">
+        
+        <div class="job-header">
+          <div class="job-id">
+            <h3>Job #{{ booking.id }}</h3>
+            <p class="job-date">{{ formatDate(booking.created_at) }}</p>
+          </div>
+          <span class="status-badge" [ngClass]="'status-' + getStatusColor(booking.status)">
+            <ion-icon [name]="getStatusIcon(booking.status)"></ion-icon>
+            {{ booking.status | titlecase }}
+          </span>
+        </div>
+        
+        <div class="job-body">
+          <div class="job-detail">
+            <span class="detail-label">
+              <ion-icon name="construct-outline" class="detail-icon"></ion-icon>
+              Service Type
+            </span>
+            <span class="detail-value">{{ booking.required_specialization | titlecase }}</span>
+          </div>
+          
+          <div class="job-detail" *ngIf="booking.clientName">
+            <span class="detail-label">
+              <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+              Client
+            </span>
+            <span class="detail-value">{{ booking.clientName }}</span>
+          </div>
+          
+          <div class="job-detail" *ngIf="booking.notes">
+            <span class="detail-label">
+              <ion-icon name="document-text-outline" class="detail-icon"></ion-icon>
+              Description
+            </span>
+            <span class="detail-value">{{ booking.notes }}</span>
+          </div>
+          
+          <div class="job-detail">
+            <span class="detail-label">
+              <ion-icon name="cash-outline" class="detail-icon"></ion-icon>
+              Service Price
+            </span>
+            <span class="detail-value price-value">{{ formatCurrency(booking.service_price) }}</span>
+          </div>
+          
+          <div class="job-detail">
+            <span class="detail-label">
+              <ion-icon name="receipt-outline" class="detail-icon"></ion-icon>
+              Payment Status
+            </span>
+            <span class="detail-value" [ngClass]="'payment-' + booking.payment_status">
+              {{ booking.payment_status | titlecase }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="job-actions">
+          <!-- For pending jobs not assigned to anyone -->
+          <ng-container *ngIf="booking.status === 'pending' && !booking.mechanic_id">
+            <ion-button 
+              color="success"
+              size="small"
+              (click)="acceptBooking(booking)"
+              [disabled]="booking.isProcessing">
+              <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+              {{ booking.isProcessing ? 'Processing...' : 'Accept Job' }}
+            </ion-button>
+          </ng-container>
+
+
+          <!-- Price setting for matched jobs without price -->
+          <div class="price-input-section" *ngIf="!booking.service_price && (booking.status === 'matched' || booking.status === 'in_progress')">
+            <ion-input 
+              type="number" 
+              placeholder="Set service price" 
+              class="price-input"
+              [(ngModel)]="booking.service_price"
+              [disabled]="booking.isProcessing || false">
+            </ion-input>
+            <ion-button 
+              fill="outline"
+              size="small"
+              color="primary"
+              (click)="setPrice(booking)"
+              [disabled]="booking.isProcessing || !booking.service_price">
+              {{ booking.isProcessing ? 'Setting...' : 'Set Price' }}
+            </ion-button>
+          </div>
+
+          <!-- For matched jobs that need to be started -->
+          <ng-container *ngIf="booking.status === 'matched' && booking.service_price">
+            <ion-button 
+              color="primary"
+              size="small"
+              (click)="startJob(booking)"
+              [disabled]="booking.isProcessing">
+              <ion-icon name="play-outline" slot="start"></ion-icon>
+              {{ booking.isProcessing ? 'Processing...' : 'Start Job' }}
+            </ion-button>
+          </ng-container>
+
+          <!-- For in-progress jobs -->
+          <ng-container *ngIf="booking.status === 'in_progress'">
+            <ion-button 
+              color="success"
+              size="small"
+              (click)="markJobAsDone(booking)"
+              [disabled]="booking.isProcessing">
+              <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+              {{ booking.isProcessing ? 'Processing...' : 'Mark as Done' }}
+            </ion-button>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoadingBookings && filteredBookings.length === 0">
+      <ion-icon name="construct-outline" size="large"></ion-icon>
+      <h3>No Jobs Found</h3>
+      <p>No {{ selectedFilter.replace('_', ' ') }} jobs found.</p>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Cash Payment Modal -->
+<ion-modal #cashPaymentModal [isOpen]="isCashModalOpen" (didDismiss)="dismissCashModal()">
+  <ng-template>
+    <ion-content class="modal-content">
+      <div class="modal-form">
+        <!-- Close Button -->
+        <div class="close-button-container">
+          <ion-button fill="clear" (click)="dismissCashModal()" class="close-button">
+            <ion-icon name="close" color="dark"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Cash Payment Header -->
+        <div class="payment-header">
+          <h2 class="payment-title">Cash</h2>
+        </div>
+
+        <!-- Order Details -->
+        <div class="order-details">
+          <div class="detail-row">
+            <span class="detail-label">Order No:</span>
+            <span class="detail-value">{{ selectedBooking?.id }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">{{ formatDate(selectedBooking?.created_at || '') }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Mechanic Name:</span>
+            <span class="detail-value">{{ selectedBooking?.clientName || 'Unknown Client' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Motorcycle Issue:</span>
+            <span class="detail-value">{{ selectedBooking?.required_specialization | titlecase }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Price:</span>
+            <span class="detail-value amount">{{ formatCurrency(selectedBooking?.service_price || null) }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Method Upload -->
+        <div class="form-field">
+          <label class="field-label">Payment Method</label>
+          <div class="upload-area" (click)="selectFiles()">
+            <div class="upload-content">
+              <ion-icon name="cloud-upload" class="upload-icon"></ion-icon>
+              <div class="upload-text">Upload File / S</div>
+              <div class="upload-hint">Click to upload photos (maximum of 3 files)</div>
+            </div>
+            <input 
+              type="file" 
+              multiple 
+              accept="image/*" 
+              #fileInput 
+              (change)="onFileSelected($event)"
+              style="display: none;">
+          </div>
+          <div class="selected-files" *ngIf="selectedFiles.length > 0">
+            <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+              {{ file.name }}
+              <ion-button fill="clear" size="small" (click)="removeFile(i)">
+                <ion-icon name="close"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+          <ion-button 
+            expand="block" 
+            class="submit-button"
+            (click)="confirmCashPayment()"
+            [disabled]="isProcessingPayment">
+            {{ isProcessingPayment ? 'Processing...' : 'Submit' }}
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Facial Recognition Payment Modal -->
+<ion-modal #facialPaymentModal [isOpen]="isFacialModalOpen" (didDismiss)="dismissFacialModal()">
+  <ng-template>
+    <ion-content class="modal-content">
+      <div class="modal-form">
+        <!-- Close Button -->
+        <div class="close-button-container">
+          <ion-button fill="clear" (click)="dismissFacialModal()" class="close-button">
+            <ion-icon name="close" color="dark"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Facial Recognition Header -->
+        <div class="payment-header">
+          <h2 class="payment-title">Facial Recognition</h2>
+        </div>
+
+        <!-- Order Details -->
+        <div class="order-details">
+          <div class="detail-row">
+            <span class="detail-label">Order No:</span>
+            <span class="detail-value">{{ selectedBooking?.id }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">{{ formatDate(selectedBooking?.created_at || '') }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Mechanic Name:</span>
+            <span class="detail-value">{{ selectedBooking?.clientName || 'Unknown Client' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Motorcycle Issue:</span>
+            <span class="detail-value">{{ selectedBooking?.required_specialization | titlecase }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Price:</span>
+            <span class="detail-value amount">{{ formatCurrency(selectedBooking?.service_price || null) }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Method Upload -->
+        <div class="form-field">
+          <label class="field-label">Payment Method</label>
+          <div class="upload-area" (click)="startFacialRecognition()">
+            <div class="upload-content">
+              <ion-icon name="scan-outline" class="upload-icon"></ion-icon>
+              <div class="upload-text">Facial Recognition</div>
+              <div class="upload-hint">Click to scan for facial recognition</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Camera Section -->
+        <div class="camera-section" *ngIf="isCapturing">
+          <div class="capturing-container">
+            <div class="capturing-animation">
+              <ion-icon name="scan-circle" class="scanning-icon"></ion-icon>
+            </div>
+            <p class="capturing-text">Scanning your face...</p>
+            <p class="capturing-hint">Please look directly at the camera</p>
+          </div>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="payment-status" *ngIf="paymentStatus">
+          <ion-icon [name]="paymentStatus === 'success' ? 'checkmark-circle' : 'close-circle'" 
+                   [color]="paymentStatus === 'success' ? 'success' : 'danger'"
+                   class="status-icon"></ion-icon>
+          <p class="status-text">{{ paymentStatusMessage }}</p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+          <ion-button 
+            expand="block" 
+            class="submit-button"
+            (click)="startFacialRecognition()"
+            [disabled]="isProcessingPayment">
+            {{ isProcessingPayment ? 'Processing...' : 'Submit' }}
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+

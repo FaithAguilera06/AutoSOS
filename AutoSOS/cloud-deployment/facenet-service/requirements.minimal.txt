@@ -1,0 +1,14 @@
+# Minimal requirements for FaceNet service
+fastapi
+uvicorn
+tensorflow-cpu
+opencv-python-headless
+numpy
+Pillow
+supabase
+redis
+python-multipart
+python-dotenv
+structlog
+httpx
+prometheus-client

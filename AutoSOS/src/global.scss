@@ -1,0 +1,185 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* PDF Viewer Modal Styles */
+.pdf-viewer-modal {
+  --width: 90%;
+  --height: 90%;
+  --max-width: 1200px;
+  --max-height: 800px;
+  --border-radius: 12px;
+}
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* Force light mode for HTML select elements - AGGRESSIVE OVERRIDE */
+select,
+.dropdown-select {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.875rem 1rem !important;
+  min-height: 48px !important;
+  width: 100% !important;
+  font-size: 1rem !important;
+  font-family: inherit !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 1rem !important;
+  padding-right: 3rem !important;
+}
+
+select:focus,
+.dropdown-select:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+select option,
+.dropdown-select option {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  padding: 0.5rem !important;
+}
+
+/* Force light mode for ion-select components - AGGRESSIVE OVERRIDE */
+ion-select {
+  --background: #f1f5f9 !important;
+  --color: #1e293b !important;
+  --border-color: #e2e8f0 !important;
+  --border-radius: 0.75rem !important;
+  --padding-start: 1rem !important;
+  --padding-end: 1rem !important;
+  --padding-top: 0.875rem !important;
+  --padding-bottom: 0.875rem !important;
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.875rem 1rem !important;
+  min-height: 48px !important;
+  width: 100% !important;
+  --ion-color-base: #1e293b !important;
+  --ion-color-contrast: #1e293b !important;
+  --ion-background-color: #f1f5f9 !important;
+  --ion-text-color: #1e293b !important;
+}
+
+ion-select::part(text) {
+  color: #1e293b !important;
+  font-size: 1rem !important;
+}
+
+ion-select::part(icon) {
+  color: #64748b !important;
+}
+
+/* Additional shadow DOM targeting */
+ion-select .select-text,
+ion-select .select-placeholder {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+ion-select .select-icon-inner {
+  color: #64748b !important;
+}
+
+/* Force override for dark mode */
+@media (prefers-color-scheme: dark) {
+  ion-select {
+    --background: #f1f5f9 !important;
+    --color: #1e293b !important;
+    --border-color: #e2e8f0 !important;
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  
+  ion-select::part(text) {
+    color: #1e293b !important;
+  }
+  
+  ion-select::part(icon) {
+    color: #64748b !important;
+  }
+}
+
+ion-tab-bar {
+  --background: #fff;
+  --border: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 24px 24px 0 0;
+  margin: 0 16px 16px 16px;
+  box-shadow: 0 0 0 0 transparent;
+  height: 64px;
+}
+
+ion-tab-button {
+  --color: #111;
+  --color-selected: #1976d2;
+  background: transparent;
+  border-radius: 0;
+  font-weight: 500;
+}
+
+ion-tab-button.tab-selected {
+  color: #1976d2 !important;
+}
+
+ion-tab-button .tab-button-text {
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+ion-tab-button .tab-button-icon {
+  font-size: 1.5em;
+}
+
+ion-content {
+  --offset-bottom: 0;
+  --offset-top: 0;
+}
+
+.orders-content {
+  --overflow: auto !important;
+}

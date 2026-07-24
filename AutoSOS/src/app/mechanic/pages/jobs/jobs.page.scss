@@ -1,0 +1,874 @@
+// Simplified CSS Variables
+:root {
+  --primary-color: #667eea;
+  --card-background: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #636e72;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobs-content {
+  --background: #f8f9fa;
+  --padding-bottom: 80px; // Space for custom navbar
+}
+
+.jobs-container {
+  padding: 20px 16px 100px 16px; // Extra bottom padding for custom navbar
+  min-height: 100vh;
+  overflow-y: auto; // Allow vertical scrolling
+}
+
+// Search and Filter Section
+.search-section {
+  margin-bottom: 20px;
+  
+  ion-searchbar {
+    --background: rgba(255, 255, 255, 0.9);
+    --border-radius: 12px;
+    --box-shadow: var(--shadow-light);
+    --placeholder-color: #666;
+    --color: var(--text-primary);
+    --icon-color: #667eea;
+    --clear-button-color: #667eea;
+  }
+}
+
+.filter-section {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  
+  ion-chip {
+    --background: rgba(255, 255, 255, 0.9);
+    --color: var(--text-primary);
+    --border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-light);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    &[color] {
+      --background: var(--button-gradient);
+      --color: white;
+      box-shadow: var(--shadow-medium);
+    }
+  }
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-top: 16px;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 8px 0 0 0;
+    font-weight: 400;
+  }
+}
+
+.job-card {
+  background: var(--card-background);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.order-card {
+  background: var(--card-background);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-medium);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-heavy);
+    border-color: rgba(102, 126, 234, 0.3);
+  }
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 12px 20px;
+  border-bottom: 1px solid #e9ecef;
+
+  .job-id {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  .order-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-matched {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-in_progress {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-ongoing {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.job-body {
+  padding: 16px 20px;
+}
+
+.order-body {
+  padding: 20px 24px;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .detail-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    .detail-icon {
+      margin-right: 8px;
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+  }
+
+  .detail-value {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: right;
+
+    &.price-value {
+      font-size: 16px;
+      color: #00b894;
+      font-weight: 700;
+    }
+  }
+}
+
+.job-actions {
+  padding: 0 20px 16px 20px;
+}
+
+.order-actions {
+  padding: 0 24px 24px 24px;
+
+  .price-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .price-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .price-input {
+      --background: #f8f9fa;
+      --border-radius: 8px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      --color: var(--text-primary);
+      --placeholder-color: #999;
+      border: 1px solid #e9ecef;
+      font-size: 16px;
+      font-weight: 500;
+
+      &:focus {
+        --background: white;
+        border-color: #0984e3;
+        box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.1);
+      }
+    }
+
+    .set-price-button {
+      --background: var(--button-gradient);
+      --color: white;
+      --border-radius: 12px;
+      height: 48px;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: none;
+      letter-spacing: 0.5px;
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+
+      &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-heavy);
+        --background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        transform: none;
+        box-shadow: var(--shadow-light);
+      }
+    }
+
+    .job-done-button {
+      --background: linear-gradient(135deg, #28a745, #20c997);
+      --color: white;
+      --border-radius: 12px;
+      height: 48px;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: none;
+      letter-spacing: 0.5px;
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+
+      &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-heavy);
+        --background: linear-gradient(135deg, #218838, #1e7e34);
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        transform: none;
+        box-shadow: var(--shadow-light);
+      }
+    }
+  }
+
+  .action-button {
+    --background: var(--button-gradient);
+    --color: white;
+    --border-radius: 12px;
+    height: 48px;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(9, 132, 227, 0.3);
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.9);
+  
+  ion-spinner {
+    --color: white;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    opacity: 0.9;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  margin: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  ion-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: white;
+  }
+
+  p {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// Animation Classes
+.order-animation {
+  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .jobs-container {
+    padding: 16px 12px 100px 12px;
+  }
+  
+  .search-section {
+    margin-bottom: 16px;
+  }
+  
+  .filter-section {
+    margin-bottom: 20px;
+    gap: 6px;
+    
+    ion-chip {
+      font-size: 12px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+    }
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+    padding-top: 16px;
+    
+    .page-title {
+      font-size: 24px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+    }
+  }
+  
+  .job-card {
+    margin-bottom: 16px;
+    border-radius: 16px;
+  }
+  
+  .order-card {
+    margin-bottom: 16px;
+    border-radius: 16px;
+  }
+  
+  .job-header,
+  .job-body,
+  .job-actions {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .order-header,
+  .order-body,
+  .order-actions {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .status-badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jobs-container {
+    padding: 12px 8px 100px 8px;
+  }
+  
+  .page-header {
+    .page-title {
+      font-size: 22px;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+    }
+  }
+  
+  .job-header,
+  .job-body,
+  .job-actions {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .order-header,
+  .order-body,
+  .order-actions {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .filter-section {
+    gap: 4px;
+    
+    ion-chip {
+      font-size: 11px;
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+  }
+}
+
+// Modal Styles
+.modal-content {
+  --background: transparent;
+  padding: 0;
+}
+
+// Make the modal overlay transparent
+ion-modal {
+  --backdrop-opacity: 0;
+}
+
+.modal-form {
+  background: white;
+  border-radius: 20px;
+  margin: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  position: relative;
+  border: 1px solid #f0f0f0;
+}
+
+.close-button-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.close-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --color: #333333;
+  font-size: 20px;
+  --background: rgba(255, 255, 255, 0.9);
+  --border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Payment Header
+.payment-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-top: 20px;
+}
+
+.payment-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #666666;
+  margin: 0;
+}
+
+// Order Details
+.order-details {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.detail-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+  
+  &.amount {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+  }
+}
+
+// Form Field
+.form-field {
+  margin-bottom: 24px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 10px;
+}
+
+// Upload Area
+.upload-area {
+  border: 2px dashed #007bff;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: #0056b3;
+    background: #f8f9fa;
+  }
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #007bff;
+}
+
+.upload-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: #666666;
+}
+
+.selected-files {
+  margin-top: 12px;
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333333;
+  }
+}
+
+// Submit Section
+.submit-section {
+  margin-top: 24px;
+}
+
+.submit-button {
+  --background: #007bff;
+  --color: white;
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  
+  &:hover {
+    --background: #0056b3;
+  }
+  
+  &[disabled] {
+    --background: #cccccc;
+    --color: #666666;
+  }
+}
+
+// Payment Instructions
+.payment-instructions {
+  margin-bottom: 24px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333333;
+    margin: 0 0 12px 0;
+  }
+  
+  ol {
+    margin: 0;
+    padding-left: 20px;
+    
+    li {
+      font-size: 14px;
+      color: #666666;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Payment Actions
+.payment-actions {
+  margin-top: 24px;
+}
+
+.confirm-button {
+  --background: #007bff;
+  --color: white;
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  
+  &:hover {
+    --background: #0056b3;
+  }
+  
+  &[disabled] {
+    --background: #cccccc;
+    --color: #666666;
+  }
+}
+
+// Camera Section
+.camera-section {
+  margin: 24px 0;
+}
+
+.camera-container {
+  text-align: center;
+  padding: 32px 20px;
+  border: 2px dashed #007bff;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+}
+
+.camera-icon {
+  font-size: 64px;
+  color: #007bff;
+  margin-bottom: 16px;
+}
+
+.camera-text {
+  font-size: 16px;
+  color: #333333;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+}
+
+.capture-button {
+  --background: #007bff;
+  --color: white;
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  max-width: 250px;
+}
+
+// Capturing Container
+.capturing-container {
+  text-align: center;
+  padding: 40px 20px;
+  border: 2px solid #007bff;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+}
+
+.capturing-animation {
+  margin-bottom: 20px;
+}
+
+.scanning-icon {
+  font-size: 64px;
+  color: #007bff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.capturing-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0 0 8px 0;
+}
+
+.capturing-hint {
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+}
+
+// Payment Status
+.payment-status {
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  
+  &.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+  }
+  
+  &.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+  }
+}
+
+.status-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.status-text {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  
+  .success & {
+    color: #155724;
+  }
+  
+  .error & {
+    color: #721c24;
+  }
+}

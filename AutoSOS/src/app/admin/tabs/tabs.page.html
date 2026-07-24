@@ -1,0 +1,24 @@
+<ion-router-outlet></ion-router-outlet>
+
+<!-- Custom Bottom Navbar -->
+<div class="custom-bottom-nav">
+  <div class="nav-item" (click)="navigateTo('client')" [class.active]="isActive('client')">
+    <ion-icon name="people"></ion-icon>
+    <span>Client</span>
+  </div>
+  
+  <div class="nav-item" (click)="navigateTo('mechanic')" [class.active]="isActive('mechanic')">
+    <ion-icon name="construct"></ion-icon>
+    <span>Mechanic</span>
+  </div>
+  
+  <div class="nav-item" (click)="navigateTo('wallet')" [class.active]="isActive('wallet')">
+    <ion-icon name="wallet"></ion-icon>
+    <span>Wallet</span>
+  </div>
+  
+  <div class="nav-item" (click)="navigateTo('account')" [class.active]="isActive('account')">
+    <ion-icon name="person"></ion-icon>
+    <span>Account</span>
+  </div>
+</div> 

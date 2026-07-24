@@ -1,0 +1,451 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <img src="assets/images/autoSOS logo side.png" alt="AutoSOS Logo" class="header-logo" />
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="mechanic-home">
+  <!-- Your Location Card -->
+  <div class="location-card" *ngIf="currentLatitude && currentLongitude">
+    <div class="location-content">
+      <div class="location-icon">
+        <ion-icon name="location" color="primary"></ion-icon>
+      </div>
+      <div class="location-text">
+        <div class="location-title">Your Location</div>
+        <div class="location-address">
+          {{ currentAddress || 'Getting address...' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="map-area">
+    <app-real-time-map 
+      #realTimeMap
+      [mechanicId]="profile?.user_id || null"
+      [clientLocation]="getClientLocationForNavigation()"
+      [showRoute]="hasActiveBooking()"
+      [isVisible]="true"
+      (locationUpdated)="onLocationUpdated($event)"
+      (mechanicLocationUpdated)="onMechanicLocationUpdated($event)">
+    </app-real-time-map>
+
+    <!-- Map Overlay with User Pin Label -->
+    <div class="map-overlay" *ngIf="currentLatitude && currentLongitude">
+      <div class="user-pin-placeholder">
+        <div class="pin-icon">
+          <ion-icon name="person" color="primary"></ion-icon>
+        </div>
+        <div class="pin-label">You are here</div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Dark Panel -->
+  <div class="dark-panel">
+    <div class="handle"></div>
+    
+    <!-- Mechanic Profile Section -->
+    <div class="mechanic-profile-section">
+      <div class="mechanic-avatar">
+        <ion-icon name="person" class="avatar-icon"></ion-icon>
+      </div>
+      <div class="mechanic-info">
+        <div class="mechanic-name">{{ mechanicName }}</div>
+        <div class="status-indicator" [class.online]="isOnline" [class.offline]="!isOnline">
+          {{ isOnline ? 'Available' : 'Offline' }}
+        </div>
+        <div class="status-description">
+          {{ isOnline ? 'You are available for new orders' : 'You are not receiving new orders' }}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stop Button -->
+    <div class="stop-button-section">
+      <ion-button 
+        class="stop-btn" 
+        [class.online-btn]="!isOnline"
+        expand="block" 
+        [color]="isOnline ? 'danger' : 'success'"
+        (click)="toggleOnlineStatus()">
+        <ion-icon [name]="isOnline ? 'stop-circle' : 'play-circle'" slot="start"></ion-icon>
+        {{ isOnline ? 'STOP' : 'GO ONLINE' }}
+      </ion-button>
+      
+      <!-- Debug Button -->
+      <ion-button 
+        fill="outline" 
+        color="secondary" 
+        size="small"
+        (click)="createTestBooking()"
+        class="debug-button"
+        style="margin-top: 10px;">
+        <ion-icon name="bug" slot="start"></ion-icon>
+        Create Test Booking
+      </ion-button>
+  </div>
+</div>
+
+<!-- Minimized Service Request Notification -->
+<div class="service-request-notification" *ngIf="currentBooking" [class.expanded]="isServiceRequestExpanded">
+  <!-- Minimized State -->
+  <div class="notification-minimized" (click)="toggleServiceRequestExpansion()" *ngIf="!isServiceRequestExpanded">
+    <div class="notification-icon">
+      <ion-icon name="notifications" color="primary"></ion-icon>
+      <div class="notification-badge" *ngIf="currentBooking.status === 'pending'">!</div>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title">New Service Request</div>
+      <div class="notification-subtitle">{{ getClientName() || 'Loading...' }} • {{ getDistanceToClient() || 'Unknown' }} away</div>
+    </div>
+    <div class="notification-actions">
+      <ion-button fill="clear" size="small" (click)="acceptRequest(); $event.stopPropagation()" color="success">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" size="small" (click)="declineRequest(); $event.stopPropagation()" color="danger">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Expanded State -->
+  <div class="notification-expanded" *ngIf="isServiceRequestExpanded">
+    <div class="expanded-header">
+      <div class="expanded-title">
+        <h3>Service Request Details</h3>
+        <div class="request-status" [class]="'status-' + currentBooking.status">
+          {{ getStatusText(currentBooking.status) }}
+        </div>
+      </div>
+      <ion-button fill="clear" (click)="toggleServiceRequestExpansion()" class="minimize-button">
+        <ion-icon name="chevron-down"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="expanded-content">
+      <!-- Client Info -->
+      <div class="client-info-section">
+        <div class="client-avatar">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="client-details">
+          <div class="client-name">{{ getClientName() || 'Loading...' }}</div>
+          <div class="client-phone">{{ getClientPhone() || 'No phone' }}</div>
+          <div class="client-distance">{{ getDistanceToClient() || 'Unknown' }} away</div>
+        </div>
+        <div class="client-actions">
+          <ion-button fill="outline" size="small" (click)="callClient()">
+            <ion-icon name="call"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Service Details -->
+      <div class="service-details-section">
+        <div class="detail-item">
+          <ion-icon name="construct" color="primary"></ion-icon>
+          <span>{{ currentBooking?.required_specialization || 'Roadside Assistance' }}</span>
+        </div>
+        <div class="detail-item">
+          <ion-icon name="bicycle" color="primary"></ion-icon>
+          <span>{{ getMotorcycleModel() || 'Unknown Model' }}</span>
+        </div>
+        <div class="detail-item" *ngIf="currentBooking?.notes">
+          <ion-icon name="document-text" color="primary"></ion-icon>
+          <span>{{ currentBooking.notes }}</span>
+        </div>
+        <div class="detail-item">
+          <ion-icon name="time" color="primary"></ion-icon>
+          <span>{{ formatDate(currentBooking?.created_at || '') }}</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-section">
+        <ion-button 
+          fill="outline" 
+          color="secondary" 
+          (click)="centerOnClient()"
+          class="action-button">
+          <ion-icon name="location" slot="start"></ion-icon>
+          Center on Client
+        </ion-button>
+        <ion-button 
+          fill="solid" 
+          color="primary" 
+          (click)="startNavigation()"
+          class="action-button">
+          <ion-icon name="navigate" slot="start"></ion-icon>
+          Start Navigation
+        </ion-button>
+      </div>
+
+      <!-- Accept/Decline Buttons -->
+      <div class="decision-buttons" *ngIf="currentBooking?.status === 'matched'">
+        <ion-button 
+          fill="outline" 
+          color="danger" 
+          (click)="declineRequest()"
+          class="decision-button">
+          <ion-icon name="close" slot="start"></ion-icon>
+          Decline
+        </ion-button>
+        <ion-button 
+          fill="solid" 
+          color="success" 
+          (click)="acceptRequest()"
+          class="decision-button">
+          <ion-icon name="checkmark" slot="start"></ion-icon>
+          Accept
+        </ion-button>
+      </div>
+
+      <!-- Price Setting Section -->
+      <div class="price-setting" *ngIf="currentBooking?.status === 'in_progress' && !currentBooking?.service_price">
+        <h4>Set Service Price</h4>
+        <div class="price-input-group">
+          <ion-input 
+            type="number" 
+            placeholder="Enter price in PHP" 
+            [(ngModel)]="servicePrice"
+            class="price-input">
+          </ion-input>
+          <ion-button 
+            fill="solid" 
+            color="primary"
+            (click)="setServicePrice()"
+            [disabled]="!servicePrice || servicePrice <= 0">
+            Set Price
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Complete Job Button -->
+      <div class="complete-section" *ngIf="currentBooking?.status === 'in_progress' && currentBooking?.service_price">
+        <ion-button 
+          fill="solid" 
+          color="success"
+          expand="block"
+          (click)="completeJob()">
+          <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+          Complete Job
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Price Setting Modal -->
+<div class="price-setting-modal" *ngIf="showPriceSettingModal">
+  <div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Set Service Price</h2>
+      <ion-button fill="clear" (click)="closePriceSettingModal()" class="close-button">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Price Input Section -->
+    <div class="price-input-section">
+      <div class="price-input-container">
+        <ion-label class="price-label">Service Price (PHP)</ion-label>
+        <ion-input 
+          type="number" 
+          [(ngModel)]="servicePrice" 
+          placeholder="Enter price"
+          class="price-input"
+          min="0"
+          step="0.01">
+        </ion-input>
+      </div>
+      
+      <!-- Quick Price Buttons -->
+      <div class="quick-price-buttons">
+        <ion-button fill="outline" size="small" (click)="setQuickPrice(500)">₱500</ion-button>
+        <ion-button fill="outline" size="small" (click)="setQuickPrice(1000)">₱1000</ion-button>
+        <ion-button fill="outline" size="small" (click)="setQuickPrice(1500)">₱1500</ion-button>
+        <ion-button fill="outline" size="small" (click)="setQuickPrice(2000)">₱2000</ion-button>
+      </div>
+    </div>
+
+    <!-- Service Details -->
+    <div class="service-details">
+      <h3>Service Details</h3>
+      <p><strong>Issue:</strong> {{ currentBooking?.required_specialization }}</p>
+      <p><strong>Notes:</strong> {{ currentBooking?.notes || 'No additional notes' }}</p>
+      <p><strong>Client:</strong> {{ clientDetails?.full_name }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="modal-actions">
+      <ion-button fill="outline" (click)="closePriceSettingModal()" class="cancel-btn">
+        Cancel
+      </ion-button>
+      <ion-button fill="solid" (click)="confirmServicePrice()" class="confirm-btn" [disabled]="!servicePrice || servicePrice <= 0">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Confirm Price
+      </ion-button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Service Request Modal -->
+<div class="service-request-modal" *ngIf="showServiceRequestModal && currentBooking">
+  <div class="modal-overlay" (click)="closeServiceRequestModal()"></div>
+  <div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header">
+      <ion-button fill="clear" (click)="closeServiceRequestModal()" class="back-button">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <h2 class="modal-title">Service Request</h2>
+      <div class="header-spacer"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-body">
+      <!-- Client Information Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <ion-icon name="person-circle" class="card-icon"></ion-icon>
+          <h3>Client Information</h3>
+        </div>
+        <div class="card-content">
+          <div class="info-row">
+            <div class="info-item">
+              <span class="info-label">Name</span>
+              <span class="info-value">{{ currentClient?.full_name || 'Loading...' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone</span>
+              <span class="info-value">{{ currentClient?.phone || 'Not provided' }}</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <span class="info-label">Distance</span>
+              <span class="info-value">{{ getDistance() }} away</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status</span>
+              <span class="info-value status-badge" [class]="'status-' + currentBooking.status">
+                {{ currentBooking.status | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Details Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <ion-icon name="construct" class="card-icon"></ion-icon>
+          <h3>Service Details</h3>
+        </div>
+        <div class="card-content">
+          <div class="info-row">
+            <div class="info-item">
+              <span class="info-label">Issue Type</span>
+              <span class="info-value">{{ currentBooking.required_specialization || 'General Service' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Motorcycle</span>
+              <span class="info-value">{{ currentClient?.motorcycle_model || 'Not specified' }}</span>
+            </div>
+          </div>
+          <div class="info-row" *ngIf="currentBooking?.notes">
+            <div class="info-item full-width">
+              <span class="info-label">Notes</span>
+              <span class="info-value">{{ currentBooking.notes }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Information Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <ion-icon name="card" class="card-icon"></ion-icon>
+          <h3>Payment Information</h3>
+        </div>
+        <div class="card-content">
+          <div class="info-row">
+            <div class="info-item">
+              <span class="info-label">Method</span>
+              <span class="info-value">{{ currentBooking.payment_method || 'Cash' }}</span>
+            </div>
+            <div class="info-item" *ngIf="currentBooking?.service_price">
+              <span class="info-label">Price</span>
+              <span class="info-value price">₱{{ currentBooking.service_price }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-section">
+        <!-- Accept/Decline Buttons (for matched requests) -->
+        <div class="action-buttons" *ngIf="currentBooking?.status === 'matched'">
+          <ion-button 
+            fill="outline" 
+            color="danger" 
+            class="action-btn decline-btn"
+            (click)="declineRequest()">
+            <ion-icon name="close" slot="start"></ion-icon>
+            Decline
+          </ion-button>
+          
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            class="action-btn accept-btn"
+            (click)="acceptRequest()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Accept Request
+          </ion-button>
+        </div>
+
+        <!-- Price Setting Section (after accepting) -->
+        <div class="price-setting" *ngIf="currentBooking?.status === 'in_progress' && !currentBooking?.service_price">
+          <h4>Set Service Price</h4>
+          <div class="price-input-group">
+            <ion-input 
+              type="number" 
+              placeholder="Enter price in PHP" 
+              [(ngModel)]="servicePrice"
+              class="price-input">
+            </ion-input>
+            <ion-button 
+              fill="solid" 
+              color="primary"
+              (click)="setServicePrice()"
+              [disabled]="!servicePrice || servicePrice <= 0">
+              Set Price
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Job Management Buttons (after price is set) -->
+        <div class="action-buttons" *ngIf="currentBooking?.status === 'in_progress' && currentBooking?.service_price">
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            class="action-btn complete-btn"
+            (click)="completeJob()">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Complete Job
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

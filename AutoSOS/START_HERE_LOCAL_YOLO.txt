@@ -1,0 +1,63 @@
+================================================
+  AutoSOS Local YOLOv8 Service Quick Start
+================================================
+
+WHAT IT DOES:
+- Runs YOLOv8 locally on your laptop
+- Automatically downloads model from Supabase
+- Android app connects via same WiFi network
+- No manual configuration needed
+
+QUICK START (3 steps):
+
+1. INSTALL DEPENDENCIES:
+   pip install -r requirements_local_yolo_supabase.txt
+
+2. START THE SERVICE:
+   Windows: start_local_yolo_supabase.bat
+   Mac/Linux: python local_yolo_supabase_service.py
+
+3. USE YOUR APP:
+   - Note the IP address shown (e.g., 192.168.1.100)
+   - Connect Android device to same WiFi
+   - Open AutoSOS app > Diagnostic > Camera
+   - Done! App will auto-detect local service
+
+IMPORTANT:
+- Both devices must be on SAME WiFi network
+- Allow port 8000 in Windows Firewall if needed
+- Model is cached after first download
+
+ENDPOINTS:
+- Health: http://<your-ip>:8000/health
+- Detect: http://<your-ip>:8000/detect
+- Model Info: http://<your-ip>:8000/model-info
+
+TEST FROM ANDROID BROWSER:
+1. Open Chrome/Edge on Android
+2. Go to: http://<your-ip>:8000/health
+3. Should see: {"status": "healthy"}
+
+TROUBLESHOOTING:
+- Service won't start? Check Python 3.8+ installed
+- Can't connect? Check same WiFi network
+- Model won't load? Check Supabase credentials
+- See LOCAL_YOLO_SUPABASE_SETUP.md for details
+
+FILES CREATED:
+- local_yolo_supabase_service.py (main service)
+- start_local_yolo_supabase.bat (Windows launcher)
+- requirements_local_yolo_supabase.txt (dependencies)
+- LOCAL_YOLO_SUPABASE_SETUP.md (detailed guide)
+- QUICK_START_LOCAL_YOLO.md (quick reference)
+- LOCAL_YOLO_IMPLEMENTATION_SUMMARY.md (full summary)
+
+README FILES:
+- LOCAL_YOLO_SUPABASE_SETUP.md - Complete setup guide
+- QUICK_START_LOCAL_YOLO.md - Quick reference guide
+- LOCAL_YOLO_IMPLEMENTATION_SUMMARY.md - Full documentation
+
+================================================
+That's it! Just run the bat file and note your IP!
+================================================
+

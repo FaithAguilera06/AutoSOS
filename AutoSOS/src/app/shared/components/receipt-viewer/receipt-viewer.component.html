@@ -1,0 +1,49 @@
+<div class="receipt-viewer-overlay" *ngIf="isVisible" (click)="closeViewer()">
+  <div class="receipt-viewer-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <div class="close-button" (click)="closeViewer()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+
+    <!-- Header -->
+    <div class="receipt-header">
+      <h3>{{ getReceiptTypeLabel() }}</h3>
+      <p *ngIf="receiptUrls.length > 1">{{ receiptUrls.length }} receipts available</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoadingReceipts" class="loading-receipts">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading receipts...</p>
+    </div>
+    
+    <!-- Receipts List -->
+    <div *ngIf="!isLoadingReceipts && receiptUrls.length > 0" class="receipts-section">
+      <div class="receipt-item" *ngFor="let receiptUrl of receiptUrls; let i = index">
+        <label>Receipt {{ i + 1 }}:</label>
+        <div class="receipt-preview" (click)="viewReceipt(i)">
+          <!-- Receipt Image Preview -->
+          <div class="receipt-image">
+            <img [src]="receiptUrlsWithSigned[i]" [alt]="getReceiptTypeLabel() + ' ' + (i + 1)" />
+            <div class="receipt-status">
+              RECEIPT
+            </div>
+            <div class="view-overlay">
+              <ion-icon name="eye-outline"></ion-icon>
+              <span>Click to view</span>
+            </div>
+          </div>
+        </div>
+        <div class="receipt-info">
+          <small>Receipt {{ i + 1 }} of {{ receiptUrls.length }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- No Receipts State -->
+    <div *ngIf="!isLoadingReceipts && receiptUrls.length === 0" class="no-receipts">
+      <ion-icon name="document-outline" size="large"></ion-icon>
+      <p>No receipts available</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="popup-overlay" *ngIf="isVisible" (click)="closePopup()">
+  <div class="popup-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <div class="close-button" (click)="closePopup()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <ion-avatar>
+        <img src="assets/images/icon.png" alt="Profile Picture">
+      </ion-avatar>
+    </div>
+
+    <!-- Mechanic Information -->
+    <div class="mechanic-info">
+      <div class="info-row">
+        <span class="label">Name:</span>
+        <span class="value">{{ mechanic.full_name || 'No name provided' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ mechanic.user_id }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Skills:</span>
+        <span class="value">{{ mechanic.specialization?.join(', ') || 'None' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="value">{{ mechanic.approved ? 'Approved' : 'Pending' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Joined:</span>
+        <span class="value">{{ mechanic.created_at | date:'short' }}</span>
+      </div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="documents-section">
+      <h3>Documents</h3>
+      
+      <!-- Loading State -->
+      <div *ngIf="isLoadingDocuments" class="loading-documents">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Loading documents...</p>
+      </div>
+      
+      <!-- Documents List -->
+      <div *ngIf="!isLoadingDocuments && documents.length > 0">
+        <div class="document-item" *ngFor="let doc of documents">
+          <label>{{ getDocumentTypeLabel(doc.doc_type) }}:</label>
+          <div class="document-preview" (click)="viewDocument(doc)">
+            <!-- Image Preview -->
+            <div *ngIf="!isPdfDocument(doc.doc_type)" class="document-image">
+              <img [src]="getDocumentUrl(doc.id)" [alt]="getDocumentTypeLabel(doc.doc_type)" />
+              <div class="document-status" [ngClass]="'status-' + doc.status">
+                {{ doc.status.toUpperCase() }}
+              </div>
+              <div class="view-overlay">
+                <ion-icon name="eye-outline"></ion-icon>
+                <span>Click to view</span>
+              </div>
+            </div>
+            
+            <!-- PDF Preview -->
+            <div *ngIf="isPdfDocument(doc.doc_type)" class="document-pdf">
+              <div class="pdf-icon">
+                <ion-icon name="document-text-outline" size="large"></ion-icon>
+                <div class="pdf-label">PDF Document</div>
+              </div>
+              <div class="document-status" [ngClass]="'status-' + doc.status">
+                {{ doc.status.toUpperCase() }}
+              </div>
+              <div class="view-overlay">
+                <ion-icon name="eye-outline"></ion-icon>
+                <span>Click to view PDF</span>
+              </div>
+            </div>
+          </div>
+          <div class="document-info">
+            <small>Uploaded: {{ doc.created_at | date:'short' }}</small>
+            <small class="document-type">{{ isPdfDocument(doc.doc_type) ? 'PDF' : 'Image' }}</small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- No Documents State -->
+      <div *ngIf="!isLoadingDocuments && documents.length === 0" class="no-documents">
+        <ion-icon name="document-outline" size="large"></ion-icon>
+        <p>No documents uploaded</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <!-- Show Accept/Decline buttons only for pending status -->
+      <ng-container *ngIf="!mechanic.approved">
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          class="accept-btn"
+          (click)="acceptMechanic()">
+          Accept
+        </ion-button>
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          class="decline-btn"
+          (click)="declineMechanic()">
+          Decline
+        </ion-button>
+      </ng-container>
+      
+      <!-- Show Change Status button for approved status -->
+      <ion-button 
+        *ngIf="mechanic.approved"
+        expand="block" 
+        fill="outline" 
+        class="change-status-btn"
+        (click)="changeStatus()">
+        Change Status
+      </ion-button>
+    </div>
+  </div>
+</div> 

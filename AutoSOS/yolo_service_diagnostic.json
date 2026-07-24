@@ -1,0 +1,11 @@
+{
+  "service_url": "https://autosos-yolo.onrender.com",
+  "timestamp": 1759418653.6561177,
+  "health": {
+    "accessible": false,
+    "error": "Timeout - service may be sleeping"
+  },
+  "model_info": {},
+  "classes": {},
+  "detection_test": {}
+}

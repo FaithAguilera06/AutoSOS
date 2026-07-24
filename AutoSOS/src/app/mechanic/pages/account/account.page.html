@@ -1,0 +1,60 @@
+<ion-content [fullscreen]="true" class="profile-content">
+  <!-- Client Badge -->
+  <div class="client-badge-container" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 16px; margin-right: 16px;">
+    <ion-button fill="solid" color="primary" style="font-size: 1.1rem; height: 2.5rem; padding: 0 1.5rem;" class="client-badge" disabled>
+      MECHANIC
+    </ion-button>
+  </div>
+  <!-- Profile Header Section -->
+  <div class="profile-header" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="avatar-container" style="display: flex; justify-content: center;">
+      <ion-avatar class="profile-avatar">
+        <img [src]="profile?.avatar_url || 'assets/images/icon.png'" alt="Profile Picture">
+      </ion-avatar>
+    </div>
+    <div class="user-info" style="text-align: center;">
+      <h2 class="user-name">{{ profile?.full_name || 'Loading...' }}</h2>
+      <p class="user-email">{{ userEmail || 'Loading...' }}</p>
+    </div>
+  </div>
+
+  <!-- Account Information Section -->
+  <div class="account-section">
+    <h3 class="section-title">Account Information</h3>
+    
+    <ion-list class="account-list">
+      <ion-item lines="none" class="info-item">
+        <ion-label class="info-label">Name</ion-label>
+        <ion-label slot="end" class="info-value">{{ profile?.full_name || 'Not set' }}</ion-label>
+      </ion-item>
+      
+      <ion-item lines="none" class="info-item">
+        <ion-label class="info-label">Email</ion-label>
+        <ion-label slot="end" class="info-value">{{ userEmail || 'Not set' }}</ion-label>
+      </ion-item>
+      
+      <ion-item lines="none" class="info-item">
+        <ion-label class="info-label">Status</ion-label>
+        <ion-label slot="end" class="info-value">{{ profile?.approved ? 'Approved' : 'Pending' }}</ion-label>
+      </ion-item>
+      
+      <ion-item lines="none" class="info-item">
+        <ion-label class="info-label">User ID</ion-label>
+        <ion-label slot="end" class="info-value">{{ profile?.user_id || 'Loading...' }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- Logout Button -->
+  <div class="logout-section">
+    <ion-button 
+      expand="block" 
+      color="primary" 
+      class="logout-button"
+      (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      LOGOUT
+    </ion-button>
+  </div>
+</ion-content>
+

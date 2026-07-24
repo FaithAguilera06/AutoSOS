@@ -1,0 +1,13 @@
+# Headless requirements for YOLOv8 service (no GUI dependencies)
+fastapi
+uvicorn
+ultralytics
+opencv-python-headless
+numpy
+Pillow
+supabase
+redis
+python-multipart
+python-dotenv
+structlog
+httpx

@@ -1,0 +1,50 @@
+<div class="popup-overlay" *ngIf="isVisible" (click)="closePopup()">
+  <div class="popup-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <div class="close-button" (click)="closePopup()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <ion-avatar>
+        <img *ngIf="client?.avatar_url" [src]="client.avatar_url" alt="Profile Picture">
+        <ion-icon *ngIf="!client?.avatar_url" name="person" size="large"></ion-icon>
+      </ion-avatar>
+    </div>
+
+    <!-- Client Information -->
+    <div class="client-info">
+      <div class="info-row">
+        <span class="label">Name:</span>
+        <span class="value">{{ client?.full_name || 'Not provided' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">User ID:</span>
+        <span class="value">{{ client?.user_id || 'Not provided' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Contact Number:</span>
+        <span class="value">{{ client?.phone || 'Not provided' }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ getEmail() }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">Role:</span>
+        <span class="value">{{ client?.role || 'Not provided' }}</span>
+      </div>
+      
+      
+      <div class="info-row">
+        <span class="label">Joined:</span>
+        <span class="value">{{ client?.created_at ? (client.created_at | date:'short') : 'Not provided' }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

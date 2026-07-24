@@ -1,0 +1,117 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="close()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Facial Recognition Payment</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="close()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="facial-payment-content">
+      <div class="payment-container" *ngIf="booking">
+        <!-- Booking Information -->
+        <div class="booking-info">
+          <h3>Booking Information</h3>
+          <div class="info-item">
+            <span class="label">Booking ID:</span>
+            <span class="value">{{ booking.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Service:</span>
+            <span class="value">{{ booking.required_specialization }}</span>
+          </div>
+          <div class="info-item" *ngIf="booking.notes">
+            <span class="label">Notes:</span>
+            <span class="value">{{ booking.notes }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Amount -->
+        <div class="amount-section">
+          <h3>Payment Amount</h3>
+          <ion-item>
+            <ion-label position="stacked">Amount (₱)</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="paymentAmount"
+              placeholder="Enter amount">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Camera Section -->
+        <div class="camera-section">
+          <h3>Facial Verification</h3>
+          
+          <!-- Camera View -->
+          <div class="camera-container" *ngIf="!capturedPhoto">
+            <video #videoElement autoplay playsinline class="camera-video"></video>
+            <div class="camera-overlay">
+              <div class="face-guide"></div>
+            </div>
+            <div class="camera-controls">
+              <ion-button 
+                (click)="startCamera()" 
+                *ngIf="!cameraStream"
+                color="primary">
+                <ion-icon name="camera" slot="start"></ion-icon>
+                Start Camera
+              </ion-button>
+              <ion-button 
+                (click)="capturePhoto()" 
+                *ngIf="cameraStream"
+                color="success"
+                [disabled]="isCapturing">
+                <ion-spinner *ngIf="isCapturing" name="crescent"></ion-spinner>
+                <ion-icon *ngIf="!isCapturing" name="camera" slot="start"></ion-icon>
+                {{ isCapturing ? 'Capturing...' : 'Capture Photo' }}
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Captured Photo -->
+          <div class="captured-photo" *ngIf="capturedPhoto">
+            <img [src]="capturedPhoto" alt="Captured Photo">
+            <div class="photo-actions">
+              <ion-button (click)="retakePhoto()" color="warning" size="small">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Retake
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Hidden canvas for photo capture -->
+          <canvas #canvasElement style="display: none;"></canvas>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+          <h4>Instructions:</h4>
+          <ul>
+            <li>Position your face within the guide circle</li>
+            <li>Ensure good lighting</li>
+            <li>Look directly at the camera</li>
+            <li>Keep your face still when capturing</li>
+          </ul>
+        </div>
+
+        <!-- Process Payment Button -->
+        <div class="payment-actions">
+          <ion-button 
+            expand="block" 
+            color="success"
+            (click)="processPayment()"
+            [disabled]="!capturedPhoto || paymentAmount <= 0 || isProcessing">
+            <ion-spinner *ngIf="isProcessing" name="crescent"></ion-spinner>
+            <ion-icon *ngIf="!isProcessing" name="card" slot="start"></ion-icon>
+            {{ isProcessing ? 'Processing...' : 'Process Payment' }}
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <img src="assets/images/autoSOS logo side.png" alt="AutoSOS Logo" class="header-logo" />
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="home-container">
+  <!-- Welcome Message -->
+  <div class="welcome-section">
+    <span class="welcome-label">Welcome,</span>
+    <span class="user-name">{{ userName }}</span>
+    <br />
+    <span class="user-email">{{ userEmail }}</span>
+  </div>
+
+  <div class="section-title">Choose a Mode</div>
+
+  <!-- Mode Buttons -->
+  <div class="modes-section">
+    <div class="mode-card" (click)="navigateToMechanicFinder()">
+      <div class="mode-icon-container">
+        <ion-icon name="construct-outline" class="mode-icon"></ion-icon>
+      </div>
+      <div class="mode-label">Mechanic Finder Mode</div>
+      <div class="mode-description">Find nearby qualified mechanics for immediate assistance</div>
+    </div>
+    <div class="mode-card" (click)="openDiagnosticModal()">
+      <div class="mode-icon-container">
+        <ion-icon name="analytics-outline" class="mode-icon"></ion-icon>
+      </div>
+      <div class="mode-label">Diagnostic Mode</div>
+      <div class="mode-description">Analyze your vehicle's health and get detailed reports</div>
+    </div>
+  </div>
+</div>
+
+<!-- Diagnostic Modal removed - direct navigation to camera page -->
+
+<!-- Camera Diagnostic Modal removed - direct navigation to camera page --> 

@@ -1,0 +1,89 @@
+<ion-content [fullscreen]="true">
+  <div class="registration-container">
+    <div class="registration-form">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <img src="assets/images/autoSOS logo.png" alt="AutoSOS Logo" class="logo">
+      </div>
+      
+      <!-- Registration Form -->
+      <div class="form-section">
+        <h2>Mechanic Registration</h2>
+        <p>Create your account to provide motorcycle services</p>
+        
+        <form #registrationForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="input-group">
+            <label>Full Name *</label>
+            <ion-input type="text" placeholder="Enter your full name" name="fullName" [(ngModel)]="formData.fullName" required></ion-input>
+          </div>
+          
+          <div class="input-group">
+            <label>Contact Number *</label>
+            <ion-input type="tel" placeholder="Enter your contact number" name="contactNumber" [(ngModel)]="formData.contactNumber" required></ion-input>
+          </div>
+          
+          <div class="input-group">
+            <label>Email *</label>
+            <ion-input type="email" placeholder="Enter your email" name="email" [(ngModel)]="formData.email" required></ion-input>
+          </div>
+          
+          <div class="input-group">
+            <label>Skills Specialization *</label>
+            <select class="skills-select" name="skills" [(ngModel)]="formData.skills" required>
+              <option value="electrical-systems">Electrical Systems</option>
+              <option value="engine">Engine and Mechanical</option>
+              <option value="all-around">General Repair (All-Around)</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label>Password *</label>
+            <ion-input [type]="passwordType" placeholder="Create a password" name="password" [(ngModel)]="formData.password" required>
+              <ion-icon [name]="eyeIcon" slot="end" class="password-toggle" (click)="togglePasswordVisibility()"></ion-icon>
+            </ion-input>
+          </div>
+          
+          <div class="input-group">
+            <label>Confirm Password *</label>
+            <ion-input [type]="confirmPasswordType" placeholder="Confirm your password" name="confirmPassword" [(ngModel)]="formData.confirmPassword" required>
+              <ion-icon [name]="confirmEyeIcon" slot="end" class="password-toggle" (click)="toggleConfirmPasswordVisibility()"></ion-icon>
+            </ion-input>
+          </div>
+          
+          <div class="input-group">
+            <label>Valid ID *</label>
+            <input type="file" id="validId" accept="image/*" (change)="onValidIdChange($event)" style="display: none;">
+            <ion-button fill="outline" expand="block" class="upload-button" (click)="triggerValidIdUpload()">
+              <ion-icon name="camera-outline" slot="start"></ion-icon>
+              {{ validIdFile ? validIdFile.name : 'Upload Picture' }}
+            </ion-button>
+          </div>
+          
+          <div class="input-group">
+            <label>Motorcycle/Small Engine Servicing NC II Certificate *</label>
+            <input type="file" id="certificate" accept=".pdf" (change)="onCertificateChange($event)" style="display: none;">
+            <ion-button fill="outline" expand="block" class="upload-button" (click)="triggerCertificateUpload()">
+              <ion-icon name="document-outline" slot="start"></ion-icon>
+              {{ certificateFile ? certificateFile.name : 'Upload PDF' }}
+            </ion-button>
+          </div>
+          
+          <ion-button expand="block" class="register-button" type="submit" [disabled]="!registrationForm.valid || !validIdFile || !certificateFile || isLoading">
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!isLoading">Create Account</span>
+          </ion-button>
+        </form>
+      </div>
+      
+      <!-- Login Link -->
+      <div class="login-link">
+        <p>Already have an account? <a routerLink="/login">Log in</a></p>
+      </div>
+      
+      <!-- Back Link -->
+      <div class="back-link">
+        <a routerLink="/role-selection">← Back to Role Selection</a>
+      </div>
+    </div>
+  </div>
+</ion-content> 

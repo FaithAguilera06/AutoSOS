@@ -1,0 +1,63 @@
+
+
+<div class="wallet-container">
+  <div class="wallet-content-flex">
+    <!-- Wallet Card Section -->
+    <div class="wallet-section">
+      <div class="wallet-card">
+        <div class="card-content">
+          <div class="balance-display">
+            <h1 class="balance-amount">₱{{ walletBalance.toFixed(2) }}</h1>
+          </div>
+          <div class="card-icon">
+            <ion-icon name="card-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="card-gradient"></div>
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="history-section">
+      <h3 class="section-title">Recent Transactions</h3>
+      <ion-list class="transaction-list">
+        <ion-item lines="none" class="transaction-item" *ngFor="let transaction of transactions">
+          <ion-avatar slot="start" class="transaction-avatar">
+            <ion-icon 
+              [name]="getTransactionIcon(transaction.transaction_type)" 
+              [color]="getTransactionColor(transaction.transaction_type)">
+            </ion-icon>
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ getTransactionTitle(transaction.transaction_type) }}</h3>
+            <p>{{ transaction.description || 'No description' }}</p>
+            <p>{{ formatDate(transaction.created_at) }}</p>
+          </ion-label>
+          <ion-label slot="end" [color]="getTransactionColor(transaction.transaction_type)">
+            {{ getTransactionAmount(transaction.transaction_type, transaction.amount) }}
+          </ion-label>
+          <!-- Receipt View Button -->
+          <ion-button 
+            *ngIf="hasReceipts(transaction)"
+            slot="end" 
+            fill="clear" 
+            size="small"
+            (click)="viewReceipts(transaction)"
+            class="receipt-button">
+            <ion-icon name="receipt-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+        
+        <!-- Empty state -->
+        <ion-item lines="none" class="transaction-item" *ngIf="transactions.length === 0">
+          <ion-label>
+            <h3>No transactions yet</h3>
+            <p>Your transaction history will appear here</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+  </div>
+</div>
+

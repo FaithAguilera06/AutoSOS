@@ -1,0 +1,141 @@
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { IonicModule, ToastController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { GPT5Service, GPT5DiagnosticRequest, GPT5DiagnosticResponse } from '../../../../services/gpt5.service';
+// import { GradioYoloService } from '../../../services/gradio-yolo.service';
+// import { MotorcycleDiagnosticService, MotorcycleDetection, DiagnosticResult } from '../../../services/motorcycle-diagnostic.service';
+
+export interface ARMarker {
+  x: number;
+  y: number;
+  label: string;
+}
+
+export interface DiagnosisResult {
+  issue: string;
+  severity: 'Low' | 'Medium' | 'High' | 'Critical';
+  description: string;
+  arAnalysis: string;
+  recommendation: string;
+  mechanicNeeded: boolean;
+  mechanicReason?: string;
+}
+
+export interface YOLODetection {
+  class_id: number;
+  class_name: string;
+  class_display_name: string;
+  confidence: number;
+  bbox: number[]; // [x1, y1, x2, y2] format from YOLO service
+  severity: string;
+}
+
+export interface YOLOResponse {
+  success: boolean;
+  detections: YOLODetection[];
+  detection_count: number;
+  image_size: {
+    width: number;
+    height: number;
+  };
+  confidence_threshold: number;
+  annotated_image?: string;
+  error?: string;
+}
+
+// Gradio API interfaces
+export interface GradioPrediction {
+  data: any[];
+  is_generating: boolean;
+  duration: number;
+  average_duration: number;
+}
+
+@Component({
+  selector: 'app-camera',
+  templateUrl: 'camera.page.html',
+  styleUrls: ['camera.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, HttpClientModule]
+})
+export class CameraPage implements OnInit, OnDestroy {
+  @ViewChild('videoElement') videoElement!: ElementRef;
+
+  cameraStream: MediaStream | null = null;
+  isAnalyzing = false;
+  analysisProgress = 0;
+  currentStep = 0;
+  diagnosisResult: DiagnosisResult | null = null;
+  showTips = false;
+  flashOn = false;
+  arOverlay = false;
+  arMarkers: ARMarker[] = [];
+  yoloDetections: YOLODetection[] = [];
+  confidenceThreshold = 0.3; // Fixed at 30% confidence threshold
+  isRealtimeDetectionActive = false;
+  detectionInterval: any = null;
+  canvasElement: HTMLCanvasElement | null = null;
+  lastDetectionTime = 0;
+  detectionFrameRate = 3; // Process every 3 seconds for optimal performance
+  yoloServiceStatus: 'checking' | 'available' | 'unavailable' = 'checking';
+  useRealYOLO = true; // Always use real YOLOv8 detection
+
+  // YOLOv8 service configuration
+  // private readonly YOLO_SERVICE_URL = 'http://localhost:8002'; // Local YOLOv8 Service (temporary)
+  // private readonly YOLO_SERVICE_URL = 'https://autosos-yolo.onrender.com'; // AutoSOS Cloud YOLOv8 Service
+  private readonly YOLO_SERVICE_URL = 'https://iceszn12-autosos.hf.space'; // AutoSOS Hugging Face YOLOv8 Service
+  private readonly GRADIO_API_URL = `${this.YOLO_SERVICE_URL}/api/predict`;
+  
+  // Alternative service URLs for testing
+  private readonly ALTERNATIVE_URLS = [
+    'https://iceszn12-autosos.hf.space', // Primary Hugging Face Space
+    'https://autosos-yolo.onrender.com', // Render fallback
+    'http://localhost:8002', // Local fallback
+    'https://autosos-yolo-service.onrender.com' // Alternative URL
+  ];
+
+  constructor(
+    private router: Router,
+    private toastController: ToastController,
+    private http: HttpClient,
+    private gpt5Service: GPT5Service
+    // private motorcycleDiagnosticService: MotorcycleDiagnosticService
+  ) { }
+
+  async ngOnInit() {
+    // Initialize camera page
+    this.createCanvas();
+    
+    // Set YOLOv8 service status to checking initially
+    this.yoloServiceStatus = 'checking';
+    
+    // Check if Android diagnostic service is available
+    await this.checkAndroidDiagnosticService();
+    
+    // Don't assume YOLOv8 service is available - will be checked when page is entered
+  }
+
+  /**
+   * Check if Android on-device diagnostic is available
+   */
+  private async checkAndroidDiagnosticService() {
+    try {
+      // const platformInfo = this.motorcycleDiagnosticService.getPlatformInfo();
+      
+      // For now, we'll assume we're on a web platform
+      // In a real implementation, you would check for Android capabilities
+      console.log('🔍 Checking Android diagnostic capabilities...');
+      
+      // This would be where you check for Android-specific YOLO capabilities
+      // For now, we'll use the cloud-based YOLO service
+      
+    } catch (error) {
+      console.error('Error checking Android diagnostic service:', error);
+    }
+  }
+
+  // ... [Rest of the original methods would be here]
+  // This is a backup of the original camera page before local YOLO service integration
+}

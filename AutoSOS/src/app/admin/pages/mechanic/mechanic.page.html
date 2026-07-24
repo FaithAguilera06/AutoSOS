@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <img src="assets/images/autoSOS logo side.png" alt="AutoSOS Logo" class="header-logo" />
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="container">
+    <!-- Tabs -->
+    <ion-segment [(ngModel)]="activeTab" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="all">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="pending">
+        <ion-label>Pending</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="approved">
+        <ion-label>Approved</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Search Bar -->
+    <ion-searchbar
+      placeholder="Search mechanics..."
+      (ionInput)="onSearchChange($event)"
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading mechanics...</p>
+    </div>
+
+    <!-- Mechanics List -->
+    <ion-list *ngIf="!isLoading">
+      <ion-item *ngFor="let mechanic of filteredMechanics" class="mechanic-item">
+        <ion-avatar slot="start" class="mechanic-avatar">
+          <img *ngIf="mechanic.avatar_url" [src]="mechanic.avatar_url" alt="Avatar">
+          <ion-icon *ngIf="!mechanic.avatar_url" name="person" size="large"></ion-icon>
+        </ion-avatar>
+        
+        <ion-label class="mechanic-label">
+          <h2>{{ mechanic.full_name || 'No name provided' }}</h2>
+          <p>Specializations: {{ mechanic.specialization.join(', ') || 'None' }}</p>
+          <p>Joined: {{ mechanic.created_at | date:'short' }}</p>
+          <div class="status-badge">
+            <ion-badge [color]="getStatusColor(mechanic.approved)">
+              {{ getStatusText(mechanic.approved) }}
+            </ion-badge>
+          </div>
+        </ion-label>
+
+        <div class="button-container">
+          <ion-icon name="eye" (click)="viewMechanic(mechanic.user_id)" class="action-icon"></ion-icon>
+          <ion-icon *ngIf="!mechanic.approved" name="checkmark" (click)="approveMechanic(mechanic.user_id)" class="action-icon approve-icon"></ion-icon>
+          <ion-icon *ngIf="!mechanic.approved" name="close" (click)="rejectMechanic(mechanic.user_id)" class="action-icon reject-icon"></ion-icon>
+          <ion-icon name="trash" (click)="deleteMechanic(mechanic.user_id)" class="action-icon"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredMechanics.length === 0" class="empty-state">
+      <ion-icon name="construct-outline" size="large"></ion-icon>
+      <h3>No mechanics found</h3>
+      <p>Try adjusting your search criteria</p>
+    </div>
+  </div>
+
+  <!-- Custom Popup -->
+  <app-mechanic-detail-popup 
+    [mechanic]="selectedMechanic" 
+    [isVisible]="showPopup"
+    (closePopupEvent)="showPopup = false"
+    (acceptMechanicEvent)="acceptMechanic()"
+    (declineMechanicEvent)="declineMechanic()"
+    (changeStatusEvent)="changeStatus()">
+  </app-mechanic-detail-popup>
+</ion-content> 

@@ -1,0 +1,39 @@
+<div class="modal-container modal-shadow">
+  <!-- Close Button -->
+  <ion-button 
+    fill="clear" 
+    class="close-button" 
+    (click)="dismiss()">
+    <ion-icon name="close"></ion-icon>
+  </ion-button>
+
+  <!-- Profile Picture -->
+  <div class="profile-picture">
+    <ion-avatar>
+      <img src="assets/images/icon.png" alt="Profile Picture">
+    </ion-avatar>
+  </div>
+
+  <!-- Client Information -->
+  <div class="client-info">
+    <div class="info-row">
+      <span class="label">Name:</span>
+      <span class="value">{{ client.name }}</span>
+    </div>
+    
+    <div class="info-row">
+      <span class="label">Contact Number:</span>
+      <span class="value">{{ client.phone }}</span>
+    </div>
+    
+    <div class="info-row">
+      <span class="label">Email:</span>
+      <span class="value">{{ client.email }}</span>
+    </div>
+    
+    <div class="info-row">
+      <span class="label">Password:</span>
+      <span class="value">{{ client.password }}</span>
+    </div>
+  </div>
+</div> 

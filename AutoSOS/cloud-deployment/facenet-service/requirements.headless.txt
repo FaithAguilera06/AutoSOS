@@ -1,0 +1,13 @@
+# Headless requirements for FaceNet service (no GUI dependencies)
+fastapi
+uvicorn
+tensorflow-cpu
+opencv-python-headless
+numpy
+Pillow
+supabase
+redis
+python-multipart
+python-dotenv
+structlog
+httpx

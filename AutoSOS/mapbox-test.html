@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapbox Test - Ionic Compatibility</title>
+    
+    <!-- Mapbox GL JS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #3880ff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .map-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid red;
+            color: red;
+        }
+        
+        .success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid green;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            🗺️ Mapbox Test - Ionic Compatibility Check
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+            <div id="status" class="status">Initializing...</div>
+        </div>
+    </div>
+
+    <script>
+        // Mapbox Access Token
+        const MAPBOX_TOKEN = 'pk.eyJ1IjoiYXV0b3NvczEyMyIsImEiOiJjbWdvNHJ0MDkxcjJtMm5va2lhNnB1YjR0In0.8hQ5bC4FlZKZFevZQvBzNg';
+        
+        let map;
+        const statusEl = document.getElementById('status');
+        
+        function updateStatus(message, type = '') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            console.log(`[Mapbox Test] ${message}`);
+        }
+        
+        function initializeMap() {
+            try {
+                updateStatus('Setting Mapbox token...', '');
+                
+                // Set Mapbox access token
+                mapboxgl.accessToken = MAPBOX_TOKEN;
+                
+                updateStatus('Creating map instance...', '');
+                
+                // Create map instance
+                map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v12',
+                    center: [120.9842, 14.5995], // Manila, Philippines
+                    zoom: 15,
+                    attributionControl: false
+                });
+                
+                updateStatus('Map created, waiting for load...', '');
+                
+                // Add event listeners
+                map.on('load', function() {
+                    updateStatus('✅ Map loaded successfully!', 'success');
+                    
+                    // Add a marker
+                    new mapboxgl.Marker({ color: 'red' })
+                        .setLngLat([120.9842, 14.5995])
+                        .setPopup(new mapboxgl.Popup().setHTML('<b>Manila, Philippines</b>'))
+                        .addTo(map);
+                        
+                    updateStatus('✅ Map loaded successfully! Marker added.', 'success');
+                });
+                
+                map.on('error', function(e) {
+                    updateStatus(`❌ Map error: ${e.error?.message || 'Unknown error'}`, 'error');
+                    console.error('Mapbox error:', e);
+                });
+                
+                map.on('style.load', function() {
+                    updateStatus('✅ Map style loaded!', 'success');
+                });
+                
+            } catch (error) {
+                updateStatus(`❌ Initialization error: ${error.message}`, 'error');
+                console.error('Mapbox initialization error:', error);
+            }
+        }
+        
+        // Test different initialization methods
+        function testAlternativeInit() {
+            updateStatus('Trying alternative initialization...', '');
+            
+            try {
+                // Method 1: Direct initialization
+                mapboxgl.accessToken = MAPBOX_TOKEN;
+                
+                const map2 = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/light-v11',
+                    center: [120.9842, 14.5995],
+                    zoom: 12,
+                    attributionControl: false,
+                    logoPosition: 'bottom-right'
+                });
+                
+                map2.on('load', function() {
+                    updateStatus('✅ Alternative init successful!', 'success');
+                });
+                
+                map2.on('error', function(e) {
+                    updateStatus(`❌ Alternative init failed: ${e.error?.message}`, 'error');
+                });
+                
+            } catch (error) {
+                updateStatus(`❌ Alternative init error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('DOM loaded, starting initialization...', '');
+            
+            // Check if Mapbox is loaded
+            if (typeof mapboxgl === 'undefined') {
+                updateStatus('❌ Mapbox GL JS not loaded!', 'error');
+                return;
+            }
+            
+            updateStatus('✅ Mapbox GL JS loaded, initializing...', 'success');
+            
+            // Try initialization
+            initializeMap();
+            
+            // If no success after 5 seconds, try alternative
+            setTimeout(() => {
+                if (!map || !map.isStyleLoaded()) {
+                    updateStatus('Initialization timeout, trying alternative...', '');
+                    testAlternativeInit();
+                }
+            }, 5000);
+        });
+        
+        // Add some debugging info
+        console.log('Mapbox GL JS version:', mapboxgl.version);
+        console.log('User agent:', navigator.userAgent);
+        console.log('Viewport:', window.innerWidth + 'x' + window.innerHeight);
+    </script>
+</body>
+</html>

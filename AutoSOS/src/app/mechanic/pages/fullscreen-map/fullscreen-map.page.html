@@ -1,0 +1,152 @@
+<ion-content [fullscreen]="true" class="fullscreen-map-content">
+  <!-- Header with controls -->
+  <div class="map-header">
+    <div class="header-left">
+      <ion-button fill="clear" (click)="goBack()" class="back-button">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <div class="header-info">
+        <h2 class="header-title">Navigation to {{ clientName }}</h2>
+        <div class="header-details">
+          <span class="distance">{{ getDistanceToClient() }} away</span>
+          <span class="eta">ETA: {{ getEstimatedArrival() }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <ion-button fill="clear" (click)="toggleFullscreen()" class="fullscreen-button">
+        <ion-icon [name]="isFullscreen ? 'contract' : 'expand'"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Fullscreen Map -->
+  <div class="fullscreen-map-container">
+    <app-real-time-map 
+      #realTimeMap
+      [mechanicId]="mechanicId"
+      [clientLocation]="getClientLocation()"
+      [showRoute]="showRoute"
+      [isVisible]="true"
+      (locationUpdated)="onLocationUpdated($event)"
+      (mechanicLocationUpdated)="onMechanicLocationUpdated($event)">
+    </app-real-time-map>
+    
+    <!-- Map Loading Overlay -->
+    <div class="map-loading-overlay" *ngIf="!realTimeMap?.map">
+      <div class="loading-content">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <h3>Loading Navigation Map</h3>
+        <p>Initializing OpenRouteService integration...</p>
+        <div class="loading-details">
+          <p><strong>Client Location:</strong> {{ clientLat }}, {{ clientLng }}</p>
+          <p><strong>Route Display:</strong> {{ showRoute ? 'Enabled' : 'Disabled' }}</p>
+          <p><strong>Map Status:</strong> Initializing...</p>
+        </div>
+        <ion-button fill="solid" color="primary" (click)="retryMapInitialization()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Retry Map
+        </ion-button>
+      </div>
+    </div>
+    
+    <!-- Map Error Overlay -->
+    <div class="map-error-overlay" *ngIf="realTimeMap?.mapError">
+      <div class="error-content">
+        <ion-icon name="alert-circle" size="large" color="danger"></ion-icon>
+        <h3>Map Loading Error</h3>
+        <p>{{ realTimeMap.mapError }}</p>
+        <ion-button fill="solid" color="primary" (click)="retryMapInitialization()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Retry Map
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="bottom-controls">
+    <div class="control-buttons">
+      <ion-button fill="solid" color="primary" (click)="centerOnCurrent()" class="control-button">
+        <ion-icon name="locate" slot="start"></ion-icon>
+        My Location
+      </ion-button>
+      
+      <ion-button fill="solid" color="secondary" (click)="centerOnClient()" class="control-button">
+        <ion-icon name="navigate" slot="start"></ion-icon>
+        Client Location
+      </ion-button>
+      
+      <ion-button fill="outline" color="tertiary" (click)="toggleRoute()" class="control-button">
+        <ion-icon [name]="showRoute ? 'eye-off' : 'eye'" slot="start"></ion-icon>
+        {{ showRoute ? 'Hide Route' : 'Show Route' }}
+      </ion-button>
+      
+      <ion-button fill="outline" color="warning" (click)="disableRouteForDebug()" class="control-button">
+        <ion-icon name="bug" slot="start"></ion-icon>
+        Debug: Disable Route
+      </ion-button>
+    </div>
+    
+    <!-- Navigation Info Card -->
+    <div class="navigation-info">
+      <div class="info-item">
+        <ion-icon name="navigate" color="primary"></ion-icon>
+        <div class="info-content">
+          <span class="info-label">Distance</span>
+          <span class="info-value">{{ getDistanceToClient() }}</span>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <ion-icon name="time" color="secondary"></ion-icon>
+        <div class="info-content">
+          <span class="info-label">ETA</span>
+          <span class="info-value">{{ getEstimatedArrival() }}</span>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <ion-icon name="person" color="tertiary"></ion-icon>
+        <div class="info-content">
+          <span class="info-label">Client</span>
+          <span class="info-value">{{ clientName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waypoint Instructions -->
+  <div class="waypoint-instructions" *ngIf="clientLocation">
+    <ion-card>
+      <ion-card-content>
+        <div class="instruction-header">
+          <ion-icon name="flag" color="primary"></ion-icon>
+          <h3>Navigation Instructions</h3>
+        </div>
+        <div class="instruction-content">
+          <p>{{ getNavigationInstructions() }}</p>
+          <div class="instruction-tips">
+            <div class="tip">
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              <span>Route is optimized for fastest arrival</span>
+            </div>
+            <div class="tip">
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              <span>Real-time traffic updates included</span>
+            </div>
+            <div class="tip">
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              <span>ETA updates automatically</span>
+            </div>
+            <div class="tip" *ngIf="showRoute">
+              <ion-icon name="map" color="primary"></ion-icon>
+              <span>Route displayed on map</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

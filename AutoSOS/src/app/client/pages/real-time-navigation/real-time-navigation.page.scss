@@ -1,0 +1,455 @@
+.navigation-content {
+  --background: #f5f5f5;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.navigation-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  min-height: 70vh;
+  height: calc(100vh - 200px); // Ensure map takes most of the screen
+  
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    min-height: 100vh;
+    height: 100vh;
+  }
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  
+  .loading-content {
+    text-align: center;
+    padding: 20px;
+    
+    h3 {
+      margin: 15px 0 10px 0;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.navigation-info-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.route-info {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  
+  .distance-info, .eta-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+}
+
+.navigation-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  
+  ion-button {
+    --border-radius: 20px;
+    height: 40px;
+    font-size: 0.8rem;
+    
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.bottom-panel {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px 20px 20px 20px;
+  max-height: 50vh;
+  min-height: 250px; // Increased minimum height to ensure mechanic info is visible
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 10; // Ensure panel is above other elements
+  
+  &.hidden {
+    display: none;
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  min-height: 70px; // Increased to ensure mechanic info has enough space
+  flex-shrink: 0; // Prevent header from shrinking
+}
+
+.mechanic-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+  min-width: 0; // Allow content to shrink if needed
+  overflow: visible; // Ensure content is not clipped
+  
+  ion-icon {
+    font-size: 36px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    color: var(--ion-color-primary); // Ensure icon is visible
+  }
+  
+  .mechanic-details {
+    flex: 1;
+    min-width: 0; // Allow text to wrap
+    overflow: visible; // Ensure text is not clipped
+    
+    h4 {
+      margin: 0 0 6px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.2;
+      word-wrap: break-word;
+      overflow: visible; // Ensure text is visible
+      white-space: normal; // Allow text wrapping
+    }
+    
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.3;
+      font-weight: 500;
+      overflow: visible; // Ensure text is visible
+      white-space: normal; // Allow text wrapping
+    }
+  }
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 4px;
+  
+  ion-icon {
+    font-size: 18px;
+  }
+  
+  span {
+    white-space: nowrap;
+  }
+}
+
+.panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; // Allow flex child to shrink
+  
+  .location-details {
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    .detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      
+      .label {
+        font-size: 0.8rem;
+        color: #666;
+        font-weight: 500;
+      }
+      
+      .value {
+        font-size: 0.9rem;
+        color: #333;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0; // Prevent buttons from shrinking
+  margin-top: auto; // Push to bottom
+  
+  ion-button {
+    flex: 1;
+    --border-radius: 12px;
+    height: 45px;
+    font-weight: 600;
+    
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .navigation-container {
+    height: 100vh;
+  }
+  
+  .map-container {
+    min-height: 75vh;
+    height: calc(100vh - 150px); // More space for map on mobile
+  }
+  
+  .navigation-info-overlay {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .route-info {
+    padding: 12px;
+    gap: 15px;
+    
+    .distance-info, .eta-info {
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+      
+      span {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .navigation-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    ion-button {
+      flex: 1;
+      min-width: 80px;
+      font-size: 0.7rem;
+      height: 35px;
+    }
+  }
+  
+  .bottom-panel {
+    padding: 20px 16px 16px 16px;
+    max-height: 55vh;
+    min-height: 200px; // Increased for mobile to ensure mechanic info is visible
+  }
+  
+  .panel-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    min-height: 65px; // Increased for mobile
+    flex-shrink: 0; // Prevent shrinking on mobile
+  }
+  
+  .mechanic-info {
+    gap: 12px;
+    overflow: visible; // Ensure visibility on mobile
+    
+    ion-icon {
+      font-size: 32px;
+      color: var(--ion-color-primary); // Ensure icon color is visible
+    }
+    
+    .mechanic-details {
+      overflow: visible; // Ensure text visibility on mobile
+      
+      h4 {
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+        overflow: visible; // Ensure text is visible
+        white-space: normal; // Allow wrapping
+      }
+      
+      p {
+        font-size: 0.85rem;
+        overflow: visible; // Ensure text is visible
+        white-space: normal; // Allow wrapping
+      }
+    }
+  }
+  
+  .status-indicator {
+    font-size: 0.8rem;
+    gap: 6px;
+    
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+    
+    ion-button {
+      height: 50px;
+    }
+  }
+}
+
+// Android specific fixes for smaller devices
+@media (max-width: 480px) {
+  .map-container {
+    min-height: 80vh;
+    height: calc(100vh - 120px); // Even more space on smaller Android devices
+  }
+  
+  .navigation-info-overlay {
+    padding: 8px;
+    
+    .navigation-card {
+      padding: 8px;
+      
+      .navigation-content {
+        .navigation-text {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  
+  .bottom-panel {
+    padding: 16px 12px 12px 12px;
+    max-height: 50vh;
+    min-height: 180px; // Increased for Android devices
+  }
+  
+  .panel-header {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    min-height: 60px; // Increased for Android devices
+    flex-shrink: 0; // Prevent shrinking
+  }
+  
+  .mechanic-info {
+    gap: 10px;
+    overflow: visible; // Ensure visibility on Android
+    
+    ion-icon {
+      font-size: 28px;
+      color: var(--ion-color-primary); // Ensure icon is visible
+    }
+    
+    .mechanic-details {
+      overflow: visible; // Ensure text visibility on Android
+      
+      h4 {
+        font-size: 1.1rem;
+        margin-bottom: 3px;
+        overflow: visible; // Ensure text is visible
+        white-space: normal; // Allow wrapping
+      }
+      
+      p {
+        font-size: 0.8rem;
+        overflow: visible; // Ensure text is visible
+        white-space: normal; // Allow wrapping
+      }
+    }
+  }
+  
+  .status-indicator {
+    font-size: 0.75rem;
+    gap: 4px;
+    
+    ion-icon {
+      font-size: 14px;
+    }
+  }
+  
+  .current-instruction {
+    padding: 8px;
+    
+    .instruction-text {
+      font-size: 0.8rem;
+    }
+  }
+}

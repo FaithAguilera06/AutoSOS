@@ -1,0 +1,10 @@
+names:
+- broken_headlights_tail_lights
+- broken_side_mirror
+- flat_tire
+- oil_leak
+nc: 4
+path: C:\Users\Ice2Fast\Desktop\AUTOSOS SUPABASE\AutoSOS\yolo-motorcycle-diagnostic-training\dataset
+test: test/images
+train: train/images
+val: val/images

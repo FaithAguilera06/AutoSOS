@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct OpenRouteService Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .loading { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Direct OpenRouteService Integration Test</h1>
+        <p>This test verifies that OpenRouteService can be called directly from the frontend without any backend dependency.</p>
+        
+        <div class="test-section info">
+            <h3>📋 Test Configuration</h3>
+            <p><strong>API Key:</strong> <span id="api-key-display">Loading...</span></p>
+            <p><strong>Test Origin:</strong> Manila, Philippines (14.5995, 120.9842)</p>
+            <p><strong>Test Destination:</strong> Makati, Philippines (14.5547, 121.0244)</p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Test Controls</h3>
+            <button onclick="testDirections()" id="test-directions-btn">Test Directions API</button>
+            <button onclick="testGeocoding()" id="test-geocoding-btn">Test Geocoding API</button>
+            <button onclick="runAllTests()" id="run-all-btn">Run All Tests</button>
+        </div>
+
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // OpenRouteService API Key (same as in environment.ts)
+        const ORS_API_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNmNWM2NzE3M2VhOTRjZGQ4ZWY2MGE4NzcwZGNhMjY1IiwiaCI6Im11cm11cjY0In0=';
+        
+        // Test coordinates
+        const TEST_ORIGIN = { lat: 14.5995, lng: 120.9842 }; // Manila
+        const TEST_DESTINATION = { lat: 14.5547, lng: 121.0244 }; // Makati
+        const TEST_QUERY = 'Manila, Philippines';
+
+        // Display API key (masked for security)
+        document.getElementById('api-key-display').textContent = ORS_API_KEY.substring(0, 20) + '...';
+
+        function addResult(title, content, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-section ${type}`;
+            resultDiv.innerHTML = `
+                <h3>${title}</h3>
+                <pre>${content}</pre>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function setButtonLoading(buttonId, loading = true) {
+            const btn = document.getElementById(buttonId);
+            if (loading) {
+                btn.disabled = true;
+                btn.textContent = 'Testing...';
+            } else {
+                btn.disabled = false;
+                btn.textContent = btn.textContent.replace('Testing...', 'Test Directions API');
+            }
+        }
+
+        async function testDirections() {
+            setButtonLoading('test-directions-btn', true);
+            addResult('🗺️ Testing Directions API', 'Starting test...', 'info');
+
+            try {
+                const url = 'https://api.openrouteservice.org/v2/directions/driving-car';
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': ORS_API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        coordinates: [
+                            [TEST_ORIGIN.lng, TEST_ORIGIN.lat],
+                            [TEST_DESTINATION.lng, TEST_DESTINATION.lat]
+                        ],
+                        format: 'geojson',
+                        options: {
+                            avoid_features: ['highways'],
+                            avoid_borders: 'controlled'
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    const feature = data.features[0];
+                    const summary = feature.properties?.summary || {};
+                    const distance = (summary.distance / 1000).toFixed(2);
+                    const duration = (summary.duration / 60).toFixed(1);
+                    
+                    const result = `✅ SUCCESS!
+Distance: ${distance} km
+Duration: ${duration} minutes
+Geometry: ${feature.geometry ? 'Present' : 'Missing'}
+Coordinates: ${feature.geometry?.coordinates?.length || 0} points`;
+                    
+                    addResult('✅ Directions API Test', result, 'success');
+                } else {
+                    addResult('❌ Directions API Test', 'No routes found in response', 'error');
+                }
+            } catch (error) {
+                addResult('❌ Directions API Test', `Error: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading('test-directions-btn', false);
+            }
+        }
+
+        async function testGeocoding() {
+            setButtonLoading('test-geocoding-btn', true);
+            addResult('📍 Testing Geocoding API', 'Starting test...', 'info');
+
+            try {
+                const url = 'https://api.openrouteservice.org/geocode/search';
+                const params = new URLSearchParams({
+                    api_key: ORS_API_KEY,
+                    text: TEST_QUERY,
+                    'boundary.country': 'PH',
+                    size: '3'
+                });
+
+                const response = await fetch(`${url}?${params}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let result = '✅ SUCCESS!\n\nFound locations:\n';
+                    data.features.forEach((feature, index) => {
+                        const props = feature.properties || {};
+                        const coords = feature.geometry?.coordinates || [0, 0];
+                        result += `${index + 1}. ${props.label || 'Unknown'}\n`;
+                        result += `   Coordinates: ${coords[1]}, ${coords[0]}\n`;
+                        result += `   Confidence: ${props.confidence || 'N/A'}\n\n`;
+                    });
+                    
+                    addResult('✅ Geocoding API Test', result, 'success');
+                } else {
+                    addResult('❌ Geocoding API Test', 'No locations found', 'error');
+                }
+            } catch (error) {
+                addResult('❌ Geocoding API Test', `Error: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading('test-geocoding-btn', false);
+            }
+        }
+
+        async function runAllTests() {
+            document.getElementById('test-results').innerHTML = '';
+            addResult('🚀 Running All Tests', 'Starting comprehensive test suite...', 'info');
+            
+            await testDirections();
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+            await testGeocoding();
+            
+            addResult('🎉 Test Suite Complete', 'All tests have been executed. Check results above.', 'info');
+        }
+
+        // Auto-run basic test on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                addResult('ℹ️ Page Loaded', 'Ready to test OpenRouteService integration. Click the test buttons above.', 'info');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

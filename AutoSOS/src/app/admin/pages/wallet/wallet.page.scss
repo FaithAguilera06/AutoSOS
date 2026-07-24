@@ -1,0 +1,248 @@
+ion-header, ion-toolbar {
+  min-height: 80px !important;
+  height: 80px !important;
+  --min-height: 80px !important;
+  --height: 80px !important;
+  display: flex;
+  align-items: center;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  max-height: 78px;
+  display: block;
+  margin: 0 auto;
+}
+
+.container {
+  padding: 16px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 20px 0;
+  
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+  }
+  
+  .page-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.request-item {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  --background: #f8f9fa;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  min-height: 80px;
+  
+  .request-avatar {
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    
+    ion-icon {
+      color: white;
+      font-size: 28px;
+    }
+  }
+  
+  .request-label {
+    h2 {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 16px;
+      color: #333;
+      white-space: nowrap;
+    }
+    
+    p {
+      font-size: 14px;
+      color: #666;
+      margin: 4px 0;
+    }
+    
+    .status-badge {
+      margin-top: 4px;
+      
+      ion-badge {
+        font-size: 12px;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 12px;
+      }
+    }
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    
+    .action-buttons {
+      display: flex;
+      gap: 4px;
+      margin-right: 8px;
+    }
+  }
+  
+  .approve-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    min-width: 40px;
+    min-height: 40px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    &:hover {
+      --background: rgba(40, 167, 69, 0.1);
+    }
+  }
+  
+  .reject-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    min-width: 40px;
+    min-height: 40px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    &:hover {
+      --background: rgba(220, 53, 69, 0.1);
+    }
+  }
+  
+  .view-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    min-width: 40px;
+    min-height: 40px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    &:hover {
+      --background: rgba(0, 123, 255, 0.1);
+    }
+  }
+  
+  .action-icon {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    color: #007bff;
+    
+    &:hover {
+      color: #0056b3;
+      background: rgba(0, 123, 255, 0.1);
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  
+  ion-icon {
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 16px 0 8px 0;
+    font-weight: 600;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+ion-searchbar {
+  margin-bottom: 16px;
+}
+
+// Transaction History Section
+.transaction-history-section {
+  margin-top: 30px;
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0 0 20px 0;
+    padding: 0 16px;
+  }
+  
+  .transaction-item {
+    --background: #f8f9fa;
+    --border-color: #e9ecef;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    
+    .transaction-avatar {
+      background: #e3f2fd;
+      color: #1976d2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    ion-label {
+      h3 {
+        font-weight: 600;
+        color: #333333;
+        margin: 0 0 4px 0;
+      }
+      
+      p {
+        color: #666666;
+        font-size: 14px;
+        margin: 2px 0;
+      }
+    }
+  }
+} 

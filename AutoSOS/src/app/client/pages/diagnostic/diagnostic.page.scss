@@ -1,0 +1,447 @@
+.diagnostic-content {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.diagnostic-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+  position: relative;
+  z-index: 3;
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.95;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.diagnostic-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 3;
+}
+
+.diagnostic-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  &.chatbot-card {
+    border-left: 4px solid #667eea;
+  }
+
+  &.camera-card {
+    border-left: 4px solid #764ba2;
+  }
+}
+
+.card-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+
+  .chatbot-card & {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+
+  .camera-card & {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+  }
+}
+
+.card-content {
+  flex: 1;
+
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+  }
+}
+
+.card-features {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .feature-tag {
+    background: #f0f2f5;
+    color: #555;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+.card-arrow {
+  color: #ccc;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+
+  .diagnostic-card:hover & {
+    transform: translateX(5px);
+  }
+}
+
+.recent-diagnoses {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #333;
+  }
+}
+
+.diagnoses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.diagnosis-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f0f2f5;
+    transform: translateX(5px);
+  }
+}
+
+.diagnosis-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 18px;
+}
+
+.diagnosis-content {
+  flex: 1;
+
+  .diagnosis-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #333;
+  }
+
+  .diagnosis-date {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0 0 5px 0;
+  }
+
+  .diagnosis-summary {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.diagnosis-status {
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    &.status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    &.status-processing {
+      background: #cce5ff;
+      color: #004085;
+    }
+  }
+}
+
+.help-section {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #333;
+  }
+}
+
+.help-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .help-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #667eea;
+    font-weight: 500;
+    --padding-start: 0;
+    --padding-end: 0;
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .diagnostic-content {
+    padding: 15px;
+  }
+
+  .page-header .page-title {
+    font-size: 2rem;
+  }
+
+  .diagnostic-card {
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .card-content .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-features {
+    gap: 6px;
+
+    .feature-tag {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+    }
+  }
+}
+
+// Animation for card entrance
+.diagnostic-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Stagger animation for cards
+.diagnostic-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.diagnostic-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+// Floating Chatbot Bubble
+.floating-chatbot-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  animation: float 3s ease-in-out infinite;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.bubble-icon {
+  color: white;
+  font-size: 28px;
+  z-index: 2;
+}
+
+.bubble-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+// Responsive adjustments for floating bubble
+@media (max-width: 768px) {
+  .floating-chatbot-bubble {
+    width: 60px;
+    height: 60px;
+    bottom: 90px;
+    right: 15px;
+
+    .bubble-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+// Loading Section
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  
+  .loading-spinner {
+    margin-bottom: 20px;
+    
+    ion-spinner {
+      --color: white;
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  .loading-text {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin: 0;
+  }
+} 

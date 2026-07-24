@@ -1,0 +1,835 @@
+ion-header, ion-toolbar {
+  min-height: 80px !important;
+  height: 80px !important;
+  --min-height: 80px !important;
+  --height: 80px !important;
+  display: flex;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 1.25em;
+  color: #1976d2;
+  font-weight: 700;
+  margin-bottom: 12px; // Reduced from 18px to 12px
+  margin-top: 8px;
+  text-align: center;
+  width: 100%;
+  letter-spacing: 0.5px;
+}
+
+.welcome-section {
+  margin-top: 18px;
+  margin-bottom: 28px;
+  width: 100%;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  color: #222;
+  font-size: 1.1em;
+  line-height: 1.2;
+}
+
+.mode-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: box-shadow 0.25s, transform 0.25s, background 0.25s;
+  border: none;
+}
+
+.mode-icon-container {
+  background: linear-gradient(135deg, #e3f2fd 60%, #bbdefb 100%);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  transition: box-shadow 0.25s, background 0.25s;
+}
+
+.mode-icon {
+  width: 44px;
+  height: 44px;
+  color: #1976d2;
+  transition: transform 0.25s, filter 0.25s;
+}
+
+.mode-card:hover {
+  background: #e3f2fd;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.mode-card:hover .mode-icon-container {
+  background: linear-gradient(135deg, #bbdefb 60%, #e3f2fd 100%);
+  box-shadow: 0 0 16px #90caf9, 0 0 0 4px #e3f2fd;
+}
+
+.mode-card:hover .mode-icon {
+  transform: scale(1.18) rotate(-8deg);
+  filter: drop-shadow(0 0 8px #1976d2aa);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  max-height: 78px;
+  display: block;
+  margin: 0 auto;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px - 60px); // Subtract header and navbar height
+  background: #f7fafd;
+  padding: 0 16px 16px 16px;
+  overflow: hidden; // Prevent scrolling
+  position: fixed;
+  top: 80px; // Position below header
+  left: 0;
+  right: 0;
+  bottom: 60px; // Leave space for navbar
+}
+
+.welcome-label {
+  font-weight: bold;
+  font-size: 1.08em;
+  margin-right: 2px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #1976d2;
+  font-size: 1.08em;
+}
+
+.user-email {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.98em;
+  color: #888;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.modes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-start; // Changed from center to flex-start to reduce top spacing
+  margin-top: 10px; // Added small top margin
+}
+
+.mode-label {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.mode-description {
+  font-size: 0.95em;
+  color: #666;
+  text-align: center;
+  line-height: 1.4;
+}
+
+// Diagnostic Modal Styles
+.diagnostic-modal-content {
+  --background: #4a6bdf;
+}
+
+.diagnostic-container {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.modal-title {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.close-button {
+  --color: white;
+  font-size: 24px;
+}
+
+// AI Symbol and Description
+.diagnostic-intro {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ai-symbol {
+  margin-bottom: 20px;
+  
+  ion-icon {
+    font-size: 80px;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.diagnostic-description {
+  h3 {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+  }
+  
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// Usage Section
+.usage-section {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+  
+  h4 {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+}
+
+.usage-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  ion-icon {
+    font-size: 24px;
+    color: white;
+    min-width: 24px;
+  }
+  
+  span {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+}
+
+// Camera Section
+.camera-section {
+  margin-bottom: 30px;
+}
+
+.camera-diagnostic-button {
+  --background: #28a745;
+  --color: white;
+  --border-radius: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-weight: 600;
+  font-size: 18px;
+  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.3);
+  
+  &:hover {
+    --background: #218838;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
+  }
+  
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+// Floating Chatbot Bubble
+.floating-chatbot-bubble {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #4a6bdf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(74, 107, 223, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  animation: float 3s ease-in-out infinite;
+  border: 3px solid white;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(74, 107, 223, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  // Hide bubble when chat is open
+  .floating-chatbot-window.chatbot-open ~ & {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.bubble-icon {
+  color: white;
+  font-size: 24px;
+  z-index: 2;
+}
+
+.bubble-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(74, 107, 223, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+// Responsive adjustments for floating bubble
+@media (max-width: 768px) {
+  .floating-chatbot-bubble {
+    width: 60px;
+    height: 60px;
+    bottom: 90px;
+    right: 15px;
+
+    .bubble-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+// Floating Chatbot Window Styles
+.floating-chatbot-window {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  width: 320px;
+  height: 280px;
+  background: white;
+  border-radius: 20px 20px 20px 5px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+  border: 2px solid #4a6bdf;
+  transform: scale(1);
+  opacity: 1;
+  transform-origin: bottom right;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  isolation: isolate;
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 40px);
+    right: 20px;
+    left: 20px;
+    height: 60vh;
+    border-radius: 20px 20px 5px 5px;
+  }
+
+  // Messenger-style tail
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #4a6bdf;
+    z-index: -1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+  }
+}
+
+.chatbot-header {
+  background: #4a6bdf;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 18px 18px 0 0;
+
+  .chatbot-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+
+    .chatbot-header-icon {
+      font-size: 20px;
+    }
+  }
+
+  .close-chatbot {
+    color: white;
+    font-size: 20px;
+  }
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #f8f9fa;
+
+  .message {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+
+    &.user-message {
+      justify-content: flex-end;
+
+      .message-content {
+        max-width: 80%;
+
+        .message-bubble {
+          background: #4a6bdf;
+          color: white;
+          padding: 12px 16px;
+          border-radius: 18px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 5px;
+          font-size: 0.9rem;
+          line-height: 1.4;
+        }
+
+        .message-time {
+          font-size: 0.75rem;
+          color: #888;
+          text-align: right;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    &.bot-message {
+      .message-avatar {
+        background: #4a6bdf;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .message-content {
+        flex: 1;
+        max-width: 80%;
+
+        .message-bubble {
+          background: white;
+          padding: 12px 16px;
+          border-radius: 18px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 5px;
+          font-size: 0.9rem;
+          line-height: 1.4;
+
+          &.typing-indicator {
+            width: 60px;
+          }
+        }
+
+        .message-time {
+          font-size: 0.75rem;
+          color: #888;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  .typing-dots {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+
+    span {
+      width: 6px;
+      height: 6px;
+      background: #4a6bdf;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+
+      &:nth-child(1) { animation-delay: -0.32s; }
+      &:nth-child(2) { animation-delay: -0.16s; }
+      &:nth-child(3) { animation-delay: 0s; }
+    }
+  }
+
+  @keyframes typing {
+    0%, 80%, 100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+.diagnosis-result {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+  border-left: 4px solid #4a6bdf;
+
+  .diagnosis-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+
+    ion-icon {
+      color: #4a6bdf;
+    }
+  }
+
+  .diagnosis-details {
+    .diagnosis-item {
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+
+      strong {
+        color: #333;
+      }
+    }
+  }
+
+  .severity-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 5px;
+
+    &.severity-low {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.severity-medium {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    &.severity-high {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    &.severity-critical {
+      background: #721c24;
+      color: white;
+    }
+  }
+}
+
+.chatbot-input-area {
+  padding: 15px 20px;
+  background: white;
+  border-top: 1px solid #eee;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+
+  .input-container {
+    .message-input {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      resize: none;
+      margin-bottom: 10px;
+      min-height: 60px;
+    }
+
+    .input-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .character-count {
+        font-size: 0.75rem;
+        color: #888;
+      }
+
+      .send-button {
+        color: #4a6bdf;
+        font-size: 20px;
+        --padding-start: 8px;
+        --padding-end: 8px;
+        height: 40px;
+        width: 40px;
+      }
+    }
+  }
+}
+
+.card-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+.card-content {
+  flex: 1;
+
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+  }
+}
+
+.card-features {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .feature-tag {
+    background: #f0f2f5;
+    color: #555;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+.card-arrow {
+  color: #ccc;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+
+  .diagnostic-card:hover & {
+    transform: translateX(5px);
+  }
+}
+
+// Camera Modal Styles
+.camera-modal-content {
+  --background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  padding: 20px;
+  position: relative;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+.camera-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 500px;
+  height: 100vh;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+.camera-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  color: white;
+
+  .camera-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .close-camera-button {
+    color: white;
+    font-size: 24px;
+  }
+}
+
+.camera-description {
+  margin-bottom: 25px;
+  text-align: center;
+  
+  p {
+    color: white;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+    font-weight: 400;
+  }
+}
+
+.camera-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.camera-preview {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-placeholder {
+  color: #666;
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.camera-controls {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  
+  .capture-button {
+    --background: #1976d2;
+    --color: white;
+    font-weight: 600;
+  }
+  
+  .analyze-button {
+    --color: #1976d2;
+    --border-color: #1976d2;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,1021 @@
+/* Your Location Card */
+.location-card {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+.location-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.location-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(33, 150, 243, 0.1);
+  border-radius: 50%;
+  
+  ion-icon {
+    font-size: 20px;
+    color: var(--ion-color-primary);
+  }
+}
+
+.location-text {
+  flex: 1;
+}
+
+.location-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 4px;
+}
+
+.location-address {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Map Area Styles */
+.map-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 50vh;
+  max-height: 60vh;
+  background: #e0e0e0;
+  
+  /* Ensure proper map rendering */
+  app-real-time-map {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+  }
+  
+  /* Override any conflicting styles */
+  :global(.map-container) {
+    height: 100% !important;
+    min-height: 50vh !important;
+    max-height: 60vh !important;
+  }
+  
+  :global(#mapbox-map) {
+    height: 100% !important;
+    width: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  
+  /* Ensure Mapbox elements are not affected by Ionic's CSS */
+  :global(.mapboxgl-canvas-container) {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  :global(.mapboxgl-canvas) {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  :global(.mapboxgl-control-container) {
+    z-index: 1000;
+  }
+}
+
+.map-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 200px;
+}
+
+.user-pin-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.pin-icon {
+  margin-bottom: 4px;
+}
+
+.pin-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 2px;
+}
+
+.location-address {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 180px;
+  word-wrap: break-word;
+}
+
+
+/* Service Request Popup Modal */
+.service-request-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 0 20px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .close-button {
+    --color: #666;
+    font-size: 24px;
+  }
+}
+
+/* Basic styles for mechanic home page */
+ion-header, ion-toolbar {
+  align-items: center;
+}
+
+.mechanic-home {
+  height: calc(100vh - 80px);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+}
+
+/* Basic card styles */
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Location info */
+.location-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.distance-info,
+.eta-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Action buttons */
+.action-section {
+  padding: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  flex: 1;
+  height: 48px;
+  font-weight: 600;
+}
+
+.accept-btn {
+  --background: var(--success-color);
+  --color: white;
+}
+
+.decline-btn {
+  --background: var(--danger-color);
+  --color: white;
+}
+
+/* Service Request Section */
+.service-request-section {
+  background: #000;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.service-request-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.request-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.request-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-matched {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-in_progress {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-completed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.request-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.client-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.client-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.client-details {
+  flex: 1;
+}
+
+.client-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.client-phone {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.request-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.detail-item ion-icon {
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+
+/* Dark Panel Styles */
+.dark-panel {
+  background: #000;
+  color: white;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+  margin-top: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-height: 200px;
+  z-index: 1000;
+}
+
+.handle {
+  width: 40px;
+  height: 4px;
+  background: #666;
+  border-radius: 2px;
+  margin: 0 auto 20px auto;
+}
+
+.mechanic-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.mechanic-avatar {
+  width: 60px;
+  height: 60px;
+  background: #333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .avatar-icon {
+    font-size: 24px;
+    color: white;
+  }
+}
+
+.mechanic-info {
+  flex: 1;
+}
+
+.mechanic-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.status-indicator {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  
+  &.online {
+    color: #4CAF50;
+  }
+  
+  &.offline {
+    color: #f44336;
+  }
+}
+
+.status-description {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.stop-button-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.stop-btn {
+  height: 56px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  width: 100%;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  
+  &.online-btn {
+    --background: #4CAF50;
+    --color: white;
+    --box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  }
+  
+  &:not(.online-btn) {
+    --background: #f44336;
+    --color: white;
+    --box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+  }
+}
+
+.debug-button {
+  height: 40px;
+  font-size: 12px;
+  --border-color: #666;
+  --color: #ccc;
+}
+
+// Service Request Map Section
+.service-map-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px;
+  color: white;
+  border-radius: 12px;
+  margin: 10px 0;
+  
+  .map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .distance-info {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      opacity: 0.9;
+      
+      ion-icon {
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .embedded-map-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px;
+    backdrop-filter: blur(10px);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1001; /* Higher than popup background */
+    
+    app-real-time-map {
+      width: 100%;
+      height: 200px;
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1001;
+    }
+    
+    /* Ensure map elements have proper z-index */
+    :global(.map-container) {
+      z-index: 1001 !important;
+    }
+    
+    :global(#mapbox-map) {
+      z-index: 1001 !important;
+    }
+    
+    :global(.mapboxgl-canvas-container) {
+      z-index: 1001 !important;
+    }
+    
+    :global(.mapboxgl-canvas) {
+      z-index: 1001 !important;
+    }
+  }
+  
+  .map-controls-section {
+    text-align: center;
+    
+    .navigation-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      justify-content: center;
+      
+      ion-button {
+        --border-radius: 15px;
+        height: 35px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        flex: 1;
+        max-width: 120px;
+      }
+    }
+    
+    .locate-client-button {
+      --border-radius: 20px;
+      height: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      --background: rgba(255, 255, 255, 0.9);
+      --color: #667eea;
+      
+      ion-icon {
+        font-size: 16px;
+      }
+      
+      &:hover {
+        --background: white;
+        transform: translateY(-2px);
+        --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .mechanic-home {
+    height: calc(100vh - 60px);
+  }
+  
+  .dark-panel {
+    padding: 16px;
+    min-height: 180px;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .mechanic-profile-section {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .mechanic-avatar {
+    width: 50px;
+    height: 50px;
+    
+    .avatar-icon {
+      font-size: 20px;
+    }
+  }
+  
+  .mechanic-name {
+    font-size: 16px;
+  }
+  
+  .status-indicator {
+    font-size: 13px;
+  }
+  
+  .status-description {
+    font-size: 11px;
+  }
+  
+  .stop-btn {
+    height: 50px;
+    font-size: 15px;
+  }
+  
+  .debug-button {
+    height: 36px;
+    font-size: 11px;
+  }
+}
+
+/* Service Request Notification Styles */
+.service-request-notification {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: calc(100vw - 40px);
+}
+
+.notification-minimized {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.notification-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f0f8ff;
+  border-radius: 50%;
+  
+  ion-icon {
+    font-size: 20px;
+    color: #3b82f6;
+  }
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.notification-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 8px;
+  
+  ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.notification-expanded {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 2px solid #e0e0e0;
+  overflow: hidden;
+  animation: expandNotification 0.3s ease-out;
+}
+
+@keyframes expandNotification {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.expanded-title {
+  flex: 1;
+  
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+  }
+}
+
+.request-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  
+  &.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  
+  &.status-matched {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  
+  &.status-in_progress {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+}
+
+.minimize-button {
+  --color: #6b7280;
+  font-size: 20px;
+}
+
+.expanded-content {
+  padding: 20px;
+}
+
+.client-info-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.client-avatar {
+  width: 50px;
+  height: 50px;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  ion-icon {
+    font-size: 24px;
+    color: white;
+  }
+}
+
+.client-details {
+  flex: 1;
+}
+
+.client-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.client-phone {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.client-distance {
+  font-size: 14px;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.client-actions {
+  ion-button {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
+
+.service-details-section {
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  ion-icon {
+    font-size: 18px;
+    color: #3b82f6;
+  }
+  
+  span {
+    font-size: 14px;
+    color: #374151;
+  }
+}
+
+.action-buttons-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.action-button {
+  flex: 1;
+  height: 44px;
+  font-weight: 600;
+}
+
+.decision-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.decision-button {
+  flex: 1;
+  height: 48px;
+  font-weight: 600;
+}
+
+.price-setting {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  
+  h4 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.price-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.price-input {
+  flex: 1;
+  --background: white;
+  --color: #1f2937;
+  --border-color: #d1d5db;
+  --border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+.complete-section {
+  ion-button {
+    height: 48px;
+    font-weight: 600;
+  }
+}
+
+/* Mobile Responsive for Notification */
+@media (max-width: 768px) {
+  .service-request-notification {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    max-width: calc(100vw - 20px);
+  }
+  
+  .notification-minimized {
+    padding: 12px;
+  }
+  
+  .notification-icon {
+    width: 36px;
+    height: 36px;
+    
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+  
+  .notification-title {
+    font-size: 15px;
+  }
+  
+  .notification-subtitle {
+    font-size: 13px;
+  }
+  
+  .expanded-content {
+    padding: 16px;
+  }
+  
+  .action-buttons-section {
+    flex-direction: column;
+  }
+  
+  .decision-buttons {
+    flex-direction: column;
+  }
+  
+  .price-input-group {
+    flex-direction: column;
+  }
+}
+
+

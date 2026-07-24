@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoSOS Local YOLO Service Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success { background-color: #d4edda; color: #155724; }
+        .status.error { background-color: #f8d7da; color: #721c24; }
+        .status.warning { background-color: #fff3cd; color: #856404; }
+        .status.info { background-color: #d1ecf1; color: #0c5460; }
+        
+        .service-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        
+        .detection {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .detection.high { border-left: 5px solid #dc3545; }
+        .detection.medium { border-left: 5px solid #ffc107; }
+        .detection.low { border-left: 5px solid #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏍️ AutoSOS Local YOLO Service Test</h1>
+        
+        <div id="status" class="status info">
+            🔍 Detecting YOLO services...
+        </div>
+        
+        <div id="serviceInfo" class="service-info" style="display: none;">
+            <h3>📡 Service Information</h3>
+            <div id="serviceDetails"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test YOLO Service</h3>
+            <input type="file" id="imageInput" accept="image/*" />
+            <br>
+            <button onclick="testHealth()">Test Health</button>
+            <button onclick="testPrediction()" id="testPredictionBtn" disabled>Test Prediction</button>
+            <button onclick="testBase64Prediction()" id="testBase64Btn" disabled>Test Base64 Prediction</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Results</h3>
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentService = null;
+        let testImage = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            detectYOLOServices();
+            setupImageInput();
+        });
+
+        function setupImageInput() {
+            const imageInput = document.getElementById('imageInput');
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    testImage = file;
+                    document.getElementById('testPredictionBtn').disabled = false;
+                    document.getElementById('testBase64Btn').disabled = false;
+                }
+            });
+        }
+
+        async function detectYOLOServices() {
+            const statusDiv = document.getElementById('status');
+            const serviceInfoDiv = document.getElementById('serviceInfo');
+            const serviceDetailsDiv = document.getElementById('serviceDetails');
+            
+            statusDiv.textContent = '🔍 Detecting YOLO services...';
+            statusDiv.className = 'status info';
+
+            try {
+                // Get current hostname to construct possible local IPs
+                const currentHost = window.location.hostname;
+                const possibleIPs = getPossibleLocalIPs(currentHost);
+                
+                // Add localhost
+                possibleIPs.unshift('localhost');
+                
+                console.log('Checking IPs:', possibleIPs);
+                
+                for (const ip of possibleIPs.slice(0, 10)) { // Check first 10 IPs for performance
+                    const serviceUrl = `http://${ip}:8000`;
+                    console.log(`Checking ${serviceUrl}...`);
+                    
+                    try {
+                        const response = await fetch(`${serviceUrl}/health`, {
+                            method: 'GET',
+                            timeout: 3000
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            currentService = {
+                                url: serviceUrl,
+                                type: 'local',
+                                isAvailable: true,
+                                data: data
+                            };
+                            
+                            console.log('✅ Found YOLO service:', currentService);
+                            
+                            statusDiv.textContent = `✅ YOLO service found at ${serviceUrl}`;
+                            statusDiv.className = 'status success';
+                            
+                            serviceInfoDiv.style.display = 'block';
+                            serviceDetailsDiv.innerHTML = `
+                                <p><strong>URL:</strong> ${serviceUrl}</p>
+                                <p><strong>Type:</strong> ${data.service_type || 'local'}</p>
+                                <p><strong>Model Loaded:</strong> ${data.model_loaded ? '✅ Yes' : '❌ No'}</p>
+                                <p><strong>IP Address:</strong> ${data.ip_address || ip}</p>
+                                <p><strong>Port:</strong> ${data.port || 8000}</p>
+                                <p><strong>Classes:</strong> ${data.classes ? Object.keys(data.classes).length : 'Unknown'}</p>
+                            `;
+                            
+                            return; // Found a service, stop looking
+                        }
+                    } catch (error) {
+                        console.log(`❌ ${serviceUrl} not available:`, error.message);
+                    }
+                }
+                
+                // No service found
+                statusDiv.textContent = '❌ No local YOLO service found';
+                statusDiv.className = 'status error';
+                
+            } catch (error) {
+                console.error('Error detecting services:', error);
+                statusDiv.textContent = `❌ Error detecting services: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        }
+
+        function getPossibleLocalIPs(currentHost) {
+            const ips = [];
+            
+            // If we're on a local IP, try variations
+            if (isLocalIP(currentHost)) {
+                const parts = currentHost.split('.');
+                if (parts.length === 4) {
+                    const base = parts.slice(0, 3).join('.');
+                    for (let i = 1; i <= 20; i++) { // Check first 20 IPs
+                        ips.push(`${base}.${i}`);
+                    }
+                }
+            } else {
+                // Try common ranges
+                const ranges = ['192.168.1.', '192.168.0.', '10.0.0.'];
+                ranges.forEach(range => {
+                    for (let i = 1; i <= 20; i++) {
+                        ips.push(`${range}${i}`);
+                    }
+                });
+            }
+            
+            return [...new Set(ips)]; // Remove duplicates
+        }
+
+        function isLocalIP(ip) {
+            const parts = ip.split('.').map(Number);
+            if (parts.length !== 4) return false;
+            
+            return (
+                (parts[0] === 192 && parts[1] === 168) ||
+                (parts[0] === 10) ||
+                (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
+                (parts[0] === 127)
+            );
+        }
+
+        async function testHealth() {
+            if (!currentService) {
+                showResult('❌ No service available', 'error');
+                return;
+            }
+
+            try {
+                showResult('🏥 Testing health endpoint...', 'info');
+                
+                const response = await fetch(`${currentService.url}/health`);
+                const data = await response.json();
+                
+                showResult(`✅ Health check successful:\n${JSON.stringify(data, null, 2)}`, 'success');
+                
+            } catch (error) {
+                showResult(`❌ Health check failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPrediction() {
+            if (!currentService || !testImage) {
+                showResult('❌ No service or image available', 'error');
+                return;
+            }
+
+            try {
+                showResult('🔍 Testing prediction with file upload...', 'info');
+                
+                const formData = new FormData();
+                formData.append('file', testImage);
+                formData.append('confidence_threshold', '0.3');
+                formData.append('return_image', 'true');
+                
+                const response = await fetch(`${currentService.url}/predict`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showPredictionResults(data);
+                } else {
+                    showResult(`❌ Prediction failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Prediction request failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testBase64Prediction() {
+            if (!currentService || !testImage) {
+                showResult('❌ No service or image available', 'error');
+                return;
+            }
+
+            try {
+                showResult('🔍 Testing prediction with base64...', 'info');
+                
+                // Convert image to base64
+                const base64 = await fileToBase64(testImage);
+                
+                const response = await fetch(`${currentService.url}/predict-base64`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image_data: base64,
+                        confidence_threshold: 0.3,
+                        return_image: true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showPredictionResults(data);
+                } else {
+                    showResult(`❌ Prediction failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Prediction request failed: ${error.message}`, 'error');
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function showPredictionResults(data) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `<div class="status success">✅ Prediction successful!</div>`;
+            html += `<div class="result">Total detections: ${data.total_detections}</div>`;
+            html += `<div class="result">Inference time: ${data.inference_time_ms}ms</div>`;
+            
+            if (data.detections && data.detections.length > 0) {
+                html += '<h4>🔍 Detections:</h4>';
+                data.detections.forEach((detection, index) => {
+                    const severity = detection.confidence > 0.7 ? 'high' : 
+                                   detection.confidence > 0.4 ? 'medium' : 'low';
+                    
+                    html += `
+                        <div class="detection ${severity}">
+                            <strong>${detection.display_name}</strong><br>
+                            Confidence: ${(detection.confidence * 100).toFixed(1)}%<br>
+                            Location: (${detection.bbox.x1.toFixed(0)}, ${detection.bbox.y1.toFixed(0)}) to 
+                            (${detection.bbox.x2.toFixed(0)}, ${detection.bbox.y2.toFixed(0)})
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<div class="status warning">⚠️ No issues detected</div>';
+            }
+            
+            if (data.annotated_image) {
+                html += '<h4>🖼️ Annotated Image:</h4>';
+                html += `<img src="${data.annotated_image}" style="max-width: 100%; border-radius: 5px;" />`;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function showResult(message, type) {
+            const resultsDiv = document.getElementById('results');
+            const className = `status ${type}`;
+            resultsDiv.innerHTML = `<div class="${className}">${message}</div>`;
+        }
+    </script>
+</body>
+</html>

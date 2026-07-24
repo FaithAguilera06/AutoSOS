@@ -1,0 +1,33 @@
+<ion-content [fullscreen]="true">
+  <div class="login-container">
+    <div class="login-form">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <img src="assets/images/autoSOS logo.png" alt="AutoSOS Logo" class="logo">
+      </div>
+      
+      <!-- Login Form -->
+      <div class="form-section">
+        <div class="input-group">
+          <label>Email</label>
+          <ion-input type="email" placeholder="Enter your email" [(ngModel)]="email"></ion-input>
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <ion-input type="password" placeholder="Enter your password" [(ngModel)]="password"></ion-input>
+        </div>
+        
+        <ion-button expand="block" class="login-button" (click)="login()" [disabled]="isLoading">
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          <span *ngIf="!isLoading">LOGIN</span>
+        </ion-button>
+      </div>
+      
+      <!-- Sign Up Link -->
+      <div class="signup-link">
+        <p>Don't have an account? <a (click)="goToRegistration()">Sign up</a></p>
+      </div>
+    </div>
+  </div>
+</ion-content> 

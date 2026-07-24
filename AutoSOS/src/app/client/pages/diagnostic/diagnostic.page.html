@@ -1,0 +1,54 @@
+<ion-content [fullscreen]="true" class="diagnostic-content">
+  <ion-router-outlet></ion-router-outlet>
+  
+  <div class="diagnostic-container" *ngIf="!isChildRoute">
+    <div class="page-header">
+      <h1 class="page-title">Motorcycle Diagnostic</h1>
+      <p class="page-subtitle">Choose your preferred diagnostic method</p>
+    </div>
+
+    <div class="diagnostic-options">
+      <!-- Camera Diagnostic Option -->
+      <div class="diagnostic-card camera-card" (click)="navigateToCamera()">
+        <div class="card-icon">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Camera Diagnostic</h3>
+          <p class="card-description">
+            Take a photo of your motorcycle issue and get AR-powered visual analysis
+          </p>
+          <div class="card-features">
+            <span class="feature-tag">Visual</span>
+            <span class="feature-tag">AR Analysis</span>
+            <span class="feature-tag">Precise</span>
+          </div>
+        </div>
+        <div class="card-arrow">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Chatbot Diagnostic Option -->
+      <div class="diagnostic-card chatbot-card" (click)="navigateToChatbot()">
+        <div class="card-icon">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">AI Chatbot Diagnostic</h3>
+          <p class="card-description">
+            Describe your motorcycle problem and get AI-powered diagnostic assistance
+          </p>
+          <div class="card-features">
+            <span class="feature-tag">AI Assistant</span>
+            <span class="feature-tag">Interactive</span>
+            <span class="feature-tag">Detailed</span>
+          </div>
+        </div>
+        <div class="card-arrow">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content> 

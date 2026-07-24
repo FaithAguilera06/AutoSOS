@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Criteria Scoring System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+        }
+        .test-section h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .service-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .service-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .service-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .service-card .specialization {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin: 4px 4px 4px 0;
+        }
+        .scoring-demo {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .scoring-demo h3 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .score-item {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            border-left: 4px solid #4caf50;
+        }
+        .score-item .label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .score-item .value {
+            color: #27ae60;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .automatic-point {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 16px 0;
+        }
+        .automatic-point h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .automatic-point p {
+            color: #856404;
+            margin-bottom: 0;
+        }
+        .criteria-weights {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .criteria-weights h3 {
+            color: #1565c0;
+            margin-top: 0;
+        }
+        .weight-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #bbdefb;
+        }
+        .weight-item:last-child {
+            border-bottom: none;
+        }
+        .weight-item .name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .weight-item .weight {
+            background: #2196f3;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 AutoSOS Multi-Criteria Scoring System</h1>
+            <p>Automatic mechanic matching with intelligent scoring based on multiple criteria</p>
+        </div>
+
+        <div class="automatic-point">
+            <h4>🎯 Automatic 1 Point for Specialization Match</h4>
+            <p>When a mechanic's specialization exactly matches the required service type, they automatically receive 1.0 point (100% score) for the specialization criterion.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Service Types & Required Specializations</h2>
+            <div class="service-types">
+                <div class="service-card">
+                    <h3>🚗 Tire Assistance</h3>
+                    <p>Flat tire, tire replacement, wheel issues</p>
+                    <span class="specialization">general repair</span>
+                </div>
+                <div class="service-card">
+                    <h3>⛽ Emergency Fuel</h3>
+                    <p>Out of fuel, fuel delivery, fuel system issues</p>
+                    <span class="specialization">general repair</span>
+                </div>
+                <div class="service-card">
+                    <h3>🛢️ Oil Leak</h3>
+                    <p>Engine oil leak, oil system problems</p>
+                    <span class="specialization">engine and mechanical</span>
+                </div>
+                <div class="service-card">
+                    <h3>🌡️ Overheating</h3>
+                    <p>Engine overheating, cooling system issues</p>
+                    <span class="specialization">engine and mechanical</span>
+                </div>
+                <div class="service-card">
+                    <h3>💡 Non-functional Brake Lights</h3>
+                    <p>Brake light not working, lighting issues</p>
+                    <span class="specialization">electrical</span>
+                </div>
+                <div class="service-card">
+                    <h3>⚡ Short Circuit</h3>
+                    <p>Electrical short circuit, wiring problems</p>
+                    <span class="specialization">electrical</span>
+                </div>
+                <div class="service-card">
+                    <h3>🔋 Dead Battery</h3>
+                    <p>Battery dead, jump start, battery replacement</p>
+                    <span class="specialization">electrical</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="criteria-weights">
+            <h3>📊 Simplified Scoring Formula</h3>
+            <div class="weight-item">
+                <span class="name">📍 Distance Score</span>
+                <span class="weight">1 - (distance / 5)</span>
+            </div>
+            <div class="weight-item">
+                <span class="name">🔧 Specialization Score</span>
+                <span class="weight">1 for match, 0 for no match</span>
+            </div>
+            <div class="weight-item">
+                <span class="name">🎯 Total Score</span>
+                <span class="weight">Distance + Specialization</span>
+            </div>
+            <div class="weight-item">
+                <span class="name">🏆 Winner</span>
+                <span class="weight">Highest Total Score</span>
+            </div>
+        </div>
+
+        <div class="scoring-demo">
+            <h3>🎯 Example: Electrical Issue (Dead Battery)</h3>
+            <p><strong>Service Required:</strong> Dead Battery → <strong>Specialization:</strong> electrical</p>
+            
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="label">Distance Score</div>
+                    <div class="value">0.5</div>
+                    <small>2.5km away: 1 - (2.5/5) = 0.5</small>
+                </div>
+                <div class="score-item">
+                    <div class="label">Specialization Score</div>
+                    <div class="value">1.0</div>
+                    <small>Mechanic has "electrical" specialization</small>
+                </div>
+            </div>
+            
+            <div style="margin-top: 16px; padding: 12px; background: white; border-radius: 6px;">
+                <strong>Total Score: 1.5</strong><br>
+                <small>Calculation: 0.5 (distance) + 1.0 (specialization) = 1.5</small>
+            </div>
+        </div>
+
+        <div class="scoring-demo">
+            <h3>🎯 Example: Engine Issue (Oil Leak)</h3>
+            <p><strong>Service Required:</strong> Oil Leak → <strong>Specialization:</strong> engine and mechanical</p>
+            
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="label">Distance Score</div>
+                    <div class="value">0.0</div>
+                    <small>8km away: 1 - (8/5) = -0.6 → 0.0 (minimum)</small>
+                </div>
+                <div class="score-item">
+                    <div class="label">Specialization Score</div>
+                    <div class="value">1.0</div>
+                    <small>Mechanic has "engine and mechanical" specialization</small>
+                </div>
+            </div>
+            
+            <div style="margin-top: 16px; padding: 12px; background: white; border-radius: 6px;">
+                <strong>Total Score: 1.0</strong><br>
+                <small>Calculation: 0.0 (distance) + 1.0 (specialization) = 1.0</small>
+            </div>
+        </div>
+
+        <div class="scoring-demo">
+            <h3>🎯 Example: General Repair (Tire Assistance)</h3>
+            <p><strong>Service Required:</strong> Tire Assistance → <strong>Specialization:</strong> general repair</p>
+            
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="label">Distance Score</div>
+                    <div class="value">0.8</div>
+                    <small>1km away: 1 - (1/5) = 0.8</small>
+                </div>
+                <div class="score-item">
+                    <div class="label">Specialization Score</div>
+                    <div class="value">0.0</div>
+                    <small>Mechanic has "electrical" specialization (no match)</small>
+                </div>
+            </div>
+            
+            <div style="margin-top: 16px; padding: 12px; background: white; border-radius: 6px;">
+                <strong>Total Score: 0.8</strong><br>
+                <small>Calculation: 0.8 (distance) + 0.0 (specialization) = 0.8</small>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>🚀 Simplified Scoring System Features</h2>
+            <ul>
+                <li><strong>Simple Formula:</strong> Distance Score + Specialization Score = Total Score</li>
+                <li><strong>Distance Formula:</strong> 1 - (distance / 5) where 5km is maximum distance</li>
+                <li><strong>Specialization Bonus:</strong> 1.0 point for exact match, 0.0 for no match</li>
+                <li><strong>Highest Score Wins:</strong> Client automatically books the mechanic with highest total score</li>
+                <li><strong>Real-time Calculation:</strong> Scores calculated when finding mechanics</li>
+                <li><strong>Database Integration:</strong> SQL function with simplified scoring</li>
+                <li><strong>Frontend Integration:</strong> Seamlessly integrated with mechanic finder</li>
+                <li><strong>Automatic Booking:</strong> System automatically assigns best scoring mechanic</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

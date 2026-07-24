@@ -1,0 +1,265 @@
+.profile-content {
+  --background: #f8fafc;
+  
+  .profile-header {
+    
+    padding: 40px 20px 30px;
+    text-align: center;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: #f8fafc;
+      border-radius: 20px 20px 0 0;
+    }
+    
+    .avatar-container {
+      margin-bottom: 20px;
+      
+      .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          background: #a0aec0;
+        }
+      }
+    }
+    
+    .user-info {
+      .user-name {
+        color: black;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      
+      .user-email {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        margin: 0;
+        font-weight: 400;
+      }
+    }
+  }
+  
+  .account-section {
+    padding: 30px 20px 20px;
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #000000;
+      margin: 0 0 20px 0;
+    }
+    
+    .account-list {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      
+      .info-item {
+        --padding: 16px 20px;
+        --border-color: #f1f5f9;
+        
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--border-color);
+        }
+        
+        .info-label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #000000;
+        }
+        
+        .info-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: #000000;
+          text-align: right;
+        }
+      }
+    }
+  }
+  
+  .logout-section {
+    padding: 20px;
+    margin-top: auto;
+    
+    .logout-button {
+      --background: linear-gradient(135deg, #667eea, #764ba2);
+      --color: white;
+      --border-radius: 12px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      margin: 20px 0;
+      
+      ion-icon {
+        margin-right: 8px;
+      }
+      
+      &:hover {
+        --background: linear-gradient(135deg, #5a67d8, #6b46c1);
+      }
+    }
+  }
+}
+
+  .client-badge-container {
+    display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 16px;
+  width: 100%;
+  padding-right: 0.3px;
+    
+
+    .client-badge {
+      font-size: 1.1rem;
+      height: 2.5rem;
+      padding: 0 1.0rem;
+    }
+  }
+
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+// Header Styling
+ion-header {
+  .client-badge {
+    --background: rgba(255, 255, 255, 0.2);
+    --color: white;
+    --border-radius: 16px;
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+  }
+}
+
+// Tab Bar Styling
+.custom-tab-bar {
+  --background: white;
+  --border: 1px solid #e2e8f0;
+  height: 70px;
+  
+  .tab-button {
+    --color: #a0aec0;
+    --color-selected: #667eea;
+    
+    &.active {
+      --color: #667eea;
+      
+      ion-icon {
+        color: #667eea;
+      }
+      
+      ion-label {
+        color: #667eea;
+        font-weight: 600;
+      }
+    }
+    
+    ion-icon {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    
+    ion-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    &:hover:not(.active) {
+      --color: #718096;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 576px) {
+  .profile-content {
+    .profile-header {
+      padding: 30px 20px 25px;
+      
+      .avatar-container .profile-avatar {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .user-info .user-name {
+        font-size: 20px;
+      }
+    }
+    
+    .account-section {
+      padding: 25px 16px 16px;
+      
+      .section-title {
+        font-size: 16px;
+      }
+    }
+    
+    .logout-section {
+      padding: 16px;
+    }
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .profile-content {
+    --background: #1a202c;
+    
+    .account-section {
+      .section-title {
+        color: #000000;
+      }
+      
+      .account-list {
+        background: white;
+        
+        .info-item {
+          --border-color: #f1f5f9;
+          
+          .info-label {
+            color: #000000;
+          }
+          
+          .info-value {
+            color: #000000;
+          }
+        }
+      }
+    }
+  }
+  
+  .custom-tab-bar {
+    --background: #2d3748;
+    --border: 1px solid #4a5568;
+  }
+}

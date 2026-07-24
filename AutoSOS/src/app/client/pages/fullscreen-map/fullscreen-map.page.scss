@@ -1,0 +1,476 @@
+.fullscreen-map-content {
+  --background: #000;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Header
+.map-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  padding: 20px 20px 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    
+    .back-button {
+      --color: white;
+      --background: rgba(255, 255, 255, 0.2);
+      --border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      backdrop-filter: blur(10px);
+      
+      ion-icon {
+        font-size: 20px;
+      }
+    }
+    
+    .header-info {
+      flex: 1;
+      
+      .header-title {
+        margin: 0 0 5px 0;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      
+      .header-details {
+        display: flex;
+        gap: 15px;
+        
+        .distance,
+        .eta {
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 0.9rem;
+          font-weight: 500;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+      }
+    }
+  }
+  
+  .header-right {
+    .fullscreen-button {
+      --color: white;
+      --background: rgba(255, 255, 255, 0.2);
+      --border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      backdrop-filter: blur(10px);
+      
+      ion-icon {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+// Fullscreen Map Container
+.fullscreen-map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  
+  app-real-time-map {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+// Bottom Controls
+.bottom-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  padding: 10px 20px 80px 20px; // Increased bottom padding to account for navigation bar
+  
+  .control-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    
+    .control-button {
+      flex: 1;
+      min-width: 120px;
+      height: 44px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      --border-radius: 22px;
+      backdrop-filter: blur(10px);
+      
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .navigation-info {
+    display: flex;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    
+    .info-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-icon {
+        font-size: 20px;
+        min-width: 20px;
+      }
+      
+      .info-content {
+        display: flex;
+        flex-direction: column;
+        
+        .info-label {
+          font-size: 0.7rem;
+          color: #666;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+          font-size: 0.9rem;
+          color: #333;
+          font-weight: 600;
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+}
+
+// Mechanic Tracking Instructions
+.tracking-instructions {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  max-width: 400px;
+  margin: 0 auto;
+  
+  ion-card {
+    margin: 0;
+    --background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    ion-card-content {
+      padding: 20px;
+      
+      .instruction-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        
+        ion-icon {
+          font-size: 24px;
+        }
+        
+        h3 {
+          margin: 0;
+          color: #333;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+      }
+      
+      .instruction-content {
+        p {
+          margin: 0 0 15px 0;
+          color: #666;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+        
+        .instruction-tips {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          
+          .tip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            ion-icon {
+              font-size: 16px;
+            }
+            
+            span {
+              font-size: 0.8rem;
+              color: #666;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .map-header {
+    padding: 15px 15px 10px 15px;
+    
+    .header-left {
+      gap: 10px;
+      
+      .back-button {
+        width: 40px;
+        height: 40px;
+        
+        ion-icon {
+          font-size: 18px;
+        }
+      }
+      
+      .header-info {
+        .header-title {
+          font-size: 1.1rem;
+        }
+        
+        .header-details {
+          flex-direction: column;
+          gap: 5px;
+          
+          .distance,
+          .eta {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+    
+    .header-right {
+      .fullscreen-button {
+        width: 40px;
+        height: 40px;
+        
+        ion-icon {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+  
+  .bottom-controls {
+    padding: 10px 15px 75px 15px; // Increased bottom padding for mobile
+    
+    .control-buttons {
+      flex-direction: column;
+      gap: 8px;
+      
+      .control-button {
+        height: 40px;
+        font-size: 0.75rem;
+        --border-radius: 20px;
+        min-width: unset;
+      }
+    }
+    
+    .navigation-info {
+      padding: 12px;
+      gap: 10px;
+      
+      .info-item {
+        gap: 6px;
+        
+        ion-icon {
+          font-size: 18px;
+        }
+        
+        .info-content {
+          .info-label {
+            font-size: 0.65rem;
+          }
+          
+          .info-value {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .tracking-instructions {
+    left: 15px;
+    right: 15px;
+    
+    ion-card {
+      ion-card-content {
+        padding: 15px;
+        
+        .instruction-header {
+          margin-bottom: 12px;
+          
+          ion-icon {
+            font-size: 20px;
+          }
+          
+          h3 {
+            font-size: 1rem;
+          }
+        }
+        
+        .instruction-content {
+          p {
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+          }
+          
+          .instruction-tips {
+            gap: 6px;
+            
+            .tip {
+              gap: 6px;
+              
+              ion-icon {
+                font-size: 14px;
+              }
+              
+              span {
+                font-size: 0.75rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Landscape orientation adjustments
+@media (orientation: landscape) and (max-height: 500px) {
+  .map-header {
+    padding: 10px 20px 5px 20px;
+    
+    .header-left {
+      .header-info {
+        .header-title {
+          font-size: 1rem;
+        }
+        
+        .header-details {
+          .distance,
+          .eta {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .bottom-controls {
+    padding: 5px 20px 70px 20px; // Increased bottom padding for landscape
+    
+    .control-buttons {
+      margin-bottom: 10px;
+      
+      .control-button {
+        height: 36px;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .navigation-info {
+      padding: 10px;
+      
+      .info-item {
+        .info-content {
+          .info-label {
+            font-size: 0.6rem;
+          }
+          
+          .info-value {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .tracking-instructions {
+    display: none; // Hide instructions in landscape to save space
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .bottom-controls {
+    .navigation-info {
+      --background: rgba(30, 30, 30, 0.95);
+      
+      .info-content {
+        .info-label {
+          color: #999;
+        }
+        
+        .info-value {
+          color: #fff;
+        }
+      }
+    }
+  }
+  
+  .tracking-instructions {
+    ion-card {
+      --background: rgba(30, 30, 30, 0.95);
+      
+      ion-card-content {
+        .instruction-header {
+          h3 {
+            color: #fff;
+          }
+        }
+        
+        .instruction-content {
+          p {
+            color: #ccc;
+          }
+          
+          .instruction-tips {
+            .tip {
+              span {
+                color: #ccc;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

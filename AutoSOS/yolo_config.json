@@ -1,0 +1,18 @@
+{
+  "model_path": "models\\motorcycle_diagnostic.pt",
+  "model_type": "custom_motorcycle_diagnostic",
+  "classes": {
+    "0": "broken_headlights_tail_lights",
+    "1": "broken_side_mirror",
+    "2": "flat_tire",
+    "3": "oil_leak"
+  },
+  "class_display_names": {
+    "0": "Broken Headlights/Tail Lights",
+    "1": "Broken Side Mirror",
+    "2": "Flat Tire",
+    "3": "Oil Leak"
+  },
+  "confidence_threshold": 0.5,
+  "fixed_timestamp": "2025-10-02"
+}

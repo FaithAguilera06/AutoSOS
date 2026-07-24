@@ -1,0 +1,268 @@
+<ion-content [fullscreen]="true" class="service-requests-content">
+  <div class="service-requests-container">
+    <!-- Header -->
+    <div class="page-header">
+      <ion-button fill="clear" (click)="goBack()" class="back-button">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <h1 class="page-title">Service Requests</h1>
+    </div>
+
+    <!-- Service Request Popup Modal -->
+    <div class="service-request-popup" *ngIf="currentServiceRequest" (click)="closePopup()">
+      <div class="popup-content" (click)="$event.stopPropagation()">
+        <!-- Popup Header -->
+        <div class="popup-header">
+          <h2>Service Request Details</h2>
+          <ion-button fill="clear" (click)="closePopup()" class="close-button">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Service Request Card -->
+        <div class="service-request-card">
+      <!-- Service Request Map Section -->
+      <div class="service-map-section">
+        <div class="map-header">
+          <h3>Live Navigation Map</h3>
+          <div class="distance-info">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ getDistance() }} away</span>
+          </div>
+        </div>
+        
+        <!-- Embedded Map Component -->
+        <div class="embedded-map-container">
+          <app-real-time-map
+            #realTimeMap
+            [mechanicId]="currentServiceRequest?.mechanic_id || null"
+            [clientLocation]="getClientLocation()"
+            [showRoute]="true"
+            [isVisible]="true"
+            [containerHeight]="'450px'"
+            (locationUpdated)="onLocationUpdated($event)"
+            (mechanicLocationUpdated)="onMechanicLocationUpdated($event)">
+          </app-real-time-map>
+        </div>
+        
+        <!-- Map Controls -->
+        <div class="map-controls-section">
+          <div class="navigation-buttons">
+            <ion-button 
+              fill="outline" 
+              color="primary" 
+              size="small"
+              (click)="centerOnClient()">
+              <ion-icon name="location" slot="start"></ion-icon>
+              Center on Client
+            </ion-button>
+            <ion-button 
+              fill="outline" 
+              color="secondary" 
+              size="small"
+              (click)="centerOnMechanic()">
+              <ion-icon name="person" slot="start"></ion-icon>
+              Center on Me
+            </ion-button>
+          </div>
+          <ion-button 
+            fill="solid" 
+            color="light" 
+            size="large"
+            class="locate-client-button"
+            (click)="openRealTimeNavigation()">
+            <ion-icon name="navigate" slot="start"></ion-icon>
+            Open Full Navigation
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Client Information Section -->
+      <div class="client-info-section">
+        <h3 class="section-title">
+          <ion-icon name="person-outline"></ion-icon>
+          Client Information
+        </h3>
+        <div class="client-details">
+          <div class="client-item">
+            <ion-icon name="person-circle-outline" class="client-icon"></ion-icon>
+            <div class="client-info">
+              <p class="client-name">{{ currentServiceRequest.client?.full_name || 'Client Name' }}</p>
+              <p class="client-label">Full Name</p>
+            </div>
+          </div>
+          
+          <div class="client-item">
+            <ion-icon name="call-outline" class="client-icon"></ion-icon>
+            <div class="client-info">
+              <p class="client-phone">{{ currentServiceRequest.client?.phone || 'No phone available' }}</p>
+              <p class="client-label">Phone Number</p>
+            </div>
+            <ion-button fill="clear" class="call-button" (click)="callClient()">
+              <ion-icon name="call"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <div class="client-item">
+            <ion-icon name="mail-outline" class="client-icon"></ion-icon>
+            <div class="client-info">
+              <p class="client-email">{{ currentServiceRequest.client?.email || 'No email available' }}</p>
+              <p class="client-label">Email Address</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motorcycle Problem Section -->
+      <div class="problem-section">
+        <h3 class="section-title">
+          <ion-icon name="construct-outline"></ion-icon>
+          Motorcycle Problem
+        </h3>
+        <div class="problem-details">
+          <div class="problem-item">
+            <ion-icon name="warning-outline" class="problem-icon"></ion-icon>
+            <div class="problem-info">
+              <p class="problem-type">{{ currentServiceRequest.required_specialization || 'General Service' }}</p>
+              <p class="problem-label">Issue Type</p>
+            </div>
+          </div>
+          
+          <div class="problem-item">
+            <ion-icon name="bicycle-outline" class="problem-icon"></ion-icon>
+            <div class="problem-info">
+              <p class="motorcycle-model">{{ currentServiceRequest.motorcycle_model || currentServiceRequest.client?.motorcycle_model || 'Not specified' }}</p>
+              <p class="problem-label">Motorcycle Model</p>
+            </div>
+          </div>
+          
+          <div class="problem-description" *ngIf="currentServiceRequest.notes">
+            <ion-icon name="document-text-outline" class="problem-icon"></ion-icon>
+            <div class="problem-info">
+              <p class="problem-notes">{{ currentServiceRequest.notes }}</p>
+              <p class="problem-label">Additional Notes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Information Section -->
+      <div class="payment-section">
+        <h3 class="section-title">
+          <ion-icon name="card-outline"></ion-icon>
+          Payment Information
+        </h3>
+        <div class="payment-details">
+          <div class="payment-method">
+            <ion-icon name="card" class="payment-icon"></ion-icon>
+            <div class="payment-info">
+              <p class="payment-type">{{ currentServiceRequest.payment_method || 'Cash' }}</p>
+              <p class="payment-label">Payment Method</p>
+            </div>
+          </div>
+          
+          <!-- Facial Recognition Payment Notification -->
+          <div class="facial-payment-notification" *ngIf="currentServiceRequest.payment_method === 'facial_recognition' && paymentReceived">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <div class="notification-content">
+              <p class="notification-title">Payment Received!</p>
+              <p class="notification-message">₱{{ currentServiceRequest.service_price }} has been added to your wallet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Section -->
+      <div class="action-buttons-section">
+        <!-- Accept/Decline Buttons (for pending requests) -->
+        <div class="accept-decline-buttons" *ngIf="currentServiceRequest.status === 'pending'">
+          <ion-button 
+            fill="outline" 
+            color="danger" 
+            class="action-button decline-button"
+            (click)="declineRequest()">
+            <ion-icon name="close" slot="start"></ion-icon>
+            Decline
+          </ion-button>
+          
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            class="action-button accept-button"
+            (click)="acceptRequest()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Accept
+          </ion-button>
+        </div>
+
+        <!-- Price Setting Section (after accepting) -->
+        <div class="price-setting-section" *ngIf="currentServiceRequest.status === 'in_progress' && !currentServiceRequest.service_price">
+          <h4>Set Service Price</h4>
+          <div class="price-input-container">
+            <ion-input 
+              type="number" 
+              placeholder="Enter price in PHP" 
+              [(ngModel)]="servicePrice"
+              class="price-input">
+            </ion-input>
+            <ion-button 
+              fill="solid" 
+              color="primary"
+              (click)="setServicePrice()"
+              [disabled]="!servicePrice || servicePrice <= 0">
+              Set Price
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Job Management Buttons (after price is set) -->
+        <div class="job-management-buttons" *ngIf="currentServiceRequest.status === 'in_progress' && currentServiceRequest.service_price">
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            class="action-button start-button"
+            (click)="startJob()">
+            <ion-icon name="play" slot="start"></ion-icon>
+            Start Job
+          </ion-button>
+        </div>
+
+        <!-- Complete Job Section (for in-progress jobs) -->
+        <div class="complete-job-section" *ngIf="currentServiceRequest.status === 'in_progress'">
+          <div class="swipe-to-complete" (swipe)="onSwipeComplete($event)">
+            <div class="swipe-container">
+              <div class="swipe-track">
+                <div class="swipe-thumb" [style.transform]="swipeProgress">
+                  <ion-icon name="checkmark"></ion-icon>
+                </div>
+                <p class="swipe-text">Swipe to Complete Job</p>
+              </div>
+            </div>
+          </div>
+          
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            class="action-button complete-button"
+            (click)="completeJob()">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Complete Job
+          </ion-button>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Service Request State -->
+    <div class="no-request-state" *ngIf="!currentServiceRequest">
+      <ion-icon name="construct-outline" size="large"></ion-icon>
+      <h3>No Service Requests</h3>
+      <p>You don't have any active service requests at the moment.</p>
+      <ion-button fill="solid" color="primary" (click)="refreshRequests()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Refresh
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

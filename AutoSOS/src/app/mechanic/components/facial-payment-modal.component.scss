@@ -1,0 +1,206 @@
+.facial-payment-content {
+  --background: #f5f5f5;
+}
+
+.payment-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.booking-info {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    .label {
+      font-weight: 500;
+      color: #666;
+    }
+
+    .value {
+      color: #333;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.amount-section {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  ion-item {
+    --background: transparent;
+    --border-color: #e0e0e0;
+    --border-radius: 8px;
+    margin: 0;
+  }
+}
+
+.camera-section {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.camera-video {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.face-guide {
+  width: 120px;
+  height: 120px;
+  border: 3px solid #4CAF50;
+  border-radius: 50%;
+  background: transparent;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 2px solid rgba(76, 175, 80, 0.3);
+    border-radius: 50%;
+  }
+}
+
+.camera-controls {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.captured-photo {
+  text-align: center;
+  margin-bottom: 16px;
+
+  img {
+    width: 100%;
+    max-width: 300px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #4CAF50;
+  }
+
+  .photo-actions {
+    margin-top: 12px;
+  }
+}
+
+.instructions {
+  background: #e3f2fd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  h4 {
+    margin: 0 0 12px 0;
+    color: #1976d2;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #1976d2;
+
+    li {
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+  }
+}
+
+.payment-actions {
+  padding: 0 16px 20px;
+
+  ion-button {
+    --border-radius: 12px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+}
+
+// Loading states
+ion-spinner {
+  margin-right: 8px;
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .payment-container {
+    padding: 16px;
+  }
+
+  .camera-video {
+    height: 200px;
+  }
+
+  .face-guide {
+    width: 100px;
+    height: 100px;
+  }
+}

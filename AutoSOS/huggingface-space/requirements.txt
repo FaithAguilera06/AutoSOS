@@ -1,0 +1,27 @@
+# Hugging Face Space Requirements for AutoSOS YOLOv8
+# Core web framework - compatible versions
+gradio==3.50.2
+fastapi==0.100.1
+uvicorn==0.23.2
+
+# Hugging Face ecosystem
+transformers==4.30.2
+huggingface_hub==0.16.4
+torch==2.0.1
+torchvision==0.15.2
+
+# Computer Vision
+opencv-python==4.8.0.76
+Pillow==10.0.0
+numpy==1.24.3
+
+# YOLOv8
+ultralytics==8.0.196
+
+# Image processing
+scikit-image==0.21.0
+
+# Utilities
+python-multipart==0.0.6
+requests==2.31.0
+pydantic==2.0.3

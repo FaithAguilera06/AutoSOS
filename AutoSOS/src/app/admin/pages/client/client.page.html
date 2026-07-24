@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <img src="assets/images/autoSOS logo side.png" alt="AutoSOS Logo" class="header-logo" />
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="container">
+    <!-- Search Bar -->
+    <ion-searchbar
+      placeholder="Search clients..."
+      (ionInput)="onSearchChange($event)"
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading clients...</p>
+    </div>
+
+    <!-- Clients List -->
+    <ion-list *ngIf="!isLoading">
+      <ion-item *ngFor="let client of filteredClients" class="client-item">
+        <ion-avatar slot="start" class="client-avatar">
+          <img *ngIf="client.avatar_url" [src]="client.avatar_url" alt="Avatar">
+          <ion-icon *ngIf="!client.avatar_url" name="person" size="large"></ion-icon>
+        </ion-avatar>
+        
+        <ion-label class="client-label">
+          <h2>{{ client.full_name || 'No name provided' }}</h2>
+          <p>{{ client.user_id }}</p>
+          <p>Joined: {{ client.created_at | date:'short' }}</p>
+        </ion-label>
+
+        <div class="button-container">
+          <ion-icon name="eye" (click)="viewClient(client.user_id)" class="action-icon"></ion-icon>
+          <ion-icon name="trash" (click)="deleteClient(client.user_id)" class="action-icon"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredClients.length === 0" class="empty-state">
+      <ion-icon name="people-outline" size="large"></ion-icon>
+      <h3>No clients found</h3>
+      <p>Try adjusting your search criteria</p>
+    </div>
+  </div>
+
+  <!-- Custom Popup -->
+  <app-client-detail-popup 
+    [client]="selectedClient" 
+    [isVisible]="showPopup"
+    (closePopupEvent)="showPopup = false">
+  </app-client-detail-popup>
+</ion-content> 

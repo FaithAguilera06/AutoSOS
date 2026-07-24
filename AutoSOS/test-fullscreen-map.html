@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Map Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .url-test {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Fullscreen Map Test</h1>
+        <p>This test verifies that the fullscreen map URL works correctly with OpenRouteService integration.</p>
+        
+        <div class="test-section info">
+            <h3>📋 Test URL</h3>
+            <div class="url-test">
+                http://localhost:4200/mechanic/fullscreen-map?clientLat=14.55&clientLng=121.05&mechanicLat=14.55&mechanicLng=121.05&showRoute=true
+            </div>
+            <p><strong>Expected Behavior:</strong></p>
+            <ul>
+                <li>✅ Map should load and display properly (not black screen)</li>
+                <li>✅ Client location should be marked at coordinates (14.55, 121.05)</li>
+                <li>✅ Route should be displayed between mechanic and client</li>
+                <li>✅ OpenRouteService should be used for routing calculations</li>
+                <li>✅ Navigation controls should be functional</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Test Steps</h3>
+            <ol>
+                <li><strong>Open the URL:</strong> Click the button below to open the fullscreen map</li>
+                <li><strong>Check Map Loading:</strong> Verify the map loads (not black screen)</li>
+                <li><strong>Verify Route Display:</strong> Check if route is shown between locations</li>
+                <li><strong>Test Controls:</strong> Try the navigation controls (center, route toggle)</li>
+                <li><strong>Check Console:</strong> Open browser console to see OpenRouteService logs</li>
+            </ol>
+            
+            <button onclick="openFullscreenMap()">🚀 Open Fullscreen Map</button>
+            <button onclick="testOpenRouteService()">🧪 Test OpenRouteService</button>
+        </div>
+
+        <div class="test-section info">
+            <h3>🔧 Debugging Information</h3>
+            <p><strong>If the map shows a black screen, check:</strong></p>
+            <ul>
+                <li>✅ Mapbox GL JS library is loaded</li>
+                <li>✅ Mapbox access token is valid</li>
+                <li>✅ OpenRouteService API key is configured</li>
+                <li>✅ No CORS errors in browser console</li>
+                <li>✅ Map container has proper dimensions</li>
+            </ul>
+            
+            <p><strong>Expected Console Logs:</strong></p>
+            <pre>Fullscreen map: Loading route parameters: {clientLat: "14.55", clientLng: "121.05", ...}
+Fullscreen map: Client location created: {latitude: 14.55, longitude: 121.05, ...}
+Initializing Mapbox map...
+Mapbox GL JS loaded successfully
+Map container is ready
+Mapbox access token set: pk.eyJ1...
+Map instance created
+Getting directions from: {latitude: 14.55, longitude: 121.05, ...} to: {latitude: 14.55, longitude: 121.05, ...}
+Using OpenRouteService API directly
+OpenRouteService API Response: {routes: [...], waypoints: [...]}</pre>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Test Results</h3>
+            <div id="test-results">
+                <p>Click the test buttons above to run tests...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openFullscreenMap() {
+            const url = 'http://localhost:4200/mechanic/fullscreen-map?clientLat=14.55&clientLng=121.05&mechanicLat=14.55&mechanicLng=121.05&showRoute=true';
+            window.open(url, '_blank');
+            addResult('🚀 Opened Fullscreen Map', `Opened URL: ${url}`, 'info');
+        }
+
+        async function testOpenRouteService() {
+            addResult('🧪 Testing OpenRouteService', 'Testing direct API access...', 'info');
+            
+            try {
+                const orsApiKey = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjNmNWM2NzE3M2VhOTRjZGQ4ZWY2MGE4NzcwZGNhMjY1IiwiaCI6Im11cm11cjY0In0=';
+                const url = 'https://api.openrouteservice.org/v2/directions/driving-car';
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': orsApiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        coordinates: [
+                            [121.05, 14.55], // Client location
+                            [121.05, 14.55]  // Mechanic location (same for test)
+                        ],
+                        format: 'geojson'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('✅ OpenRouteService Test', `API working correctly. Response: ${JSON.stringify(data, null, 2)}`, 'success');
+                } else {
+                    addResult('❌ OpenRouteService Test', `API Error: ${response.status} - ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                addResult('❌ OpenRouteService Test', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        function addResult(title, content, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-section ${type}`;
+            resultDiv.innerHTML = `
+                <h4>${title}</h4>
+                <pre>${content}</pre>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Auto-run basic test on page load
+        window.addEventListener('load', () => {
+            addResult('ℹ️ Page Loaded', 'Ready to test fullscreen map integration. Click the test buttons above.', 'info');
+        });
+    </script>
+</body>
+</html>
